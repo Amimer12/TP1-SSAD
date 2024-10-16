@@ -1,0 +1,539 @@
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+	user-select: none;
+}
+@font-face {
+  font-family: "WorkSans";
+  src: url(../WorkSans-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: "Pacifico";
+  src: url(../Pacifico-Regular.ttf);
+}
+body {
+  font-family: "WorkSans";
+  background-color: #f3eecd;
+  color: #222;
+}
+a {
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
+:root {
+  --padding-container: 15px;
+  --color: #f3eecd;
+}
+.container {
+  padding-left: var(--padding-container);
+  padding-right: var(--padding-container);
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+/* ######################### */
+.header {
+  padding: 15px 0;
+  position: relative;
+}
+.team .container {
+  height: 100%;
+}
+.team {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  z-index: 3;
+  background-color: #f6f6f6;
+  width: 100%;
+  height: 100%;
+  transition: 0.9s;
+}
+.team.active {
+  left: 0;
+}
+.team button {
+  position: absolute;
+  padding: 6px 19px;
+  right: 20px;
+  top: 20px;
+  background-color: transparent;
+  border: 1px solid #333;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+.team h2 {
+  text-align: center;
+  margin: 20px 20px 40px;
+  text-transform: capitalize;
+  font-weight: 700;
+  font-size: 29px;
+  position: relative;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.team h2::after {
+  width: 100%;
+  height: 1px;
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+}
+.team ul {
+  height: calc(100% - 33.34px);
+  isolation: isolate;
+}
+.team ul li {
+  padding: 10px;
+  text-transform: capitalize;
+  color: #333;
+  position: relative;
+  margin-bottom: 15px;
+}
+.team ul li p {
+	font-weight: 700;
+}
+.team ul li::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: calc(100% + 10px);
+  top: 50%;
+  left: -10px;
+  background-color: var(--color);
+  transition: 0.6s;
+  z-index: -1;
+  transform: skewX(-20deg) translateY(-50%);
+}
+.team ul li:hover::after {
+  width: 100%;
+}
+@media (max-width: 678px) {
+  .team h2 {
+    font-size: 22px;
+  }
+}
+.header .container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.header .left h2 {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 26px;
+  margin-bottom: 32px;
+  isolation: isolate;
+  position: relative;
+  width: fit-content;
+}
+.header .left h2::after {
+  content: "";
+  height: 1px;
+  width: calc(100% + 40px);
+  position: absolute;
+  left: 0;
+  bottom: -19px;
+  background-color: #777;
+}
+.header .left p {
+  font-weight: 600;
+  text-transform: capitalize;
+  cursor: pointer;
+  position: relative;
+}
+.header .left p .bg {
+  position: absolute;
+  width: 0;
+  height: calc(100% + 10px);
+  top: 50%;
+  left: -10px;
+  background-color: #f6f6f6;
+  transition: 0.4s;
+  z-index: -1;
+  transform: skewX(-20deg) translateY(-50%);
+}
+
+.header .left p:hover .bg {
+  width: 100%;
+}
+.header .right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.landing {
+  position: relative;
+  isolation: isolate;
+  height: calc(100vh - 110.28px);
+}
+.landing > img {
+  position: absolute;
+  z-index: -1;
+  transition: 0.6s;
+}
+.landing > img.active {
+  transform: rotate(90deg);
+}
+.landing > img:nth-of-type(1) {
+  top: 2%;
+  left: 10%;
+}
+.landing > img:nth-of-type(2) {
+  top: 8%;
+  right: 13%;
+}
+.landing > img:nth-of-type(3) {
+  bottom: 4%;
+  left: 3%;
+}
+.landing > img:nth-child(4) {
+  bottom: 9%;
+  right: 10%;
+}
+.landing .container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.landing .container .login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 20px;
+  height: 100%;
+	width: 100%;
+	height: 100%;
+	transition: 0.9s;
+	overflow: hidden;
+}
+.landing .container .login.gone {
+	transition: 0.9s;
+	/* width: 0; */
+	height: 0;
+}	
+.landing .container {
+  height: calc(100% - 54.94px );
+}
+.landing .container .login h1 {
+  color: #333;
+  font-size: 26px;
+  text-transform: capitalize;
+  text-align: center;
+  max-width: 480px;
+  line-height: 1.4;
+}
+@media (max-width:678px) {
+	.landing .container .login h1 {
+		font-size: 20px;
+	}
+}
+.landing .container .login h1 q {
+  font-family: "Pacifico";
+  letter-spacing: 2px;
+}
+.landing > p {
+  font-size: 13px;
+  font-weight: 600;
+	text-align: center;
+	padding: 20px;
+}
+.landing .container .formcontainer {
+  background-color: rgba(246, 246, 246, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 65%;
+  border-radius: 20px;
+  padding: 30px 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+}
+@media (max-width:678px) {
+	.landing .container .login .formcontainer {
+		width: 95%;
+	}
+}
+@media (min-width: 992px) {
+  .landing .container .formcontainer {
+    width: 50%;
+  }
+}
+.landing .container .formcontainer h2 {
+  text-transform: capitalize;
+  margin-bottom: 16px;
+  color: #222;
+}
+.landing .container .formcontainer p {
+  font-weight: 600;
+  width: 300px;
+  text-align: center;
+  line-height: 1.4;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+.landing .container .formcontainer form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  width: 100%;
+  padding: 0 40px;
+}
+.landing .container .formcontainer form input[type="text"],
+.landing .container .formcontainer form input[type="password"] {
+  padding: 14px 20px;
+  color: #333;
+  border: 1px solid #b6b6b6;
+  border-radius: 8px;
+  background-color: transparent;
+}
+@media (max-width:678px) {
+	.landing .container .formcontainer form {
+		padding:  0 10px;
+	}
+	.landing .container .formcontainer form input[type="text"],
+.landing .container .formcontainer form input[type="password"]  {
+		width: 95%;
+	}
+}
+.landing .container .formcontainer form input[type="text"]:focus,
+.landing .container .formcontainer form input[type="password"]:focus {
+  outline: none;
+}
+.landing .container .formcontainer form input[type="submit"] {
+  padding: 14px 20px;
+  border: none;
+  background-color: #fdb863;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-weight: 600;
+  font-size: 15px;
+  transition: 0.3s;
+}
+.landing .container .formcontainer form input[type="submit"]:hover {
+  opacity: 0.92;
+}
+
+.loader {
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	display: none;
+	margin:15px auto;
+	position: relative;
+	box-sizing: border-box;
+	animation: rotation 1s linear infinite;
+}
+.loader::after,
+.loader::before {
+	content: '';  
+	box-sizing: border-box;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: rgb(255 185 0);
+	width: 12px;
+	height: 12px;
+	transform: translate(-50%, 50%);
+	border-radius: 50%;
+}
+.loader::before {
+	left: auto;
+	right: 0;
+	background: rgb(0 135 244);
+	transform: translate(50%, 100%);
+}
+
+@keyframes rotation {
+0% {
+	transform: rotate(0deg);
+}
+100% {
+	transform: rotate(360deg);
+}
+} 
+.containerloader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.3s;
+	height: 0px;
+	/* overflow: hidden; */
+}
+.containerloader span.active {
+	display: block;
+}
+.landing .container .formcontainer  .containerloader.active {
+	height: 40px;
+} 
+.landing .container .formcontainer  .containerloader p {
+	display: none;
+}
+.landing .container .formcontainer  .containerloader p.yes.active {
+	font-size: 14px;
+	text-transform: capitalize;
+	color: rgb(0, 145, 0);
+	display: block;
+}
+.landing .container .formcontainer  .containerloader p.no.active {
+	display: block;
+	font-size: 14px;
+	text-transform: capitalize;
+	color: rgb(145, 0, 0);
+}
+.landing .container .loginPass {
+	display: none;
+	gap: 20px;
+	width: 100%;
+	height: 100%;
+}
+.landing .container .loginPass.active {
+	display: flex;
+}
+.landing .container .loginPass > div {
+	background-color: rgba(246, 246, 246, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 65%;
+  border-radius: 20px;
+  padding: 30px 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+}
+.landing .container .loginPass > div.left , .landing .container .loginPass > div.right {
+	flex: 1;
+	width: 40%;
+}
+@media (max-width:678px) {
+	.landing .container .loginPass {
+		flex-direction: column;
+	}
+	.landing .container .loginPass > div.left , .landing .container .loginPass > div.right {
+		flex: 1;
+		width: 100%;
+	}
+}
+.landing .container .loginPass div form {
+	width: 100%;
+	height: 100%;
+}
+.landing .container .loginPass div form textarea {
+	width: 100%;
+	border: 1px solid #777;
+	color: #333;
+	padding: 10px;
+	background-color: transparent;
+	border-radius: 4px;
+	height: 100%;
+	resize: none;
+}
+.landing .container .loginPass div form textarea:focus {
+	outline: none;
+}
+.landing .container .loginPass div p {
+	font-weight: 600;
+	text-transform: capitalize;
+	margin-bottom: 16px;
+	height: 40.4px;
+}
+.landing .container .loginPass div.left .bottom {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height:40px;
+
+}
+.landing .container .loginPass div.left .bottom .menu {
+	position: relative;
+	width: 80%;
+}
+.landing .container .loginPass div.left .bottom ul {
+	position: absolute;
+	background-color: #f6f6f6;
+	width: 280px;
+	border-radius: 5px;
+	bottom:calc(100% - 11px) ;
+	border-radius: 6px;
+	overflow: hidden;
+	
+	transition: 0.4s;
+	height: 0;
+}
+.landing .container .loginPass div.left .bottom ul.active {
+	height:190.5px ;
+	border: 1px solid #777;
+}
+.landing .container .loginPass div.left .bottom ul li:hover {
+	padding-left:20px;
+}
+.landing .container .loginPass div.left .bottom ul li {
+	padding: 10px;
+	color: #333;
+	text-transform: capitalize;
+	font-weight: 500;
+	font-size: 15px;
+	transition: 0.4s;
+	cursor: pointer;
+}
+.landing .container .loginPass div.left .bottom ul li.active {
+	color: white;
+	background-color:rgb(0 135 244) ;
+} 
+.landing .container .loginPass div.left .bottom ul li:not(:last-of-type) {
+	border-bottom: 1px solid #777;
+}
+.landing .container .loginPass div.left .bottom p {
+	display: flex;
+	align-items: center;
+	margin: 0;
+	gap: 20px;
+	border: 1px solid #777;
+	width: fit-content;
+	padding: 10px;
+	margin-top: 20px;
+	border-radius: 6px;
+	cursor: pointer;
+}
+.landing .container .loginPass div.left .bottom button {
+	height: 40.39px;
+	margin-top: 20px;
+	padding: 0 20px;
+	text-transform: capitalize;
+	color: #333;
+	font-weight: 600;
+	border-radius: 5px;
+	border: 1px solid #777;
+	cursor: pointer;
+}

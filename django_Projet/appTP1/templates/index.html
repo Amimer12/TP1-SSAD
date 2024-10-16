@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADD -GROUPE TP 2</title>
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="team">
+        <button> <i class="fa-solid fa-arrow-left"></i> </button>
+        <div class="container">
+            <h2>Meet our membes !</h2>
+            <ul>
+                <li><p>ABDI Naila</p></li>
+                <li><p>AMIMER Abderrahmane Mohamed Elmahdi</p></li>
+                <li><p>AOUDIA Djahid</p></li>
+                <li><p>BOUREKIA Nihad </p></li>
+                <li><p>Dhairi Fatima Ez-zahra </p></li>
+                <li><p>SEDDIKI Aridj </p></li>
+                <li><p>Zeghouf Samir</p></li>
+                <li><p>Zouaoui Mohamed </p></li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="header">
+        <div class="container">
+            <div class="left">
+                <h2>cool_stuff</h2>
+                <p class="about"><span>about the team</span> <i class="fa-solid fa-arrow-right"></i><span class="bg"></span> </p>
+                <span></span>
+            </div>
+            <div class="right">
+                <i class="fa-solid fa-globe"></i>
+            </div>
+        </div>
+    </div>
+    <div class="landing">
+        <img src="{% static 'svg/blue-star.css' %}" alt="">
+        <img src="{% static 'svg/yellow-treffle.svg' %}" alt="">
+        <img src="{% static 'svg/flipped-red-demi-circles.svg' %}" alt="">
+        <img src="{% static 'svg/green-filled-circle.svg' %}" alt="">
+        <div class="container">
+            <div class="loginPass">
+                <div class="left">
+                    <p>put your uncrypted message here </p>
+                    <form action="">
+                        <textarea name=""  id="" placeholder="" ></textarea>
+                    </form>
+                    <div class="bottom">
+                        <div class="menu">
+                            <p>choose your methed <i class="fa-solid fa-chevron-up"></i></p>
+                            <ul> 
+                                <li data-method="1">method 1 - Miroir</li>
+                                <li data-method="2" >method 2 - Affine</li>
+                                <li data-method="3">method 3 - decalage a gauche</li>
+                                <li data-method="4">method 4 - decalage a droite</li>
+                                <li data-method="5">method 5 - cesar</li>
+                            </ul>
+                        </div>
+                        <button>execute</button>
+                    </div>
+                </div>
+                <div class="right">
+                    <p>the crypted message</p>
+                    <form action="">
+                        <textarea name=""  id=""></textarea>
+                    </form>
+                </div>
+            </div>
+            <div  class="login">
+                <h1>well come to <q>encryptify</q> where we can encrypt your message</h1>
+                <div class="formcontainer">
+                    <h2>agent login</h2>
+                    <p>Hey , Enter your details ro get sign in your account</p>
+                    <form action="">
+                        <input type="text" id="email" placeholder="Enter Email ">
+                        <input type="password" placeholder="Password " id="password">
+                        <input type="submit" value="sign in">
+                        <div class="containerloader"><p class="yes">your request est valid</p><p class="no">sorry your email or password is wrong</p><span class="loader"></span></div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <p>Copyright @TEAM_2 2024 | Privacy Policy </p>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
