@@ -1,3 +1,57 @@
+// the mainLoader
+
+let myMainLoadertext = new SplitType('.theMainLoaderSpan',{type:"chars"})
+let loaderMainDivs = document.querySelectorAll('.theMianLoader .textContainer div')
+let loaderMain = document.querySelector('.theMianLoader')
+let willrun = localStorage.getItem("loader")
+let listOfBtnSetting = document.querySelectorAll('.settingSide .box div button')
+if (willrun !== null) {
+        listOfBtnSetting.forEach((e)=> {
+            e.classList.remove('active')
+        })
+        if(willrun === "run") {
+                listOfBtnSetting.forEach((lo)=> {
+                    if (lo.dataset.loader === "y") {
+                        lo.classList.add('active')
+                    }
+                })
+        } else {
+            listOfBtnSetting.forEach((lo)=> {
+                if (lo.dataset.loader === "n") {
+                    lo.classList.add('active')
+                }
+            })
+        }
+    if (willrun === "run") {
+        const tl = gsap.timeline()
+        loaderMain.style.backgroundColor = "#333"
+        tl.to(loaderMainDivs,{y:0,duration:0.1,delay:.2,color:'#f6f6f6',
+        stagger: {
+            each:0.05,
+        }
+        })
+        tl.to(loaderMain,{delay:1.2,height:0,
+        ease:"power3.out",duration:1
+        })
+    } else {
+        loaderMain.style.height = "0px"
+    }
+} else {
+    const tl = gsap.timeline()
+    loaderMain.style.backgroundColor = "#333"
+    tl.to(loaderMainDivs,{y:0,duration:0.1,delay:.2,color:'#f6f6f6',
+    stagger: {
+        each:0.05,
+    }
+    })
+    tl.to(loaderMain,{delay:1.2,height:0,
+    ease:"power3.out",duration:1
+    })
+}
+
+// end the Main loader
+
+
 let img = document.querySelectorAll('.landing > img')
 let emailfild = document.querySelector('#email')
 let passwordfild = document.querySelector('#password')
@@ -12,7 +66,7 @@ let submit = document.querySelector('.landing .container .formcontainer form inp
 submit.addEventListener('click',function(e) {
     e.preventDefault();
     containerloader.classList.add('active')
-    let loader = document.querySelector('span.loader')
+    let loader = document.querySelector('.login .formcontainer span.loader')
     let pyes = document.querySelector('.landing .container .formcontainer  .containerloader p.yes')
     let pno = document.querySelector('.landing .container .formcontainer  .containerloader p.no')
     pno.classList.remove('active')
@@ -29,6 +83,20 @@ submit.addEventListener('click',function(e) {
                     loginfrom.remove()
                     isremove = true
                     loginPass.classList.add('active')
+                    let divtextareaLeft = document.querySelector('.landing .container .loginPass div.left')
+                    let divtextareaRight = document.querySelector('.landing .container .loginPass div.right')
+                    gsap.from(divtextareaLeft, {
+                        x:-200,
+                        duration:1,
+                        opacity:0,
+                        ease:"power3.out"
+                    })
+                    gsap.from(divtextareaRight, {
+                        x:+400,
+                        opacity:0,
+                        duration:1,
+                        ease:"power3.out"
+                    })
                 },1000)
             },2000)
         } else {
@@ -95,25 +163,166 @@ let textareaLeft = document.querySelector('.landing .container .loginPass div.le
 let textareaRight = document.querySelector('.landing .container .loginPass div.right form textarea')
 btnSumbitCryp.addEventListener('click', function() {
     if (numOfMethod !== undefined) {
-        miroir(textareaLeft.value)
+        // miroir(textareaLeft.value)
     }
 })
 
-// function miroir(theText) {
-//     let theTextsting = new String(theText)
-//     let words = []
-//     words = theTextsting.split(" ")
-//     words.forEach(function(ele) {
+function miroir(theText) {
+    let theTextsting = new String(theText)
+    let words = []
+    words = theTextsting.split(" ")
+    let reverse = words.map(function(ele) {
+        let word = []
+        word = ele.split("")
+        let i = Math.floor(word.length / 2)
+        for (j = 0 ; j <= i ; j++ ) {
+            let a = word[j]
+            word[j] = word[ele.length - 1 - j]
+            word[ele.length - 1 - j] = a
+        }
+        ele = word.join("")
+        return ele
+    } )
+    console.log(reverse.join(" "))
+}
+// miroir('mohamed zouaoui')
 
-//         let i = Math.floor(ele.length / 2)
-//         for (j = 0 ; j < i ; j++ ) {
-//             let a = ele[j]
-//             let b = ele[ele.length - 1 - i]
-//             let c ;
-//             c = a;
-//             a = b;
-//             b = c
-//         }
-//     } )
-//     console.log(words)
-// }
+function decalgeAdroite(theText) {
+    let theTextsting = new String(theText)
+    let words = [];
+    words = theTextsting.split(" ")
+    let reverseAdoite = words.map(function(ele) {
+        let word = []
+        word = ele.split("")
+        let i = word.length
+        let fin = word[i - 1]
+        for (j = i - 1 ;j >= 1; j--) {
+            let a  = word[j]
+            word[j] = word[j - 1]
+        }
+        word[0] = fin
+        return word.join("")
+    })
+    console.log(reverseAdoite.join(" "))
+}
+// decalgeAdroite("abc bcfds mohamed")
+
+function decalgeAgauche(theText) {
+    let theTextsting = new String(theText)
+    let words = [];
+    words = theTextsting.split(" ")
+    let reverseAdoite = words.map(function(ele) {
+        let word = []
+        word = ele.split("")
+        let i = word.length
+        let start = word[0]
+        for (j = 0 ;j < i -1 ; j++) {
+            let a  = word[j]
+            word[j] = word[j + 1]
+        }
+        word[i -1 ] = start
+        return word.join("")
+    })
+    console.log(reverseAdoite.join(" "))
+}
+// decalgeAgauche('mohmaed zouaoui')
+// 
+
+//  the responsive start
+// let startHeight = window.innerHeight
+// textareaLeft.addEventListener('focus' ,function() {
+//     if (startHeight !== window.innerHeight) {
+//         let change = startHeight - window.innerHeight;
+//         let landing = document.querySelector('.landing');
+//         landing.style.height = `calc(100vh + ${change}px)`
+//     }
+// })
+// document.querySelector('.landing .container .formcontainer form input[type="text"]').addEventListener('blur' ,function() {
+//     console.log(true)
+// })
+// //  the responsive end
+// sign up
+let submitNewUser = document.querySelector('.createUser .mastercontainer .left form input[type="submit"]')
+submitNewUser.addEventListener('click',function(e) {
+    e.preventDefault()
+    let div = document.querySelector('.createUser .mastercontainer .containerloader')
+    let divP = document.querySelector('.createUser .mastercontainer .containerloader p ')
+    let divLoder = document.querySelector('.createUser .mastercontainer .containerloader span');
+    div.classList.add('active')
+    divLoder.style.display = 'block'
+    divP.style.display = 'none';
+    setTimeout(()=> {
+        divLoder.style.display = 'none'
+        divP.style.display = 'block';
+        let createUser = document.querySelector('.createUser');
+        gsap.to(createUser,{y:"-100%",duration:1.6,delay:1,ease:"power3.in"})
+    },1900)
+})
+
+let addUserBtn = document.querySelector('.header .right button')
+addUserBtn.addEventListener('click',()=> {
+    let createUser = document.querySelector('.createUser');
+    gsap.to(createUser,{
+        duration:1.6,
+        ease:"power3.out",
+        y:"100%"
+    })
+})
+let userTopNone = document.querySelector('.createUser .mastercontainer .left i')
+userTopNone.addEventListener('click',()=> {
+    let createUser = document.querySelector('.createUser');
+    gsap.to(createUser,{
+        duration:1.6,
+        delay:0.1,
+        ease:"power3.out",
+        y:"-100%"
+    })
+
+})
+// end sign up
+// start maim Loader
+// ########
+
+let divIconSetting = document.querySelector('.settingSide .icon')
+let iconSetting = document.querySelector('.settingSide .icon i')
+let settingSide = document.querySelector('.settingSide')
+divIconSetting.addEventListener("click",function(e) {
+    e.stopPropagation()
+    iconSetting.classList.toggle('fa-spin')
+    if (settingSide.classList.contains('active') ) {
+        settingSide.classList.remove('active')
+        gsap.to(settingSide,{
+            x:0,
+            duration:1,
+            ease:"power3.out",
+        })
+    } else {
+        settingSide.classList.add('active')
+        gsap.to(settingSide,{
+            x:270,
+            duration:1,
+            ease:"power3.out",
+        })
+    }
+})
+listOfBtnSetting.forEach((ele)=> {
+    ele.addEventListener("click",(e)=> {
+        listOfBtnSetting.forEach((e) => {
+            e.classList.remove('active')
+        })
+        e.target.classList.add('active')
+        if (e.target.dataset.loader === "y") {
+            localStorage.setItem("loader","run")
+        } else {
+            localStorage.setItem("loader","stop")
+        }
+    })
+})
+
+
+
+
+
+
+
+// end maim Loader

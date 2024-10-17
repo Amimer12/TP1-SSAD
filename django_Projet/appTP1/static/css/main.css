@@ -14,6 +14,10 @@
   font-family: "Pacifico";
   src: url(../Pacifico-Regular.ttf);
 }
+@font-face {
+  font-family: "BebasNeue";
+  src: url(../BebasNeue-Regular.ttf);
+}
 body {
   font-family: "WorkSans";
   background-color: #f3eecd;
@@ -52,6 +56,242 @@ ul {
   }
 }
 /* ######################### */
+/* setting */
+
+.settingSide {
+  position: fixed;
+  width: 270px;
+  height: 100vh;
+  background-color: #f6f6f6;
+  top: 0;
+  left: -270px;
+  z-index: 10;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+  isolation: isolate;
+}
+.settingSide .icon {
+  width: 30px;
+  height: 30px;
+  background-color: #f6f6f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  position: absolute;
+  top: 29%;
+  right: -30px;
+  cursor: pointer;
+}
+.settingSide .box {
+  padding: 20px 15px;
+  height: 40px;
+  color: #333;
+}
+.settingSide .box p {
+  font-weight: 600;
+    text-transform: capitalize;
+    font-size: 17px;
+    margin-bottom: 25px;
+    position: relative;
+}
+.settingSide .box p::after {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 1px;
+  background-color: #333;
+  bottom: -10px;
+  left: 0;
+}
+.settingSide .box div {
+      display: flex;
+    gap: 12px;
+}
+
+.settingSide .box div button {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #777;
+  background-color: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-weight: 600;
+  font-size: 15px;
+  transition: 0.3s;
+  color: #333;
+}
+.settingSide .box div button.active {
+  border: none;
+background-color: #fdb863;
+}
+
+/* setting */
+/* main loader */
+
+.theMianLoader {
+  position: fixed;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  color: transparent;
+  font-family: 'BebasNeue';
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  letter-spacing: -2px;
+  isolation: isolate;
+  overflow: hidden;
+}
+.theMianLoader .textContainer {
+
+  padding: 22px 7px 0px 7px;
+  overflow: hidden;
+}
+.theMianLoader .textContainer div {
+
+  transform: translateY(-100px);
+  transition: all 0.5s;
+  color:transparent
+}
+/* ############################### */
+
+.createUser {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: -100%;
+  left: 0;
+  z-index: 100;
+  background: #f6f6f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.createUser .mastercontainer {
+  display: flex;
+  gap: 10px;
+  height: 80vh;
+  width: 80%;
+  background-color: rgba(246, 246, 246, 0.8);
+  border-radius: 20px;
+  padding: 30px 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+}
+.createUser .mastercontainer .left{
+  flex: 1 ;
+  position: relative;
+}
+.createUser .mastercontainer .left h2 {
+  text-transform: capitalize;
+  margin-bottom: 16px;
+  color: #222;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.createUser .mastercontainer .left > p {
+  font-weight: 600;
+  width: 300px;
+  text-align: center;
+  line-height: 1.4;
+  font-size: 15px;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.createUser .mastercontainer .left form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  width: 100%;
+  padding: 0 40px;
+}
+.createUser .mastercontainer .left i {
+  color: #777;
+  border: 1px solid #777;
+  padding: 10px;
+  position: absolute;
+  border-radius: 6px;
+}
+.createUser .mastercontainer .left .containerloader p.yes {
+  color: green;
+  font-weight: 600;
+  font-size: 15px;
+  text-transform: capitalize;
+  display: none;
+}
+.createUser .mastercontainer .left .containerloader p.yes.active {
+display: block;
+}
+.createUser .mastercontainer .left form input[type="text"],
+.createUser .mastercontainer .left form input[type="password"] {
+  padding: 14px 20px;
+  color: #333;
+  border: 1px solid #b6b6b6;
+  border-radius: 8px;
+  background-color: transparent;
+}
+@media (max-width:678px) {
+	.createUser .mastercontainer .left form {
+		padding:  0 10px;
+	}
+
+	.createUser .mastercontainer .left form input[type="text"],
+.createUser .mastercontainer .left form input[type="password"]  {
+		width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+	}
+}
+.createUser .mastercontainer .left form input[type="text"]:focus,
+.createUser .mastercontainer .left form input[type="password"]:focus {
+  outline: none;
+}
+.createUser .mastercontainer .left form input[type="submit"] {
+  padding: 14px 20px;
+  border: none;
+  background-color: #fdb863;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-weight: 600;
+  font-size: 15px;
+  transition: 0.3s;
+}
+.createUser .mastercontainer .left form input[type="submit"]:hover {
+  opacity: 0.92;
+}
+.createUser .mastercontainer .right {
+  flex: 1;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.createUser .mastercontainer .right img {
+  max-width: 100%;
+  /* flex: 1; */
+}
+@media (max-width:992px) {
+  .createUser .mastercontainer .right  {
+    display: none;
+  }
+}
+.createUser .mastercontainer .containerloader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 0px;
+}
+.createUser .mastercontainer .containerloader.active {
+  height: 30px;
+}
+/* ############################### */
 .header {
   padding: 15px 0;
   position: relative;
@@ -153,6 +393,11 @@ ul {
   position: relative;
   width: fit-content;
 }
+@media (max-width:678px) {
+  .header .left h2 {
+    font-size: 20px;
+  }
+}
 .header .left h2::after {
   content: "";
   height: 1px;
@@ -168,6 +413,7 @@ ul {
   cursor: pointer;
   position: relative;
 }
+
 .header .left p .bg {
   position: absolute;
   width: 0;
@@ -187,15 +433,35 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  /* width: 30px;
+  height: 30px; */
   margin-right: 10px;
   cursor: pointer;
+}
+.header .right button {
+    width: 130px;
+    height: 39px;
+    border: none;
+    background-color: #fdb863;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 15px;
+    transition: 0.3s;
+    color: #333;
+}
+.header .right button i {
+  margin-left: 10px;
+}
+.header .right button:hover {
+  opacity: 0.95;
 }
 .landing {
   position: relative;
   isolation: isolate;
   height: calc(100vh - 110.28px);
+  overflow:hidden ;
 }
 .landing > img {
   position: absolute;
@@ -324,6 +590,8 @@ ul {
 	.landing .container .formcontainer form input[type="text"],
 .landing .container .formcontainer form input[type="password"]  {
 		width: 95%;
+    margin-left: auto;
+    margin-right: auto;
 	}
 }
 .landing .container .formcontainer form input[type="text"]:focus,
@@ -526,6 +794,14 @@ ul {
 	border-radius: 6px;
 	cursor: pointer;
 }
+@media (max-width:992px) {
+  .landing .container .loginPass div.left .bottom p {
+    font-size: 13px;
+  }
+  .landing .container .loginPass div.left .bottom button {
+    font-size: 13px;
+  }
+}
 .landing .container .loginPass div.left .bottom button {
 	height: 40.39px;
 	margin-top: 20px;
@@ -536,4 +812,8 @@ ul {
 	border-radius: 5px;
 	border: 1px solid #777;
 	cursor: pointer;
+}
+.landing .container .loginPass div.right .bottom {
+  width: 100%;
+  height: 50px;
 }
