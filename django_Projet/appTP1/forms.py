@@ -7,11 +7,12 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import UserAccount  # Adjust this import based on your project structure
 
 
-
+################################################ MOT DE PASSE FUNCTIONS #########################################################
 
 alphabetMin = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
 alphabetMaj = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-specialCharacters = ["!","@","#","$","%","^","&","*","(",")","-","_","=","+","[","]","{","}","|","\\",":",";","'","\"",",",".","<",">","/","?","`","~"]
+specialCharacters = ["!","@","#","$","%","^","&","*","(",")","-","_",
+    "=","+","[","]","{","}","|","\\",":",";","'","\"",",",".","<",">","/","?","`","~"]
 numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 
@@ -48,8 +49,9 @@ def motDePasseMix(motDePasse):
      
 #motDePasseMix()   
 
+##################################################################################################################################
 
-
+## CREATE ACCOUNT FORM ##############################################
 
 class CustomUserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
@@ -83,3 +85,29 @@ class CustomUserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+    
+#########################################################################################
+
+
+## LOGIN FORM ###########################################################################
+
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter Username',
+            'class': 'form-control'
+        })
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Enter Password',
+            'class': 'form-control'
+        })
+    )
+
+
+
+#########################################################################################

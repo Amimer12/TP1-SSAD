@@ -131,20 +131,27 @@
                     <div class="bottom"></div>
                 </div>
             </div>
-            <div  class="login">
-                <h1>well come to <q>encryptify</q> where we can encrypt your message</h1>
+            <div class="login">
+                <h1>Welcome to <q>Encryptify</q>, where we can encrypt your message</h1>
                 <div class="formcontainer">
-                    <h2>agent login</h2>
-                    <p>Hey , Enter your details ro get sign in your account</p>
-                    <form action="">
-                        <input type="text" id="email" placeholder="Enter Email ">
-                        <input type="password" placeholder="Password " id="password">
-                        <input type="submit" value="sign in">
-                        <div class="containerloader"><p class="yes">your request was successful</p><p class="no">sorry your email or password is wrong</p><span class="loader"></span></div>
+                    <h2>Agent Login</h2>
+                    <p>Enter your details to sign in to your account</p>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="text" name="usernameL" placeholder="Enter Username" required>
+                        <input type="password" name="passwordL" placeholder="Enter Password" required>
+                        <input type="submit" value="Sign In">
+                        <div class="containerloader">
+                            <p class="yes">Your request was successful</p>
+                            <p class="no">Sorry, your email or password is wrong</p>
+                            <span class="loader"></span>
+                        </div>
                     </form>
-
                 </div>
             </div>
+            
+
+            
         </div>
         <p>Copyright @TEAM_2 2024 | Privacy Policy </p>
     </div>

@@ -50,60 +50,6 @@ if (willrun !== null) {
 }
 
 // end the Main loader
-
-
-let img = document.querySelectorAll('.landing > img')
-let emailfild = document.querySelector('#email')
-let passwordfild = document.querySelector('#password')
-let containerloader = document.querySelector('.landing .container .formcontainer  .containerloader')
-let loginfrom = document.querySelector('.landing .container .login')
-setInterval(() => {
-    let i = Math.floor(4 * Math.random())
-    img[i].classList.toggle('active')
-},2000)
-let isremove = false
-let submit = document.querySelector('.landing .container .formcontainer form input[type="submit"]')
-submit.addEventListener('click',function(e) {
-    e.preventDefault();
-    containerloader.classList.add('active')
-    let loader = document.querySelector('.login .formcontainer span.loader')
-    let pyes = document.querySelector('.landing .container .formcontainer  .containerloader p.yes')
-    let pno = document.querySelector('.landing .container .formcontainer  .containerloader p.no')
-    pno.classList.remove('active')
-    pyes.classList.remove('active')
-    loader.classList.add('active')
-
-    setTimeout(()=> {
-        loader.classList.remove('active')
-        if (emailfild.value == "admin" && passwordfild.value == 'admin') {
-            pyes.classList.add('active')
-            setTimeout(()=> {
-                loginfrom.classList.add('gone')
-                setTimeout(()=> {
-                    loginfrom.remove()
-                    isremove = true
-                    loginPass.classList.add('active')
-                    let divtextareaLeft = document.querySelector('.landing .container .loginPass div.left')
-                    let divtextareaRight = document.querySelector('.landing .container .loginPass div.right')
-                    gsap.from(divtextareaLeft, {
-                        x:-200,
-                        duration:1,
-                        opacity:0,
-                        ease:"power3.out"
-                    })
-                    gsap.from(divtextareaRight, {
-                        x:+400,
-                        opacity:0,
-                        duration:1,
-                        ease:"power3.out"
-                    })
-                },1000)
-            },2000)
-        } else {
-            pno.classList.add('active')
-        }
-    },1900)
-})  
 let team = document.querySelector(".team")
 let teambtn = document.querySelector(".team button")
 let teampara = document.querySelector(".header .left p")
@@ -113,10 +59,95 @@ teampara.onclick = function() {
 teambtn.onclick = function() {
     team.classList.toggle('active')
 }
+
+//////////////////////////////////////////////////////////////////////
+
+let emailfild = document.querySelector('input[name="usernameL"]');  // Update the selector to match the rendered ID
+let passwordfild = document.querySelector('input[name="passwordL"]');  // Update the selector to match the rendered ID
+let containerloader = document.querySelector('.landing .container .formcontainer .containerloader');
+let loginfrom = document.querySelector('.landing .container .login');
+let loginPass = document.querySelector('.landing .container .loginPass');
+let urlLogin = document.querySelector('.landing .container .login .formcontainer form').action;
+
+
+let submit = document.querySelector('.landing .container .formcontainer form input[type="submit"]');
+submit.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    containerloader.classList.add('active');
+    let loader = document.querySelector('.login .formcontainer span.loader');
+    let pyes = document.querySelector('.landing .container .formcontainer .containerloader p.yes');
+    let pno = document.querySelector('.landing .container .formcontainer .containerloader p.no');
+    
+    pno.classList.remove('active');
+    pyes.classList.remove('active');
+    loader.classList.add('active');
+
+    // Collect form data
+    let formData = new URLSearchParams();  // Using URLSearchParams
+    formData.append('username', emailfild.value);  // Appending username
+    formData.append('password', passwordfild.value);  // Appending password
+
+    
+
+    fetch(urlLogin, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',  // URL-encoded form data
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  // CSRF token
+        },
+        body: formData.toString()  // Convert formData to string for sending
+    })
+    .then(response => response.json()) // Parse JSON response
+    .then(data => {
+        loader.classList.remove('active');
+
+        if (data.success_message) {
+            pyes.textContent = data.success_message;
+            pyes.classList.add('active');
+
+            setTimeout(() => {
+                loginfrom.classList.add('gone');
+                setTimeout(() => {
+                    loginfrom.remove();
+                    loginPass.classList.add('active');
+                    
+                    let divtextareaLeft = document.querySelector('.landing .container .loginPass div.left');
+                    let divtextareaRight = document.querySelector('.landing .container .loginPass div.right');
+                    
+                    gsap.from(divtextareaLeft, {
+                        x: -200,
+                        duration: 1,
+                        opacity: 0,
+                        ease: "power3.out"
+                    });
+                    gsap.from(divtextareaRight, {
+                        x: +400,
+                        opacity: 0,
+                        duration: 1,
+                        ease: "power3.out"
+                    });
+                }, 1000);
+            }, 2000);
+        } else if (data.errors) {
+            pno.textContent = data.errors.username ? data.errors.username[0] : "Invalid email or password";
+            pno.classList.add('active');
+        }
+    })
+    .catch(error => {
+        loader.classList.remove('active');
+        pno.textContent = "An error occurred. Please try again.";
+        pno.classList.add('active');
+    });
+});
+
+
+
+//////////////////////////////////////////////
+
 let email = 'admin'
 let password = 'admin'
 let login = document.querySelector('.login')
-let loginPass = document.querySelector('.landing .container .loginPass')
 let pchoise = document.querySelector('.landing .container .loginPass .left .menu p')
 let pchoiseIcon = document.querySelector('.landing .container .loginPass .left .menu p i')
 let ulchoise = document.querySelector('.landing .container .loginPass div.left .bottom ul')
