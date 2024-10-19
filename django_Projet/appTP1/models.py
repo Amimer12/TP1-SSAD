@@ -15,9 +15,9 @@ class UserAccountManager(BaseUserManager):
             raise ValueError("Users must have an email address")
 
         email = self.normalize_email(email)
-        username = email.split('@')[0]  # Automatically set username to the text before '@'
-        user = self.model(email=email, username=username, **extra_kwargs)
+        user = self.model(email=email, **extra_kwargs)
         user.set_password(password)
+        user.is_active = extra_kwargs.get('is_active', True) 
         user.save(using=self._db)
         return user
 
@@ -30,6 +30,7 @@ class UserAccountManager(BaseUserManager):
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
+        user.is_active = True  
         user.save(using=self._db)
         return user
 
@@ -41,7 +42,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         unique=True,
     )
     username = models.CharField(max_length=25, blank=True, null=True)
-    
+    is_active = models.BooleanField(default=True)
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='useraccount_set',  
