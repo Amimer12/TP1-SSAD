@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from .forms import CustomUserCreationForm, LoginForm
 from .models import UserAccount
+from django.views.decorators.csrf import csrf_exempt
+
 
 def AuthPage(request):
     signup_form = CustomUserCreationForm()
