@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns = [
-        path('Auth_Page/',views.AuthPage),
+        path('',views.AuthPage),
 ]

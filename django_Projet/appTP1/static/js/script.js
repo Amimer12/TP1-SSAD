@@ -242,43 +242,105 @@ function decalgeAgauche(theText) {
 // })
 // //  the responsive end
 // sign up
-let submitNewUser = document.querySelector('.createUser .mastercontainer .left form input[type="submit"]')
-submitNewUser.addEventListener('click',function(e) {
-    e.preventDefault()
-    let div = document.querySelector('.createUser .mastercontainer .containerloader')
-    let divP = document.querySelector('.createUser .mastercontainer .containerloader p ')
-    let divLoder = document.querySelector('.createUser .mastercontainer .containerloader span');
-    div.classList.add('active')
-    divLoder.style.display = 'block'
-    divP.style.display = 'none';
-    setTimeout(()=> {
-        divLoder.style.display = 'none'
-        divP.style.display = 'block';
-        let createUser = document.querySelector('.createUser');
-        gsap.to(createUser,{y:"-100%",duration:1.6,delay:1,ease:"power3.in"})
-    },1900)
-})
+// Handle the submission with visual effects and then form submission
+document.addEventListener('DOMContentLoaded', function () {
+    let form = document.querySelector('.createUser .mastercontainer .left form');
+    let div = document.querySelector('.createUser .mastercontainer .containerloader');
+    let successMessageElement = div.querySelector('.yes');
 
-let addUserBtn = document.querySelector('.header .right button')
-addUserBtn.addEventListener('click',()=> {
-    let createUser = document.querySelector('.createUser');
-    gsap.to(createUser,{
-        duration:1.6,
-        ease:"power3.out",
-        y:"100%"
-    })
-})
-let userTopNone = document.querySelector('.createUser .mastercontainer .left i')
-userTopNone.addEventListener('click',()=> {
-    let createUser = document.querySelector('.createUser');
-    gsap.to(createUser,{
-        duration:1.6,
-        delay:0.1,
-        ease:"power3.out",
-        y:"-100%"
-    })
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission (no page reload)
 
-})
+            let formData = new FormData(form); // Create a FormData object to hold form data
+            let url = form.action; // Get the form action URL
+
+            // Clear previous errors by hiding all form-error elements
+            let errorElements = form.querySelectorAll('.form-error');
+            errorElements.forEach(function (errorElement) {
+                errorElement.style.display = 'none'; // Hide all error messages initially
+            });
+
+            // Send an AJAX POST request using the Fetch API
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest', // Header to indicate AJAX request
+                    'X-CSRFToken': form.querySelector('input[name="csrfmiddlewaretoken"]').value // CSRF token
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => { throw data });  // Throw error data
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle the response data (success)
+                if (data.success_message) {
+                    // Success: show the loader and animate the form away
+                    successMessageElement.textContent = data.success_message;
+
+                    let divLoader = div.querySelector('span');
+                    let divP = div.querySelector('p');
+
+                    div.classList.add('active');
+                    divLoader.style.display = 'block';
+                    divP.style.display = 'none';
+
+                    setTimeout(() => {
+                        divLoader.style.display = 'none';
+                        divP.style.display = 'block';
+
+                        let createUser = document.querySelector('.createUser');
+                        gsap.to(createUser, { y: "-100%", duration: 1.6, delay: 1, ease: "power3.in" });
+                    }, 1900);
+                }
+            })
+            .catch(data => {
+                // Errors: Display form errors dynamically
+                if (data.errors) {
+                    let errors = JSON.parse(data.errors); // Parse the JSON-formatted errors
+                    Object.keys(errors).forEach(function (fieldName) {
+                        let errorElement = form.querySelector(`[name="${fieldName}"]`).nextElementSibling;
+                        if (errorElement && errorElement.classList.contains('form-error')) {
+                            errorElement.textContent = errors[fieldName][0].message; // Show the first error for the field
+                            errorElement.style.display = 'block'; // Show the error message
+                        }
+                    });
+                }
+            });
+        });
+    }
+});
+
+
+
+
+// Handle showing the user creation form when clicking "Add User" button
+let addUserBtn = document.querySelector('.header .right button');
+addUserBtn.addEventListener('click', () => {
+    let createUser = document.querySelector('.createUser');
+    gsap.to(createUser, {
+        duration: 1.6,
+        ease: "power3.out",
+        y: "100%"
+    });
+});
+
+// Handle hiding the user creation form when clicking the top icon (like a close button)
+let userTopNone = document.querySelector('.createUser .mastercontainer .left i');
+userTopNone.addEventListener('click', () => {
+    let createUser = document.querySelector('.createUser');
+    gsap.to(createUser, {
+        duration: 1.6,
+        delay: 0.1,
+        ease: "power3.out",
+        y: "-100%"
+    });
+});
+
 // end sign up
 // start maim Loader
 // ########

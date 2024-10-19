@@ -32,26 +32,45 @@
         <div class="mastercontainer">
             <div class="left">
                 <i class="fa-solid  fa-chevron-up"></i>
-                <h2>sign up</h2>
-                <p>let's get started with creating your account</p>
-                <form action="">
-                    <input type="text"  placeholder="Enter a User Name ">
-                    <input type="text" placeholder="Enter Email ">
-                    <input type="password" placeholder="Create A Password " >
-                    <input type="password" placeholder="Conform Your Password " >
-                    <input type="submit" value="sign in">
-                    <div class="containerloader"><p class="yes">your account was successful Created</p><span class="loader"></span></div>
+                <h2>Sign Up</h2>
+                <p>Let's get started with creating your account</p>
+    
+                <form action="" method="POST">
+                    {% csrf_token %}
+                
+                <!-- Username field -->
+                <input type="text" name="username" placeholder="Enter a User Name" required>
+                
+                <!-- Email field -->
+                <input type="text" name="email" placeholder="Enter Email" required>
+                <p class="form-error"></p>
+
+                <!-- Password fields -->
+                <input type="password" name="password1" placeholder="Create A Password of 6 charahcters" required>
+                <p class="form-error"></p>
+
+                <input type="password" name="password2" placeholder="Confirm Your Password" required>
+                <p class="form-error"></p>
+
+                <input type="submit" value="Sign Up">
+                
+                <div class="containerloader">
+                    <p class="yes"></p>
+                    <span class="loader"></span>
+                </div>
                 </form>
             </div>
             <div class="right">
-                <img src="                https://cdni.iconscout.com/illustration/premium/thumb/sign-up-illustration-download-in-svg-png-gif-file-formats--login-enter-log-cyber-protection-nallow-pack-people-illustrations-6983270.png?f=webp" alt="">
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/sign-up-illustration-download-in-svg-png-gif-file-formats--login-enter-log-cyber-protection-nallow-pack-people-illustrations-6983270.png?f=webp" alt="Signup Image">
             </div>
         </div>
     </div>
+    
+    
     <div class="team">
         <button> <i class="fa-solid fa-arrow-left"></i> </button>
         <div class="container">
-            <h2>meet our membes !</h2>
+            <h2>meet our members !</h2>
             <ul>
                 <li><p>ABDI Naila</p></li>
                 <li><p>AMIMER Abderrahmane Mohamed Elmahdi</p></li>
