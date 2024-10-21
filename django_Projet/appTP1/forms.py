@@ -66,7 +66,7 @@ class CustomUserCreationForm(forms.ModelForm):
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
         if not motDePasseMix(password1) :
-            raise forms.ValidationError("Password must have 6 charachters")
+            raise forms.ValidationError("Password must have 6 charachters of letters or numbers or special charachters !!")
         return password1
     
     def clean_password2(self):
@@ -74,7 +74,7 @@ class CustomUserCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
+            raise forms.ValidationError("Passwords doesn't match")
             
         return password2
 

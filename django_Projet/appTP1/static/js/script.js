@@ -152,6 +152,7 @@ let pchoise = document.querySelector('.landing .container .loginPass .left .menu
 let pchoiseIcon = document.querySelector('.landing .container .loginPass .left .menu p i')
 let ulchoise = document.querySelector('.landing .container .loginPass div.left .bottom ul')
 let ulLiChoise = document.querySelectorAll('.landing .container .loginPass div.left .bottom ul li')
+
 let numOfMethod
 pchoise.addEventListener("click",() => {
     ulchoise.classList.toggle('active')
@@ -192,10 +193,50 @@ ulLiChoise.forEach((ele) => {
 let btnSumbitCryp = document.querySelector('.landing .container .loginPass div.left .bottom button')
 let textareaLeft = document.querySelector('.landing .container .loginPass div.left form textarea')
 let textareaRight = document.querySelector('.landing .container .loginPass div.right form textarea')
-btnSumbitCryp.addEventListener('click', function() {
+
+let urlCrypt = document.querySelector('.landing .container .loginPass .left form').action;
+let textFeildToCrypt = document.querySelector('textarea[id="textCrypt"]');  
+let textFeildResult = document.querySelector('textarea[id="textResult"]');  
+
+
+btnSumbitCryp.addEventListener('click', function(e) {
+    e.preventDefault();
+
     if (numOfMethod !== undefined) {
-        // miroir(textareaLeft.value)
-    }
+        console.log(numOfMethod)
+        console.log(textFeildToCrypt.value)
+
+
+    let formDataCrypt = new URLSearchParams();  
+    formDataCrypt.append('method', numOfMethod);  
+    formDataCrypt.append('textToEncrypt', textFeildToCrypt.value);
+
+    fetch(urlCrypt, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',  
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  
+        },
+        body: formDataCrypt.toString()  
+    })
+    .then(response => response.json()) 
+    .then(data => {
+       
+        if (data.success) {
+            textFeildResult.textContent = data.CryptedText
+        } else if (data.errors) {
+            textFeildResult.textContent = "An error occurred. Please try again."
+        textFeildResult.style.color = "red"
+
+        }
+    })
+    .catch(error => {
+        textFeildResult.textContent = "An error occurred. Please try again." 
+        textFeildResult.style.color = "red"
+    });
+}
+
+
 })
 
 function miroir(theText) {
