@@ -821,3 +821,6 @@ display: block;
   display: none; 
   color: red;    
 }
+#textCrypt{
+  height: 90%;
+}

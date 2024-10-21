@@ -9,19 +9,21 @@ import math
 
 
 
-# ******************************* Fonction pour calculer l'inverse modulaire de a ######################################
+############################################ Affine ############################################
+
+# Calculer l'inverse modulaire de a :
 def mod_inverse(a, m):
     for x in range(1, m):
         if (a * x) % m == 1:
             return x
     raise ValueError(f"Pas d'inverse modulaire pour a={a} et m={m}")
 
-# ************************ Vérifier si a est coprime avec 128 (pour éviter des erreurs de déchiffrement)###########
+# Vérifier si a est coprime avec 128 (pour éviter des erreurs de déchiffrement) :
 def is_coprime(a, m):
     return math.gcd(a, m) == 1
 
-# *********************** Fonction pour chiffrer un message (Affine)
-def encrypt_message(message, a, b):
+############################################ Affine Encrypt #######################################
+def encrypt_message_affine(message, a, b):
     decimal_values_y = []
     m = 128
 
@@ -41,8 +43,8 @@ def encrypt_message(message, a, b):
 
     return encrypted_message
 
-# *********************** Fonction pour déchiffrer un message (Affine)#####################################
-def decrypt_message(encrypted_message, a, b):
+############################################ Affine Decrypt ############################################
+def decrypt_message_affine(encrypted_message, a, b):
     m = 128
     decimal_values_z = []
     
@@ -62,7 +64,7 @@ def decrypt_message(encrypted_message, a, b):
 
     return decrypted_message
 
-############################  Décalage : ##############################################################
+############################################ Décalage ##############################################
 
 def decalage_droite_mot(mot):
     """Décale tous les caractères d'un mot à droite d'un caractère."""
@@ -90,20 +92,76 @@ def decalage_texte(texte):
 
     return texte_droite, texte_gauche
 
-# Exemple d'utilisation
-#message = "Hello world Python"
-#print("Message original:", message)
 
-# Décalage
-#decalage_d, decalage_g = decalage_texte(message)
-#print("Décalage à droite:", decalage_d)
-#print("Décalage à gauche:", decalage_g)
-
-########################### Mirroir ######################################
+############################################ Mirroir ###########################################
 
 def mirroir(text):
     result = text[::-1]
-    return(result if text != result else decalage_texte(text))
+    return(result if text != result else decalage_gauche_mot(text))
+
+############################################ César #############################################
+
+#methode1: en utilisant table d'ascii
+'''
+def cryptage_cesar(texte,n):
+    texte_crypte=""
+    for caractere  in texte :
+        texte_crypte += chr((ord(caractere )+n-32)%95+32)
+    return texte_crypte
+
+def decryptage_cesar(texte,n):
+    texte_noncrypte=""
+    for caractere  in texte :
+         texte_noncrypte += chr((ord(caractere )-n-32)%95+32)
+    return texte_noncrypte
+'''
+#methode2:
+def cryptage_cesar(texte,n):
+   texte_crypte=""
+   caracteres_speciaux=[" ","!",'"',"#","$","%","&","`","(",")","*","+",",","-",
+    ".","/",":",";","<","=",">","?","@","[","\\","]","^","_","'","{","|","}","~"]
+   
+   for caractere  in texte :
+        #crypter les chiffres
+        if caractere.isdigit():
+            texte_crypte += chr((ord(caractere )+n-48)%10+48)
+        #crypter les lettres majuscules
+        elif caractere.isupper():
+            texte_crypte += chr((ord(caractere )+n-65)%26+65)
+        #crypter les lettres minuscules
+        elif  caractere.islower():
+            texte_crypte += chr((ord(caractere )+n-97)%26+97)
+        #crypter les caracteres speciaux
+        else:
+            index=caracteres_speciaux.index(caractere)
+            
+            texte_crypte += caracteres_speciaux[(index+n)%33]
+   return texte_crypte
+
+def decryptage_cesar(texte,n):
+    texte_decrypte=""
+    caracteres_speciaux=[" ","!",'"',"#","$","%","&","`","(",")","*","+",",","-",
+    ".","/",":",";","<","=",">","?","@","[","\\","]","^","_","'","{","|","}","~"]
+   
+    for caractere  in texte :
+        #decrypter les chiffres
+        if caractere.isdigit():
+            texte_decrypte += chr((ord(caractere )-n-48)%10+48)
+        #decrypter les lettres majuscules
+        elif caractere.isupper():
+            texte_decrypte += chr((ord(caractere )-n-65)%26+65)
+        #decrypter les lettres minuscules
+        elif  caractere.islower():
+            texte_decrypte += chr((ord(caractere )-n-97)%26+97)
+        #decrypter les caracteres speciaux
+        else:
+            index=caracteres_speciaux.index(caractere)
+            
+            texte_decrypte += caracteres_speciaux[(index-n)%33]
+    return texte_decrypte
+
+########################################################################################################################################
+
 
 
 def AuthPage(request):
@@ -152,7 +210,7 @@ def AuthPage(request):
             method = request.POST.get('method')
             textToEncrypt = request.POST.get('textToEncrypt')
             CryptedText = ""
-            if method and textToEncrypt :
+            if (method and textToEncrypt) or CryptedText =="":
                 if method == '1':
                     CryptedText = mirroir(textToEncrypt)
                 elif method =="2":
