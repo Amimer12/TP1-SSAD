@@ -68,15 +68,20 @@ def decrypt_message_affine(encrypted_message, a, b):
 
 def decalage_droite_mot(mot):
     """Décale tous les caractères d'un mot à droite d'un caractère."""
+    
     if len(mot) == 0:
-        return mot
-    return mot[-1] + mot[:-1]
+        result =  mot
+    result= mot[-1] + mot[:-1]
+
+    return (result if mot != result else encrypt_message_affine(mot,3,5))
 
 def decalage_gauche_mot(mot):
     """Décale tous les caractères d'un mot à gauche d'un caractère."""
     if len(mot) == 0:
-        return mot
-    return mot[1:] + mot[0]
+        result =  mot
+    result= mot[1:] + mot[0]
+    return (result if mot != result else encrypt_message_affine(mot,3,5))
+
 
 def decalage_texte(texte):
     """Décale chaque mot du texte à droite et à gauche."""
@@ -214,13 +219,13 @@ def AuthPage(request):
                 if method == '1':
                     CryptedText = mirroir(textToEncrypt)
                 elif method =="2":
-                    pass
+                    CryptedText = encrypt_message_affine(textToEncrypt,3,5)
                 elif method =="3":
                     CryptedText = decalage_gauche_mot(textToEncrypt)
                 elif method =="4":
                     CryptedText = decalage_droite_mot(textToEncrypt)
                 elif method == "5":
-                    pass
+                    CryptedText = cryptage_cesar(textToEncrypt,20)
                 
                 return JsonResponse({'success':True,'CryptedText': CryptedText })
             else:
