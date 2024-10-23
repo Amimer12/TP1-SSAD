@@ -195,8 +195,12 @@ let textareaLeft = document.querySelector('.landing .container .loginPass div.le
 let textareaRight = document.querySelector('.landing .container .loginPass div.right form textarea')
 
 let urlCrypt = document.querySelector('.landing .container .loginPass .left form').action;
-let textFeildToCrypt = document.querySelector('textarea[id="textCrypt"]');  
-let textFeildResult = document.querySelector('textarea[id="textResult"]');  
+let textFeildToCrypt = document.querySelector('textarea[id="textToCrypt"]');  
+let affine_a = document.querySelector('input[id="affine_a"]');  
+let affine_b = document.querySelector('input[id="affine_b"]');  
+let cesar_key = document.querySelector('input[id="cesar_key"]');  
+let textFeildResultCrypt = document.querySelector('textarea[id="textResultCrypt"]');  
+let textFeildResultDecrypt = document.querySelector('textarea[id="textResultDecrypt"]');  
 
 
 btnSumbitCryp.addEventListener('click', function(e) {
@@ -210,6 +214,9 @@ btnSumbitCryp.addEventListener('click', function(e) {
     let formDataCrypt = new URLSearchParams();  
     formDataCrypt.append('method', numOfMethod);  
     formDataCrypt.append('textToEncrypt', textFeildToCrypt.value);
+    formDataCrypt.append('affine_a', affine_a.value);
+    formDataCrypt.append('affine_b', affine_b.value);
+    formDataCrypt.append('cesar_key', cesar_key.value);
 
     fetch(urlCrypt, {
         method: 'POST',
@@ -221,19 +228,23 @@ btnSumbitCryp.addEventListener('click', function(e) {
     })
     .then(response => response.json()) 
     .then(data => {
-       
         if (data.success) {
-            textFeildResult.textContent = data.CryptedText
+            // Success case: display encrypted and decrypted text
+            textFeildResultCrypt.textContent = data.CryptedText;
+            textFeildResultDecrypt.textContent = data.DecryptedText;
+            textFeildResultCrypt.style.color = "";  // Reset any error styling
         } else if (data.errors) {
-            textFeildResult.textContent = "An error occurred. Please try again."
-        textFeildResult.style.color = "red"
-
+            // Error case: display specific error message from server
+            textFeildResultCrypt.textContent = data.errors;
+            textFeildResultCrypt.style.color = "red";
         }
     })
     .catch(error => {
-        textFeildResult.textContent = "An error occurred. Please try again." 
-        textFeildResult.style.color = "red"
+        
+        textFeildResultCrypt.textContent = "An error occurred. Please try again.";
+        textFeildResultCrypt.style.color = "red";
     });
+    
 }
 
 
@@ -439,6 +450,21 @@ divIconSetting.addEventListener("click",function(e) {
         })
     }
 })
+//   meeeee
+settingSide.addEventListener('click',(e)=> {
+    e.stopPropagation()
+})
+window.addEventListener('click',function(e) {
+    if (e.target !== settingSide ) {
+        settingSide.classList.remove('active')
+        iconSetting.classList.remove('fa-spin')
+        gsap.to(settingSide,{
+            x:0,
+            duration:1,
+            ease:"power3.out",
+        })
+    }
+})
 listOfBtnSetting.forEach((ele)=> {
     ele.addEventListener("click",(e)=> {
         listOfBtnSetting.forEach((e) => {
@@ -460,3 +486,42 @@ listOfBtnSetting.forEach((ele)=> {
 
 
 // end maim Loader
+// the question marke ???
+let questionIcon = document.querySelector(".landing .container .loginPass div.left .top .question .icon");
+let takeaffine = document.querySelector('.landing .container .loginPass div.left .question .box.takeaffine');
+let takecesar = document.querySelector('.landing .container .loginPass div.left .question .box.takecesar');
+ulLiChoise.forEach((ele) => {
+    ele.onclick = function() {
+        // Remove 'active' class from all list items
+        ulLiChoise.forEach((e) => {
+            e.classList.remove('active');
+        });
+
+        // Add 'active' class to the clicked item
+        this.classList.add('active');
+        numOfMethod = this.dataset.method;
+
+        // Hide both boxes (Affine and Cesar) by default when any new li is selected
+        questionIcon.classList.remove("active");
+        takeaffine.classList.remove('active');
+        takecesar.classList.remove('active');
+
+        // Show the relevant question icon and box based on the selected method
+        if (numOfMethod === "2") {
+            questionIcon.classList.add("active"); // Show the question icon for Affine
+            takeaffine.classList.add("active");   // Immediately show the Affine box
+        } else if (numOfMethod === "5" || numOfMethod === "6") {
+            questionIcon.classList.add("active"); // Show the question icon for Cesar
+            takecesar.classList.add("active");    // Immediately show the Cesar box
+        }
+    }
+});
+
+// Toggle box visibility on question icon click (optional, can be removed if auto-show is preferred)
+questionIcon.addEventListener('click', function() {
+    if (numOfMethod === "2") {
+        takeaffine.classList.toggle('active');  // Toggle Affine box
+    } else if (numOfMethod === "5" || numOfMethod === '6') {
+        takecesar.classList.toggle('active');  // Toggle Cesar box
+    }
+});
