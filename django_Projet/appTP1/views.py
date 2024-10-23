@@ -25,47 +25,63 @@ def decrypt_message_affine(encrypted_message, a, b):
     return decrypted_message
  
 ############################################ Décalage ##############################################
-
 def encrypt_decalage_droite(mot):
-    """Décale tous les caractères d'un mot à droite d'un caractère."""
+    """Décale tous les caractères d'un mot à droite d'un caractère. Gère plusieurs mots."""
+    words = mot.split(" ")  
+    result_words = []
     
-    if len(mot) == 0:
-        result =  mot
-    result= mot[-1] + mot[:-1]
-
-    return (result if mot != result else encrypt_cesar_adroite(mot,1))
+    for word in words:
+        if len(word) == 0:
+            result_word = word
+        else:
+            result_word = word[-1] + word[:-1]
+            if word == result_word:  
+                result_word = encrypt_cesar_adroite(word, 1)
+        result_words.append(result_word)
+    
+    return " ".join(result_words)  # Join the words back with spaces
 
 def encrypt_decalage_gauche(mot):
-    """Décale tous les caractères d'un mot à gauche d'un caractère."""
-    if len(mot) == 0:
-        result =  mot
-    result= mot[1:] + mot[0]
-    return (result if mot != result else encrypt_cesar_agauche(mot,1))
+    """Décale tous les caractères d'un mot à gauche d'un caractère. Gère plusieurs mots."""
+    words = mot.split(" ")
+    result_words = []
+    
+    for word in words:
+        if len(word) == 0:
+            result_word = word
+        else:
+            result_word = word[1:] + word[0]
+            if word == result_word:
+                result_word = encrypt_cesar_agauche(word, 1)
+        result_words.append(result_word)
+    
+    return " ".join(result_words)
 
 def decrypt_decalage_droite(mot):
-    """Décale tous les caractères d'un mot à droite d'un caractère."""    
-    result= encrypt_decalage_gauche(mot)
-    return (result if mot != result else decrypt_cesar_adroite(mot,1))
+    """Décale tous les caractères d'un mot à droite d'un caractère (inverse). Gère plusieurs mots."""
+    words = mot.split(" ")
+    result_words = []
+    
+    for word in words:
+        result_word = encrypt_decalage_gauche(word)  # Use gauche to reverse droite
+        if word == result_word:
+            result_word = decrypt_cesar_adroite(word, 1)
+        result_words.append(result_word)
+    
+    return " ".join(result_words)
 
 def decrypt_decalage_gauche(mot):
-    """Décale tous les caractères d'un mot à gauche d'un caractère."""
-    result= encrypt_decalage_droite(mot)
-    return (result if mot != result else decrypt_cesar_agauche(mot,1))
-
-
-def decalage_texte(texte):
-    """Décale chaque mot du texte à droite et à gauche."""
-    mots = texte.split()
+    """Décale tous les caractères d'un mot à gauche d'un caractère (inverse). Gère plusieurs mots."""
+    words = mot.split(" ")
+    result_words = []
     
-    # Décalage à droite pour tous les mots
-    mots_droite = [encrypt_decalage_droite(mot) for mot in mots]
-    texte_droite = ' '.join(mots_droite)
-
-    # Décalage à gauche pour tous les mots
-    mots_gauche = [encrypt_decalage_gauche(mot) for mot in mots]
-    texte_gauche = ' '.join(mots_gauche)
-
-    return texte_droite, texte_gauche
+    for word in words:
+        result_word = encrypt_decalage_droite(word)  # Use droite to reverse gauche
+        if word == result_word:
+            result_word = decrypt_cesar_agauche(word, 1)
+        result_words.append(result_word)
+    
+    return " ".join(result_words)
 
 
 ############################################ Mirroir ###########################################
@@ -247,7 +263,7 @@ def AuthPage(request):
                 print("Authentication failed.")
                 return JsonResponse({'errors': {'__all__': ["Please enter a correct username and password. Note that both fields may be case-sensitive."]}}, status=400)
 
-#####################################################################################################
+################################################## LOGIN ###################################################
         elif 'method' in request.POST and 'textToEncrypt' in request.POST:
             method = request.POST.get('method')
             textToEncrypt = request.POST.get('textToEncrypt')
