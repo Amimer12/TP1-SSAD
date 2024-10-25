@@ -219,9 +219,69 @@ def decrypt_cesar_adroite(texte, n):
 
 
 ########################################################################################################################################
+def PW_verification(password):
+    special_characters = "(!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)"
+
+    digit = any(char.isdigit() for char in password)
+    lower = any(char.islower() for char in password)
+    upper = any(char.isupper() for char in password)
+    special = any(char in special_characters for char in password)
+    is_long_enough = len(password) >= 6
+
+    if not digit:
+        print("You should add a number to your password")
+    if not lower:
+        print("You should add a lowercase letter to your password")
+    if not upper:
+        print("You should add an uppercase letter to your password")
+    if not special:
+        print("You should add a special character to your password")
+    if not is_long_enough:
+        print("Your password should be at least 6 characters long")
+
+    # Check if the password is strong or weak
+    if digit and lower and upper and special and is_long_enough:
+        return "your password is very strong"
+    elif (digit and lower) or (upper and special) and is_long_enough:
+        return "your password is strong"
+    elif (digit and lower and not upper and not special) or (digit and upper and not lower and not special) \
+            or (lower and upper and not digit and not special) or (digit and special and not lower and not upper) \
+            or (lower and special and not digit and not upper) or (upper and special and not digit and not lower) \
+            and is_long_enough:
+        return "your password is weak"
+    elif digit or lower or upper or special and is_long_enough:
+        return "your password is very weak"
+    else:
+        return "your password is too weak"
 
 
+def AuthPage(request):
+    signup_form = CustomUserCreationForm()
+    login_form = LoginForm()
 
+    if request.method == "POST":
+        
+        # Handle user signup
+        if 'username' in request.POST and 'email' in request.POST:
+            signup_form = CustomUserCreationForm(request.POST)
+            login_form = LoginForm()
+
+            if signup_form.is_valid():
+                # Verify password strength
+                password = request.POST.get('password1')
+                password_strength = PW_verification(password)
+
+                if "very weak" in password_strength or "too weak" in password_strength:
+                    return JsonResponse({'password_error': password_strength}, status=400)
+
+                # If the password is acceptable, save the form
+                signup_form.save()
+                return JsonResponse({'success_message': "Your account has been successfully created!", 'password_strength': password_strength})
+            else:
+                errors = signup_form.errors.as_json()
+                return JsonResponse({'errors': errors}, status=400)
+
+'''
 def AuthPage(request):
     signup_form = CustomUserCreationForm()
     login_form = LoginForm()
@@ -239,7 +299,7 @@ def AuthPage(request):
             else:
                 errors = signup_form.errors.as_json()
                 return JsonResponse({'errors': errors}, status=400)
-            
+'''
 ############################### LOGIN FUNCTION ###########################################################
         elif 'username' in request.POST and 'password' in request.POST:
             login_form = LoginForm(request, data=request.POST)
