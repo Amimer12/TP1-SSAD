@@ -62,13 +62,17 @@ teambtn.onclick = function() {
 
 //////////////////////////////////////////////////////////////////////
 
+// the background change
+// end
+// 
 let emailfild = document.querySelector('input[name="usernameL"]');  // Update the selector to match the rendered ID
 let passwordfild = document.querySelector('input[name="passwordL"]');  // Update the selector to match the rendered ID
 let containerloader = document.querySelector('.landing .container .formcontainer .containerloader');
 let loginfrom = document.querySelector('.landing .container .login');
 let loginPass = document.querySelector('.landing .container .loginPass');
 let urlLogin = document.querySelector('.landing .container .login .formcontainer form').action;
-
+let theModeBox = document.querySelector(".settingSide .box-crypt")
+let webSiteMode = 'cry';
 
 let submit = document.querySelector('.landing .container .formcontainer form input[type="submit"]');
 submit.addEventListener('click', function(e) {
@@ -105,7 +109,7 @@ submit.addEventListener('click', function(e) {
         if (data.success_message) {
             pyes.textContent = data.success_message;
             pyes.classList.add('active');
-
+            theModeBox.style.display = "block"
             setTimeout(() => {
                 loginfrom.classList.add('gone');
                 setTimeout(() => {
@@ -150,18 +154,78 @@ let password = 'admin'
 let login = document.querySelector('.login')
 let pchoise = document.querySelector('.landing .container .loginPass .left .menu p')
 let pchoiseIcon = document.querySelector('.landing .container .loginPass .left .menu p i')
-let ulchoise = document.querySelector('.landing .container .loginPass div.left .bottom ul')
-let ulLiChoise = document.querySelectorAll('.landing .container .loginPass div.left .bottom ul li')
+let ulchoise = document.querySelector('.landing .container .loginPass div.left .bottom ul.crypt')
+let ulLiChoise = document.querySelectorAll('.landing .container .loginPass div.left .bottom ul.crypt li')
+
+// #############--------------------------------####################3
+let ulchoisestg = document.querySelector('.landing .container .loginPass div.left .bottom ul.stg')
+let ulLiChoisestg = document.querySelectorAll('.landing .container .loginPass div.left .bottom ul.stg li')
 
 let numOfMethod
+
+// website mode
+
+let crypageMode = document.querySelector(".settingSide .box-crypt .cry")
+let stegranographyMode = document.querySelector(".settingSide .box-crypt .stg")
+
+// les text
+
+let textareaRightCty = document.querySelectorAll(".landing .container .loginPass div.right > div.areacry ")
+let textareaRightStg = document.querySelector(".landing .container .loginPass div.right > div.areastg ")
+
+
+// ??????
+
+let questionIcon = document.querySelector(".landing .container .loginPass div.left .top .question .icon");
+let takeaffine = document.querySelector('.landing .container .loginPass div.left .question .box.takeaffine');
+let takecesar = document.querySelector('.landing .container .loginPass div.left .question .box.takecesar');
+let btnModeList = [questionIcon ,takecesar,takeaffine ]
+crypageMode.onclick = ()=> {
+    webSiteMode = "cry";
+    stegranographyMode.classList.remove('active')
+    crypageMode.classList.add('active')
+    textareaRightStg.style.display = "none"
+    textareaRightCty.forEach((e)=> {
+        e.style.display = "block"
+    })
+    btnModeList.forEach((e)=> {
+        e.classList.remove('active')
+    })
+}
+stegranographyMode.onclick = ()=> {
+    webSiteMode = "stg";
+    crypageMode.classList.remove('active')
+    stegranographyMode.classList.add('active')
+    textareaRightStg.style.display = "block"
+    textareaRightCty.forEach((e)=> {
+        e.style.display = "none"
+    })
+    btnModeList.forEach((e)=> {
+        e.classList.remove('active')
+    })
+}
+
+
+
 pchoise.addEventListener("click",() => {
-    ulchoise.classList.toggle('active')
-    if (ulchoise.classList.contains('active')) {
-        pchoiseIcon.classList.remove('fa-chevron-up')
-        pchoiseIcon.classList.add('fa-chevron-down')
+    if (webSiteMode === 'cry') {
+        ulchoise.classList.toggle('active')
+        if (ulchoise.classList.contains('active')) {
+            pchoiseIcon.classList.remove('fa-chevron-up')
+            pchoiseIcon.classList.add('fa-chevron-down')
+        } else {
+            pchoiseIcon.classList.remove('fa-chevron-down')
+            pchoiseIcon.classList.add('fa-chevron-up')
+        }
     } else {
-        pchoiseIcon.classList.remove('fa-chevron-down')
-        pchoiseIcon.classList.add('fa-chevron-up')
+        ulchoisestg.classList.toggle('active')
+        if (ulchoisestg.classList.contains('active')) {
+            pchoiseIcon.classList.remove('fa-chevron-up')
+            pchoiseIcon.classList.add('fa-chevron-down')
+        } else {
+            pchoiseIcon.classList.remove('fa-chevron-down')
+            pchoiseIcon.classList.add('fa-chevron-up')
+        }
     }
 })
 pchoise.onclick = function(e) {
@@ -250,64 +314,64 @@ btnSumbitCryp.addEventListener('click', function(e) {
 
 })
 
-function miroir(theText) {
-    let theTextsting = new String(theText)
-    let words = []
-    words = theTextsting.split(" ")
-    let reverse = words.map(function(ele) {
-        let word = []
-        word = ele.split("")
-        let i = Math.floor(word.length / 2)
-        for (j = 0 ; j <= i ; j++ ) {
-            let a = word[j]
-            word[j] = word[ele.length - 1 - j]
-            word[ele.length - 1 - j] = a
-        }
-        ele = word.join("")
-        return ele
-    } )
-    console.log(reverse.join(" "))
-}
+// function miroir(theText) {
+//     let theTextsting = new String(theText)
+//     let words = []
+//     words = theTextsting.split(" ")
+//     let reverse = words.map(function(ele) {
+//         let word = []
+//         word = ele.split("")
+//         let i = Math.floor(word.length / 2)
+//         for (j = 0 ; j <= i ; j++ ) {
+//             let a = word[j]
+//             word[j] = word[ele.length - 1 - j]
+//             word[ele.length - 1 - j] = a
+//         }
+//         ele = word.join("")
+//         return ele
+//     } )
+//     console.log(reverse.join(" "))
+// }
 // miroir('mohamed zouaoui')
 
-function decalgeAdroite(theText) {
-    let theTextsting = new String(theText)
-    let words = [];
-    words = theTextsting.split(" ")
-    let reverseAdoite = words.map(function(ele) {
-        let word = []
-        word = ele.split("")
-        let i = word.length
-        let fin = word[i - 1]
-        for (j = i - 1 ;j >= 1; j--) {
-            let a  = word[j]
-            word[j] = word[j - 1]
-        }
-        word[0] = fin
-        return word.join("")
-    })
-    console.log(reverseAdoite.join(" "))
-}
+// function decalgeAdroite(theText) {
+//     let theTextsting = new String(theText)
+//     let words = [];
+//     words = theTextsting.split(" ")
+//     let reverseAdoite = words.map(function(ele) {
+//         let word = []
+//         word = ele.split("")
+//         let i = word.length
+//         let fin = word[i - 1]
+//         for (j = i - 1 ;j >= 1; j--) {
+//             let a  = word[j]
+//             word[j] = word[j - 1]
+//         }
+//         word[0] = fin
+//         return word.join("")
+//     })
+//     console.log(reverseAdoite.join(" "))
+// }
 // decalgeAdroite("abc bcfds mohamed")
 
-function decalgeAgauche(theText) {
-    let theTextsting = new String(theText)
-    let words = [];
-    words = theTextsting.split(" ")
-    let reverseAdoite = words.map(function(ele) {
-        let word = []
-        word = ele.split("")
-        let i = word.length
-        let start = word[0]
-        for (j = 0 ;j < i -1 ; j++) {
-            let a  = word[j]
-            word[j] = word[j + 1]
-        }
-        word[i -1 ] = start
-        return word.join("")
-    })
-    console.log(reverseAdoite.join(" "))
-}
+// function decalgeAgauche(theText) {
+//     let theTextsting = new String(theText)
+//     let words = [];
+//     words = theTextsting.split(" ")
+//     let reverseAdoite = words.map(function(ele) {
+//         let word = []
+//         word = ele.split("")
+//         let i = word.length
+//         let start = word[0]
+//         for (j = 0 ;j < i -1 ; j++) {
+//             let a  = word[j]
+//             word[j] = word[j + 1]
+//         }
+//         word[i -1 ] = start
+//         return word.join("")
+//     })
+//     console.log(reverseAdoite.join(" "))
+// }
 // decalgeAgauche('mohmaed zouaoui')
 // 
 
@@ -487,9 +551,7 @@ listOfBtnSetting.forEach((ele)=> {
 
 // end maim Loader
 // the question marke ???
-let questionIcon = document.querySelector(".landing .container .loginPass div.left .top .question .icon");
-let takeaffine = document.querySelector('.landing .container .loginPass div.left .question .box.takeaffine');
-let takecesar = document.querySelector('.landing .container .loginPass div.left .question .box.takecesar');
+
 ulLiChoise.forEach((ele) => {
     ele.onclick = function() {
         // Remove 'active' class from all list items
@@ -525,3 +587,4 @@ questionIcon.addEventListener('click', function() {
         takecesar.classList.toggle('active');  // Toggle Cesar box
     }
 });
+

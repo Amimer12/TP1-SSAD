@@ -23,7 +23,7 @@ def decrypt_message_affine(encrypted_message, a, b):
     decrypted_chars = [chr(value) for value in decimal_values_decrypted]  # Conversion en caractères déchiffrés
     decrypted_message = ''.join(decrypted_chars)  # Combinaison des caractères déchiffrés
     return decrypted_message
- 
+
 ############################################ Décalage ##############################################
 def encrypt_decalage_droite(mot):
     """Décale tous les caractères d'un mot à droite d'un caractère. Gère plusieurs mots."""
@@ -96,9 +96,9 @@ def mirroir_cryptage(text):
             taille=len(mot)
             partie_centrale=mot[taille//2:]
             if taille%2 == 0:
-              result="y"+partie_centrale +"xx"
+                result="y"+partie_centrale +"xx"
             else:
-              result="y"+partie_centrale +"x" 
+                result="y"+partie_centrale +"x" 
         resultats.append(result)
     return ' '.join(resultats)
 
@@ -130,7 +130,7 @@ def cryptage_cesar(texte,n):
 def decryptage_cesar(texte,n):
     texte_noncrypte=""
     for caractere  in texte :
-         texte_noncrypte += chr((ord(caractere )-n-32)%95+32)
+        texte_noncrypte += chr((ord(caractere )-n-32)%95+32)
     return texte_noncrypte
 '''
 #methode2:
@@ -281,7 +281,7 @@ def AuthPage(request):
                 errors = signup_form.errors.as_json()
                 return JsonResponse({'errors': errors}, status=400)
 
-'''
+
 def AuthPage(request):
     signup_form = CustomUserCreationForm()
     login_form = LoginForm()
@@ -289,7 +289,7 @@ def AuthPage(request):
     if request.method == "POST":
         
         # Handle user signup
-        if 'username' in request.POST and 'email' in request.POST:
+        if 'username' in request.POST and 'email' in request.POST :
             signup_form = CustomUserCreationForm(request.POST)
             login_form = LoginForm()
 
@@ -299,9 +299,10 @@ def AuthPage(request):
             else:
                 errors = signup_form.errors.as_json()
                 return JsonResponse({'errors': errors}, status=400)
-'''
+
 ############################### LOGIN FUNCTION ###########################################################
-        elif 'username' in request.POST and 'password' in request.POST:
+        elif 'username' in request.POST and 'password' in request.POST :
+            
             login_form = LoginForm(request, data=request.POST)
             signup_form = CustomUserCreationForm()
 

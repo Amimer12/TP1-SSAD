@@ -20,8 +20,8 @@
 }
 body {
   font-family: "WorkSans";
-  background-color: #f3eecd;
-  color: #222;
+  background-color: var(--bg);
+  color: var(--t);
 }
 a {
   text-decoration: none;
@@ -31,7 +31,10 @@ ul {
 }
 :root {
   --padding-container: 15px;
-  --color: #f3eecd;
+  --bg: #002711;
+  --v:#510047;
+  --t:#f1cbe6;
+
 }
 .container {
   padding-left: var(--padding-container);
@@ -62,18 +65,19 @@ ul {
   position: fixed;
   width: 270px;
   height: 100vh;
-  background-color: #f6f6f6;
+  background-color: var(--bg);
   top: 0;
   left: -270px;
   z-index: 10;
-  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
   isolation: isolate;
+  border-right: 1px solid var(--t);
 }
 .settingSide .icon {
   width: 30px;
   height: 30px;
-  background-color: #f6f6f6;
+  background-color: var(--bg);
   display: flex;
+  color: var(--t);
   align-items: center;
   justify-content: center;
   border-top-right-radius: 6px;
@@ -82,14 +86,20 @@ ul {
   top: 29%;
   right: -30px;
   cursor: pointer;
+  border-style:solid ;
+  border-color: var(--t) var(--t) var(--t) transparent;
+  border-width: 1px ;
 }
 .settingSide .box , .settingSide .box-crypt {
   padding: 20px 15px;
   height: 100px;
-  color: #333;
+  color: var(--t);
+}
+.settingSide .box-crypt {
+  display: none;
 }
 .settingSide .box p,.settingSide .box-crypt p {
-  font-weight: 600;
+  font-weight: 400;
     text-transform: capitalize;
     font-size: 17px;
     margin-bottom: 25px;
@@ -100,31 +110,30 @@ ul {
   position: absolute;
   width: 70%;
   height: 1px;
-  background-color: #333;
+  background-color: var(--t);
   bottom: -10px;
   left: 0;
 }
 .settingSide .box div ,.settingSide .box-crypt div {
-      display: flex;
+    display: flex;
     gap: 12px;
 }
 
 .settingSide .box div button,.settingSide .box-crypt div button {
   flex: 1;
   padding: 8px;
-  border: 1px solid #777;
+  border: 1px solid var(--t);
   background-color: transparent;
-  border-radius: 8px;
   cursor: pointer;
   text-transform: capitalize;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 15px;
   transition: 0.3s;
-  color: #333;
+  color: var(--t);
 }
 .settingSide .box div button.active ,.settingSide .box-crypt div button.active {
   border: none;
-background-color: #fdb863;
+  background-color:var(--v) ;
 }
 
 
@@ -168,7 +177,7 @@ background-color: #fdb863;
   top: -100%;
   left: 0;
   z-index: 100;
-  background: #f6f6f6;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,10 +188,8 @@ background-color: #fdb863;
   gap: 10px;
   height: 80vh;
   width: 80%;
-  background-color: rgba(246, 246, 246, 0.8);
-  border-radius: 20px;
+  background-color: black;
   padding: 30px 20px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
 }
 .createUser .mastercontainer .left{
   flex: 1 ;
@@ -191,13 +198,14 @@ background-color: #fdb863;
 .createUser .mastercontainer .left h2 {
   text-transform: capitalize;
   margin-bottom: 16px;
-  color: #222;
+  color: var(-t);
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
+  font-weight: 400;
 }
 .createUser .mastercontainer .left > p {
-  font-weight: 600;
+  font-weight: 400;
   width: 300px;
   text-align: center;
   line-height: 1.4;
@@ -205,23 +213,25 @@ background-color: #fdb863;
   margin-bottom: 30px;
   margin-left: auto;
   margin-right: auto;
+  color: var(--t);
 }
 .createUser .mastercontainer .left form {
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
+  row-gap: 15px;
   width: 100%;
   padding: 0 40px;
 }
 .createUser .mastercontainer .left i {
-  color: #777;
-  border: 1px solid #777;
+  color: var(--t);
+  border: none;
   padding: 10px;
+  background-color: var(--v);
   position: absolute;
-  border-radius: 6px;
+  cursor: pointer;
 }
 .createUser .mastercontainer .left .containerloader p.yes {
-  color: green;
+  color: var(--t);
   font-weight: 600;
   font-size: 15px;
   text-transform: capitalize;
@@ -233,9 +243,8 @@ display: block;
 .createUser .mastercontainer .left form input[type="text"],
 .createUser .mastercontainer .left form input[type="password"] {
   padding: 14px 20px;
-  color: #333;
-  border: 1px solid #b6b6b6;
-  border-radius: 8px;
+  color: var(--t);
+  border: 1px solid var(--t);
   background-color: transparent;
 }
 @media (max-width:678px) {
@@ -257,13 +266,13 @@ display: block;
 .createUser .mastercontainer .left form input[type="submit"] {
   padding: 14px 20px;
   border: none;
-  background-color: #fdb863;
-  border-radius: 8px;
+  background-color: var(--v);
   cursor: pointer;
   text-transform: capitalize;
   font-weight: 600;
   font-size: 15px;
   transition: 0.3s;
+  color: var(--t);
 }
 .createUser .mastercontainer .left form input[type="submit"]:hover {
   opacity: 0.92;
@@ -296,6 +305,9 @@ display: block;
 .header {
   padding: 15px 0;
   position: relative;
+  color: white;
+  backdrop-filter:blur(10px)
+  /* background-color: #333; */
 }
 .team .container {
   height: 100%;
@@ -335,6 +347,7 @@ display: block;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
+  color: var(--v);
 }
 .team h2::after {
   width: 100%;
@@ -367,7 +380,8 @@ display: block;
   height: calc(100% + 10px);
   top: 50%;
   left: -10px;
-  background-color: var(--color);
+  background-color: var(--v);
+  opacity: 0.6;
   transition: 0.6s;
   z-index: -1;
   transform: skewX(-20deg) translateY(-50%);
@@ -409,10 +423,11 @@ display: block;
   background-color: #777;
 }
 .header .left p {
-  font-weight: 600;
+  font-weight: 400;
   text-transform: capitalize;
   cursor: pointer;
   position: relative;
+  isolation: isolate;
 }
 
 .header .left p .bg {
@@ -421,7 +436,7 @@ display: block;
   height: calc(100% + 10px);
   top: 50%;
   left: -10px;
-  background-color: #f6f6f6;
+  background-color: var(--v);
   transition: 0.4s;
   z-index: -1;
   transform: skewX(-20deg) translateY(-50%);
@@ -443,14 +458,13 @@ display: block;
     width: 130px;
     height: 39px;
     border: none;
-    background-color: #fdb863;
-    border-radius: 8px;
     cursor: pointer;
     text-transform: capitalize;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 15px;
     transition: 0.3s;
     color: #333;
+    background-color: var(--t);
 }
 .header .right button i {
   margin-left: 10px;
@@ -464,30 +478,8 @@ display: block;
   height: calc(100vh - 110.28px);
   overflow:hidden ;
 }
-.landing > img {
-  position: absolute;
-  z-index: -1;
-  transition: 0.6s;
-}
-.landing > img.active {
-  transform: rotate(90deg);
-}
-.landing > img:nth-of-type(1) {
-  top: 2%;
-  left: 10%;
-}
-.landing > img:nth-of-type(2) {
-  top: 8%;
-  right: 13%;
-}
-.landing > img:nth-of-type(3) {
-  bottom: 4%;
-  left: 3%;
-}
-.landing > img:nth-child(4) {
-  bottom: 9%;
-  right: 10%;
-}
+
+
 .landing .container {
 	display: flex;
 	align-items: center;
@@ -514,13 +506,14 @@ display: block;
   height: calc(100% - 54.94px );
 }
 .landing .container .login h1 {
-  color: #333;
+  color: var(--t);
   font-size: 21px;
   text-transform: capitalize;
   text-align: center;
   max-width: 480px;
   line-height: 1.4;
   margin: 0;
+  font-weight: 500;
 }
 @media (max-width:678px) {
 	.landing .container .login h1 {
@@ -530,22 +523,37 @@ display: block;
 .landing .container .login h1 q {
   font-family: "Pacifico";
   letter-spacing: 2px;
+  font-weight: 600;
 }
 .landing > p {
   font-size: 13px;
   font-weight: 600;
 	text-align: center;
 	padding: 20px;
+  color: var(--t);
 }
 .landing .container .formcontainer {
-  background-color: rgba(246, 246, 246, 0.8);
+  background-color:black ;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 65%;
-  border-radius: 20px;
   padding:20px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+  color: var(--t);
+  position: relative;
+}
+.landing .container .formcontainer::after {
+  content: '';
+  position: absolute;
+  height: 10px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--v);
+  width: 0%;
+  transition: 0.9s;
+}
+.landing .container .formcontainer:hover::after {
+  width: 100%;
 }
 @media (max-width:678px) {
 	.landing .container .login .formcontainer {
@@ -560,7 +568,6 @@ display: block;
 .landing .container .formcontainer h2 {
   text-transform: capitalize;
   margin-bottom: 16px;
-  color: #222;
 }
 .landing .container .formcontainer p {
   font-weight: 600;
@@ -568,7 +575,7 @@ display: block;
   text-align: center;
   line-height: 1.4;
   font-size: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .landing .container .formcontainer form {
   display: flex;
@@ -580,9 +587,9 @@ display: block;
 .landing .container .formcontainer form input[type="text"],
 .landing .container .formcontainer form input[type="password"] {
   padding: 14px 20px;
-  color: #333;
-  border: 1px solid #b6b6b6;
-  border-radius: 8px;
+  color: var(--t);
+  border: 1px solid var(--t);
+
   background-color: transparent;
 }
 @media (max-width:678px) {
@@ -603,13 +610,13 @@ display: block;
 .landing .container .formcontainer form input[type="submit"] {
   padding: 14px 20px;
   border: none;
-  background-color: #fdb863;
-  border-radius: 8px;
+  background-color: var(--v);
   cursor: pointer;
   text-transform: capitalize;
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 400;
+  font-size: 17px;
   transition: 0.3s;
+  color: var(--t);
 }
 .landing .container .formcontainer form input[type="submit"]:hover {
   opacity: 0.92;
@@ -632,7 +639,7 @@ display: block;
 	position: absolute;
 	left: 0;
 	top: 0;
-	background: rgb(255 185 0);
+	background: var(--v);
 	width: 12px;
 	height: 12px;
 	transform: translate(-50%, 50%);
@@ -641,7 +648,7 @@ display: block;
 .loader::before {
 	left: auto;
 	right: 0;
-	background: rgb(0 135 244);
+	background: var(--t);
 	transform: translate(50%, 100%);
 }
 
@@ -692,14 +699,13 @@ display: block;
 	display: flex;
 }
 .landing .container .loginPass > div {
-	background-color: rgba(246, 246, 246, 0.8);
+	background-color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 65%;
-  border-radius: 20px;
+  color: var(--t);
   padding: 30px 20px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
 }
 .landing .container .loginPass > div.left , .landing .container .loginPass > div.right {
 	flex: 1;
@@ -717,11 +723,13 @@ display: block;
 .landing .container .loginPass div form {
 	width: 100%;
 	height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .landing .container .loginPass div form textarea {
 	width: 100%;
 	border: 1px solid #777;
-	color: #333;
+	color: var(--t);
 	padding: 10px;
 	background-color: transparent;
 	border-radius: 4px;
@@ -732,7 +740,7 @@ display: block;
 	outline: none;
 }
 .landing .container .loginPass div.left p {
-	font-weight: 600;
+	font-weight: 400;
 	text-transform: capitalize;
 	margin-bottom: 16px;
 	height: 40.4px;
@@ -751,19 +759,18 @@ display: block;
 }
 .landing .container .loginPass div.left .bottom ul {
 	position: absolute;
-	background-color: #f6f6f6;
+	background-color: var(--t);
 	width: 280px;
-	border-radius: 5px;
 	bottom:calc(100% - 11px) ;
-	border-radius: 6px;
 	overflow: hidden;
-	
 	transition: 0.4s;
 	height: 0;
 }
 .landing .container .loginPass div.left .bottom ul.active {
 	height:230px ;
-	border: 1px solid #777;
+}
+.landing .container .loginPass div.left .bottom ul.stg.active {
+	height:114px ;
 }
 .landing .container .loginPass div.left .bottom ul li:hover {
 	padding-left:20px;
@@ -778,11 +785,11 @@ display: block;
 	cursor: pointer;
 }
 .landing .container .loginPass div.left .bottom ul li.active {
-	color: white;
-	background-color:rgb(0 135 244) ;
+	color: var(--t);
+	background-color:var(--v) ;
 } 
 .landing .container .loginPass div.left .bottom ul li:not(:last-of-type) {
-	border-bottom: 1px solid #777;
+	border-bottom: 1px solid black;
 }
 .landing .container .loginPass div.left .bottom p {
 	display: flex;
@@ -808,11 +815,11 @@ display: block;
 	height: 40.39px;
 	margin-top: 20px;
 	padding: 0 20px;
+  background-color: var(--t);
 	text-transform: capitalize;
-	color: #333;
-	font-weight: 600;
-	border-radius: 5px;
-	border: 1px solid #777;
+	color: black;
+	font-weight: 500;
+	border: 1px solid var(--t);
 	cursor: pointer;
 }
 
@@ -827,13 +834,17 @@ display: block;
   flex-direction: column;
   height: calc(100% - 50px);
 }
+.landing .container .loginPass div.right > div.areastg {
+  display: none;
+}
 
+/* ###### */
 .landing .container .loginPass div.right > div p {
-  color: #333;
-  font-weight: 600;
+  color: var(--t);
+  font-weight: 400;
   text-transform: capitalize;
   margin-bottom: 10px;
-  text-align: center;
+  text-align: left;
 }
 @media (max-width:600px) {
   .landing .container .loginPass div.left .top > p {
