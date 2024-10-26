@@ -21,34 +21,25 @@ numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 def motDePasseThreeChar(motDePasse):
     
     if len(motDePasse) != 3 or not all(char in ['0', '1', '2'] for char in motDePasse):
-        return True
+        return False, "Password must have 3 characters that are 0, 1, or 2!"
+    return True, ""
     
-    return False
-    
-#motDePasseThreeChar()
-
-
 # Mot de passe de 6 charachtères de 0 à 9:
 
 def motDePasseSixChar(motDePasse):
     
     if len(motDePasse) != 6 or not all(char in numbers for char in motDePasse) :
-        return False
-    
-    return True
+       return False, "Password must have 6 characters between 0 and 9!"
+    return True, ""
 
-    
-#motDePasseSixChar()
 
 # Mot de passe de 6 charchtères de tous les chars :
 
 def motDePasseMix(motDePasse):   
     if len(motDePasse) != 6 or not all(char in numbers + alphabetMaj + alphabetMin + specialCharacters for char in motDePasse):
-        return False
-    return True
+        return False, "Password must have 6 characters of letters, numbers, or special characters!"
+    return True, ""
 
-     
-#motDePasseMix()   
 
 ##################################################################################################################################
 
@@ -66,8 +57,10 @@ class CustomUserCreationForm(forms.ModelForm):
 
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
-        if not motDePasseMix(password1) :
-            raise forms.ValidationError("Password must have 6 charachters of letters or numbers or special charachters !!")
+
+        is_valid, error_message = motDePasseSixChar(password1)
+        if not is_valid:
+            raise forms.ValidationError(error_message)
         return password1
     
     def clean_password2(self):
