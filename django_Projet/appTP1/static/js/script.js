@@ -5,6 +5,8 @@ let loaderMainDivs = document.querySelectorAll('.theMianLoader .textContainer di
 let loaderMain = document.querySelector('.theMianLoader')
 let willrun = localStorage.getItem("loader")
 let listOfBtnSetting = document.querySelectorAll('.settingSide .box div button')
+let webSiteMode = 'cry';
+
 if (willrun !== null) {
         listOfBtnSetting.forEach((e)=> {
             e.classList.remove('active')
@@ -72,7 +74,6 @@ let loginfrom = document.querySelector('.landing .container .login');
 let loginPass = document.querySelector('.landing .container .loginPass');
 let urlLogin = document.querySelector('.landing .container .login .formcontainer form').action;
 let theModeBox = document.querySelector(".settingSide .box-crypt")
-let webSiteMode = 'cry';
 
 let submit = document.querySelector('.landing .container .formcontainer form input[type="submit"]');
 submit.addEventListener('click', function(e) {
@@ -162,6 +163,9 @@ let ulchoisestg = document.querySelector('.landing .container .loginPass div.lef
 let ulLiChoisestg = document.querySelectorAll('.landing .container .loginPass div.left .bottom ul.stg li')
 
 let numOfMethod
+
+
+console.log(webSiteMode)
 
 // website mode
 
@@ -280,7 +284,7 @@ let affine_b = document.querySelector('input[id="affine_b"]');
 let cesar_key = document.querySelector('input[id="cesar_key"]');  
 let textFeildResultCrypt = document.querySelector('textarea[id="textResultCrypt"]');  
 let textFeildResultDecrypt = document.querySelector('textarea[id="textResultDecrypt"]');  
-
+let messageStg = document.querySelector('textarea[id="textResultStg"]')
 
 btnSumbitCryp.addEventListener('click', function(e) {
     e.preventDefault();
@@ -291,11 +295,16 @@ btnSumbitCryp.addEventListener('click', function(e) {
 
 
     let formDataCrypt = new URLSearchParams();  
+    if(webSiteMode==="cry"){
     formDataCrypt.append('method', numOfMethod);  
     formDataCrypt.append('textToEncrypt', textFeildToCrypt.value);
     formDataCrypt.append('affine_a', affine_a.value);
     formDataCrypt.append('affine_b', affine_b.value);
     formDataCrypt.append('cesar_key', cesar_key.value);
+    }else{
+        formDataCrypt.append('methodStg', 1);  
+        formDataCrypt.append('textToStg', textFeildToCrypt.value);
+    }
 
     fetch(urlCrypt, {
         method: 'POST',
@@ -308,19 +317,29 @@ btnSumbitCryp.addEventListener('click', function(e) {
     .then(response => response.json()) 
     .then(data => {
         if (data.success) {
-            // Success case: display encrypted and decrypted text
+            if(webSiteMode=="cry"){
             textFeildResultCrypt.textContent = data.CryptedText;
             textFeildResultDecrypt.textContent = data.DecryptedText;
+            }else{
+                messageStg.textContent = data.messageStg;
+            }
             textFeildResultCrypt.style.color = "";  // Reset any error styling
         } else if (data.errors) {
             // Error case: display specific error message from server
+            if(webSiteMode=="cry"){
             textFeildResultCrypt.textContent = data.errors;
+            }else{
+            messageStg.textContent = data.errors;
+            }
             textFeildResultCrypt.style.color = "red";
         }
     })
     .catch(error => {
-        
+        if(webSiteMode=="cry"){
         textFeildResultCrypt.textContent = "An error occurred. Please try again.";
+        }else{
+            messageStg.textContent ="An error occurred. Please try again.";
+        }
         textFeildResultCrypt.style.color = "red";
     });
     
