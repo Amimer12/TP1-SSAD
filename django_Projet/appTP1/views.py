@@ -14,7 +14,7 @@ def encrypt_message_affine(message, a, b):
     encrypted_chars = [chr(value) for value in decimal_values_y]  # Conversion en caractères chiffrés
     encrypted_message = ''.join(encrypted_chars)  # Combinaison des caractères chiffrés
     return encrypted_message
- 
+
 
 ############################################ Affine Decrypt ############################################
 def decrypt_message_affine(encrypted_message, a, b):

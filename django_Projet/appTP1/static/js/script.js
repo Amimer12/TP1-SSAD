@@ -191,6 +191,7 @@ crypageMode.onclick = ()=> {
     btnModeList.forEach((e)=> {
         e.classList.remove('active')
     })
+    moveDesign()
 }
 stegranographyMode.onclick = ()=> {
     webSiteMode = "stg";
@@ -203,9 +204,15 @@ stegranographyMode.onclick = ()=> {
     btnModeList.forEach((e)=> {
         e.classList.remove('active')
     })
+    moveDesign()
 }
 
-
+function moveDesign() {
+    pchoiseIcon.classList.remove('fa-chevron-down')
+    pchoiseIcon.classList.add('fa-chevron-up')
+    ulchoise.classList.remove('active')
+    ulchoisestg.classList.remove('active')
+}
 
 pchoise.addEventListener("click",() => {
     if (webSiteMode === 'cry') {
@@ -230,7 +237,6 @@ pchoise.addEventListener("click",() => {
 })
 pchoise.onclick = function(e) {
     e.stopPropagation();
-    
 }
 ulchoise.onclick = function(e) {
     e.stopPropagation();
@@ -248,6 +254,15 @@ window.addEventListener('click' ,function(e) {
 ulLiChoise.forEach((ele) => {
     ele.onclick = function() {
         ulLiChoise.forEach((e) => {
+            e.classList.remove('active')
+        })
+        this.classList.add('active')
+        numOfMethod = this.dataset.method
+    }
+})
+ulLiChoisestg.forEach((ele) => {
+    ele.onclick = function() {
+        ulLiChoisestg.forEach((e) => {
             e.classList.remove('active')
         })
         this.classList.add('active')
