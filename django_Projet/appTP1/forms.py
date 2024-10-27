@@ -42,6 +42,37 @@ def motDePasseMix(motDePasse):
 
 
 ##################################################################################################################################
+def PW_verification(password):
+    digit = any(char.isdigit() for char in password)
+    lower = any(char.islower() for char in password)
+    upper = any(char.isupper() for char in password)
+    special = any(char in specialCharacters for char in password)
+    is_long_enough = len(password) >= 6
+
+    if not digit:
+        return False,"You should add a number to your password"
+    if not lower:
+        return False,"You should add a lowercase letter to your password"
+    if not upper:
+        return False,"You should add an uppercase letter to your password"
+    if not special:
+        return False,"You should add a special character to your password"
+    if not is_long_enough:
+        return False,"Your password should be at least 6 characters long"
+
+    # Check if the password is strong or weak
+    if digit and lower and upper and special and is_long_enough:
+        return True,"your password is very strong"
+    elif (digit and lower) or (upper and special) and is_long_enough:
+        return True,"your password is strong"
+    elif (digit and lower and not upper and not special) or (digit and upper and not lower and not special) \
+            or (lower and upper and not digit and not special) or (digit and special and not lower and not upper) \
+            or (lower and special and not digit and not upper) or (upper and special and not digit and not lower) \
+            and is_long_enough:
+         return False,"your password is weak"
+    else:
+        return False,"your password is very weak"
+    
 
 ## CREATE ACCOUNT FORM ##############################################
 
@@ -58,7 +89,7 @@ class CustomUserCreationForm(forms.ModelForm):
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
 
-        is_valid, error_message = motDePasseSixChar(password1)
+        is_valid, error_message = PW_verification(password1)
         if not is_valid:
             raise forms.ValidationError(error_message)
         return password1

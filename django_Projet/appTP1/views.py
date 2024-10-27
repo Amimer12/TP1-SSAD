@@ -219,67 +219,21 @@ def decrypt_cesar_adroite(texte, n):
 
 
 ########################################################################################################################################
-def PW_verification(password):
-    special_characters = "(!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)"
 
-    digit = any(char.isdigit() for char in password)
-    lower = any(char.islower() for char in password)
-    upper = any(char.isupper() for char in password)
-    special = any(char in special_characters for char in password)
-    is_long_enough = len(password) >= 6
+#################################################################################################################################
 
-    if not digit:
-        print("You should add a number to your password")
-    if not lower:
-        print("You should add a lowercase letter to your password")
-    if not upper:
-        print("You should add an uppercase letter to your password")
-    if not special:
-        print("You should add a special character to your password")
-    if not is_long_enough:
-        print("Your password should be at least 6 characters long")
+def decode_message_from_invisible_characters(encoded_text):
+    binary_message = ""
+    
+    for char in encoded_text:        
+        if char == '\u200B':  
+            binary_message += '1'
+        elif char == '\u200C':  
+            binary_message += '0'
 
-    # Check if the password is strong or weak
-    if digit and lower and upper and special and is_long_enough:
-        return "your password is very strong"
-    elif (digit and lower) or (upper and special) and is_long_enough:
-        return "your password is strong"
-    elif (digit and lower and not upper and not special) or (digit and upper and not lower and not special) \
-            or (lower and upper and not digit and not special) or (digit and special and not lower and not upper) \
-            or (lower and special and not digit and not upper) or (upper and special and not digit and not lower) \
-            and is_long_enough:
-        return "your password is weak"
-    elif digit or lower or upper or special and is_long_enough:
-        return "your password is very weak"
-    else:
-        return "your password is too weak"
+    decoded_chars = [chr(int(binary_message[i:i+8], 2)) for i in range(0, len(binary_message), 8)]
+    return ''.join(decoded_chars)
 
-
-def AuthPage(request):
-    signup_form = CustomUserCreationForm()
-    login_form = LoginForm()
-
-    if request.method == "POST":
-        
-        # Handle user signup
-        if 'username' in request.POST and 'email' in request.POST:
-            signup_form = CustomUserCreationForm(request.POST)
-            login_form = LoginForm()
-
-            if signup_form.is_valid():
-                # Verify password strength
-                password = request.POST.get('password1')
-                password_strength = PW_verification(password)
-
-                if "very weak" in password_strength or "too weak" in password_strength:
-                    return JsonResponse({'password_error': password_strength}, status=400)
-
-                # If the password is acceptable, save the form
-                signup_form.save()
-                return JsonResponse({'success_message': "Your account has been successfully created!", 'password_strength': password_strength})
-            else:
-                errors = signup_form.errors.as_json()
-                return JsonResponse({'errors': errors}, status=400)
 
 
 def AuthPage(request):
@@ -318,7 +272,6 @@ def AuthPage(request):
                     user_found = True
                     print(f"User {username} authenticated successfully!")
                     return JsonResponse({'success_message': "Login successful!"})
-
             
             if not user_found:
                 print("Authentication failed.")
@@ -391,7 +344,19 @@ def AuthPage(request):
             # Return error if something goes wrong
             return JsonResponse({'errors': error_msg}, status=400)
     
-            
+        elif 'methodStg' in request.POST and 'textToStg' in request.POST: 
+            methodStg = request.POST.get('methodStg')
+            textToStg = request.POST.get('textToStg')
+            messageStg = ""
+            if methodStg and textToStg :
+                if methodStg == "1":
+                    messageStg = decode_message_from_invisible_characters(textToStg)
+                
+            else:
+                error_msg = "Method and text to encrypt must be provided."
+            if messageStg:
+                    return JsonResponse({'success': True, 'messageStg': messageStg})
+
     else:
         signup_form = CustomUserCreationForm()
         login_form = LoginForm()
