@@ -20,8 +20,11 @@
 }
 body {
   font-family: "WorkSans";
-  background-color: #f3eecd;
-  color: #222;
+  background-image:url("../svg/Group1.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color:white;
 }
 a {
   text-decoration: none;
@@ -196,6 +199,7 @@ background-color: #fdb863;
   margin-right: auto;
 }
 .createUser .mastercontainer .left > p {
+  color:#333;
   font-weight: 600;
   width: 300px;
   text-align: center;
@@ -334,6 +338,7 @@ display: block;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
+  color: #333;
 }
 .team h2::after {
   width: 100%;
@@ -442,7 +447,7 @@ display: block;
     width: 130px;
     height: 39px;
     border: none;
-    background-color: #fdb863;
+    background-color: #63aefd;
     border-radius: 8px;
     cursor: pointer;
     text-transform: capitalize;
@@ -513,7 +518,7 @@ display: block;
   height: calc(100% - 54.94px );
 }
 .landing .container .login h1 {
-  color: #333;
+  color:whitesmoke;
   font-size: 26px;
   text-transform: capitalize;
   text-align: center;
@@ -561,6 +566,7 @@ display: block;
   color: #222;
 }
 .landing .container .formcontainer p {
+  color: #333;
   font-weight: 600;
   width: 300px;
   text-align: center;
@@ -601,7 +607,7 @@ display: block;
 .landing .container .formcontainer form input[type="submit"] {
   padding: 14px 20px;
   border: none;
-  background-color: #fdb863;
+  background-color: #63aefd;
   border-radius: 8px;
   cursor: pointer;
   text-transform: capitalize;

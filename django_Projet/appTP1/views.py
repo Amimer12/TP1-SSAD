@@ -3,10 +3,12 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from .forms import CustomUserCreationForm, LoginForm
 from .models import UserAccount
+from .models import FailedLoginAttempt
 from django.views.decorators.csrf import csrf_exempt
 import math
-
-
+from django.utils import timezone
+from datetime import timedelta
+from django.utils.timezone import now
 
 
 # ******************************* Fonction pour calculer l'inverse modulaire de a ######################################
@@ -133,20 +135,43 @@ def AuthPage(request):
             password = login_form.data.get('password')
 
             print(f"Attempting to authenticate user: {username}")
+            
+            try:
+                user = UserAccount.objects.get(username=username)
+            except UserAccount.DoesNotExist:
+                return JsonResponse({'errors': {'__all__': ["Invalid username."]}}, status=400)
+            #users = UserAccount.objects.all()
+            #user_found = False
+            #for user in users: user.username == username and
+            if user :  
+            # verfier si utlisateure son compte n'est pas blocker 
+                failed_attempt,create= FailedLoginAttempt.objects.get_or_create(user=user)
 
-            users = UserAccount.objects.all()
-            user_found = False
-            for user in users:
-                if user.username == username and user.check_password(password):
-                    user_found = True
+                if failed_attempt.is_locked():
+                    remaining_time = failed_attempt.locked_until - now()
+                    minutes_remaining = remaining_time.total_seconds() 
+                    print("account blocked")
+                    return JsonResponse({'errors': {'__all__': [f"Your account is locked. Try again  in {int(minutes_remaining)} seconde."]}}, status=403)
+ 
+                if  user.check_password(password):
+                    failed_attempt.reset_attempts()
+                    #user_found = True
                     print(f"User {username} authenticated successfully!")
                     return JsonResponse({'success_message': "Login successful!"})
-
-            
-            if not user_found:
-                print("Authentication failed.")
-                return JsonResponse({'errors': {'__all__': ["Please enter a correct username and password. Note that both fields may be case-sensitive."]}}, status=400)
-
+                else :
+                    print("Authentication failed.")
+                    failed_attempt.attempts += 1
+                    print(failed_attempt.attempts)
+                # Si 3 tentatives échouées, verrouiller pendant 30 minutes
+                    if failed_attempt.attempts >= 3:
+                        failed_attempt.lock_account()
+                        return JsonResponse({'errors': {'__all__': ["Too many failed attempts. Account locked for 30 seconde"]}}, status=403)
+                    
+                    failed_attempt.save()
+                    print("Authentication failed.")
+                    return JsonResponse({'errors': {'__all__': ["invalide password"]}}, status=400)
+           # if not user_found:
+           
 #####################################################################################################
         elif 'method' in request.POST and 'textToEncrypt' in request.POST:
             method = request.POST.get('method')

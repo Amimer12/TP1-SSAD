@@ -8,7 +8,8 @@ from datetime import datetime, timedelta, date
 from django.utils.timezone import now
 from asgiref.sync import async_to_sync
 from django.urls import reverse
-
+from django.utils import timezone
+from datetime import timedelta
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_kwargs):
         if not email:
@@ -68,3 +69,34 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
 
 
+class FailedLoginAttempt(models.Model):
+    user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, related_name='failed_login_attempt')
+    attempts = models.IntegerField(default=0)
+    locked_until = models.DateTimeField(null=True, blank=True)
+
+    def is_locked(self):
+        """
+        Vérifie si le compte est actuellement verrouillé.
+        """
+        if self.locked_until and self.locked_until > timezone.now():
+            return True
+        return False
+
+    def reset_attempts(self):
+        """
+        Réinitialise les tentatives échouées.
+        """
+        self.attempts = 0
+        self.locked_until = None
+        self.save()
+
+    def lock_account(self):
+        """
+        Verrouille le compte pour 30 minutes.
+        """
+        self.attempts = 0
+        self.locked_until = timezone.now() + timedelta(seconds=30)
+        self.save()
+
+    def __str__(self):
+        return f"Failed login attempts for {self.user.email}"

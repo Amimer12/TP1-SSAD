@@ -130,7 +130,9 @@ submit.addEventListener('click', function(e) {
                 }, 1000);
             }, 2000);
         } else if (data.errors) {
-            pno.textContent = data.errors.username ? data.errors.username[0] : "Invalid email or password";
+            console.log(data.errors)
+          //  pno.textContent = data.errors.__all__ ? data.errors.__all__[0] : "Invalid email or password";
+            pno.textContent = data.errors.__all__[0] ;
             pno.classList.add('active');
         }
     })
@@ -379,6 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (errorElement && errorElement.classList.contains('form-error')) {
                             errorElement.textContent = errors[fieldName][0].message; // Show the first error for the field
                             errorElement.style.display = 'block'; // Show the error message
+                           
                         }
                     });
                 }
