@@ -5,6 +5,8 @@ let loaderMainDivs = document.querySelectorAll('.theMianLoader .textContainer di
 let loaderMain = document.querySelector('.theMianLoader')
 let willrun = localStorage.getItem("loader")
 let listOfBtnSetting = document.querySelectorAll('.settingSide .box div button')
+let webSiteMode = 'cry';
+
 if (willrun !== null) {
         listOfBtnSetting.forEach((e)=> {
             e.classList.remove('active')
@@ -62,13 +64,16 @@ teambtn.onclick = function() {
 
 //////////////////////////////////////////////////////////////////////
 
+// the background change
+// end
+// 
 let emailfild = document.querySelector('input[name="usernameL"]');  // Update the selector to match the rendered ID
 let passwordfild = document.querySelector('input[name="passwordL"]');  // Update the selector to match the rendered ID
 let containerloader = document.querySelector('.landing .container .formcontainer .containerloader');
 let loginfrom = document.querySelector('.landing .container .login');
 let loginPass = document.querySelector('.landing .container .loginPass');
 let urlLogin = document.querySelector('.landing .container .login .formcontainer form').action;
-
+let theModeBox = document.querySelector(".settingSide .box-crypt")
 
 let submit = document.querySelector('.landing .container .formcontainer form input[type="submit"]');
 submit.addEventListener('click', function(e) {
@@ -105,7 +110,7 @@ submit.addEventListener('click', function(e) {
         if (data.success_message) {
             pyes.textContent = data.success_message;
             pyes.classList.add('active');
-
+            theModeBox.style.display = "block"
             setTimeout(() => {
                 loginfrom.classList.add('gone');
                 setTimeout(() => {
@@ -152,23 +157,92 @@ let password = 'admin'
 let login = document.querySelector('.login')
 let pchoise = document.querySelector('.landing .container .loginPass .left .menu p')
 let pchoiseIcon = document.querySelector('.landing .container .loginPass .left .menu p i')
-let ulchoise = document.querySelector('.landing .container .loginPass div.left .bottom ul')
-let ulLiChoise = document.querySelectorAll('.landing .container .loginPass div.left .bottom ul li')
+let ulchoise = document.querySelector('.landing .container .loginPass div.left .bottom ul.crypt')
+let ulLiChoise = document.querySelectorAll('.landing .container .loginPass div.left .bottom ul.crypt li')
+
+// #############--------------------------------####################3
+let ulchoisestg = document.querySelector('.landing .container .loginPass div.left .bottom ul.stg')
+let ulLiChoisestg = document.querySelectorAll('.landing .container .loginPass div.left .bottom ul.stg li')
 
 let numOfMethod
+
+
+console.log(webSiteMode)
+
+// website mode
+
+let crypageMode = document.querySelector(".settingSide .box-crypt .cry")
+let stegranographyMode = document.querySelector(".settingSide .box-crypt .stg")
+
+// les text
+
+let textareaRightCty = document.querySelectorAll(".landing .container .loginPass div.right > div.areacry ")
+let textareaRightStg = document.querySelector(".landing .container .loginPass div.right > div.areastg ")
+
+
+// ??????
+
+let questionIcon = document.querySelector(".landing .container .loginPass div.left .top .question .icon");
+let takeaffine = document.querySelector('.landing .container .loginPass div.left .question .box.takeaffine');
+let takecesar = document.querySelector('.landing .container .loginPass div.left .question .box.takecesar');
+let btnModeList = [questionIcon ,takecesar,takeaffine ]
+crypageMode.onclick = ()=> {
+    webSiteMode = "cry";
+    stegranographyMode.classList.remove('active')
+    crypageMode.classList.add('active')
+    textareaRightStg.style.display = "none"
+    textareaRightCty.forEach((e)=> {
+        e.style.display = "block"
+    })
+    btnModeList.forEach((e)=> {
+        e.classList.remove('active')
+    })
+    moveDesign()
+}
+stegranographyMode.onclick = ()=> {
+    webSiteMode = "stg";
+    crypageMode.classList.remove('active')
+    stegranographyMode.classList.add('active')
+    textareaRightStg.style.display = "block"
+    textareaRightCty.forEach((e)=> {
+        e.style.display = "none"
+    })
+    btnModeList.forEach((e)=> {
+        e.classList.remove('active')
+    })
+    moveDesign()
+}
+
+function moveDesign() {
+    pchoiseIcon.classList.remove('fa-chevron-down')
+    pchoiseIcon.classList.add('fa-chevron-up')
+    ulchoise.classList.remove('active')
+    ulchoisestg.classList.remove('active')
+}
+
 pchoise.addEventListener("click",() => {
-    ulchoise.classList.toggle('active')
-    if (ulchoise.classList.contains('active')) {
-        pchoiseIcon.classList.remove('fa-chevron-up')
-        pchoiseIcon.classList.add('fa-chevron-down')
+    if (webSiteMode === 'cry') {
+        ulchoise.classList.toggle('active')
+        if (ulchoise.classList.contains('active')) {
+            pchoiseIcon.classList.remove('fa-chevron-up')
+            pchoiseIcon.classList.add('fa-chevron-down')
+        } else {
+            pchoiseIcon.classList.remove('fa-chevron-down')
+            pchoiseIcon.classList.add('fa-chevron-up')
+        }
     } else {
-        pchoiseIcon.classList.remove('fa-chevron-down')
-        pchoiseIcon.classList.add('fa-chevron-up')
+        ulchoisestg.classList.toggle('active')
+        if (ulchoisestg.classList.contains('active')) {
+            pchoiseIcon.classList.remove('fa-chevron-up')
+            pchoiseIcon.classList.add('fa-chevron-down')
+        } else {
+            pchoiseIcon.classList.remove('fa-chevron-down')
+            pchoiseIcon.classList.add('fa-chevron-up')
+        }
     }
 })
 pchoise.onclick = function(e) {
     e.stopPropagation();
-    
 }
 ulchoise.onclick = function(e) {
     e.stopPropagation();
@@ -192,14 +266,27 @@ ulLiChoise.forEach((ele) => {
         numOfMethod = this.dataset.method
     }
 })
+ulLiChoisestg.forEach((ele) => {
+    ele.onclick = function() {
+        ulLiChoisestg.forEach((e) => {
+            e.classList.remove('active')
+        })
+        this.classList.add('active')
+        numOfMethod = this.dataset.method
+    }
+})
 let btnSumbitCryp = document.querySelector('.landing .container .loginPass div.left .bottom button')
 let textareaLeft = document.querySelector('.landing .container .loginPass div.left form textarea')
 let textareaRight = document.querySelector('.landing .container .loginPass div.right form textarea')
 
 let urlCrypt = document.querySelector('.landing .container .loginPass .left form').action;
-let textFeildToCrypt = document.querySelector('textarea[id="textCrypt"]');  
-let textFeildResult = document.querySelector('textarea[id="textResult"]');  
-
+let textFeildToCrypt = document.querySelector('textarea[id="textToCrypt"]');  
+let affine_a = document.querySelector('input[id="affine_a"]');  
+let affine_b = document.querySelector('input[id="affine_b"]');  
+let cesar_key = document.querySelector('input[id="cesar_key"]');  
+let textFeildResultCrypt = document.querySelector('textarea[id="textResultCrypt"]');  
+let textFeildResultDecrypt = document.querySelector('textarea[id="textResultDecrypt"]');  
+let messageStg = document.querySelector('textarea[id="textResultStg"]')
 
 btnSumbitCryp.addEventListener('click', function(e) {
     e.preventDefault();
@@ -210,8 +297,16 @@ btnSumbitCryp.addEventListener('click', function(e) {
 
 
     let formDataCrypt = new URLSearchParams();  
+    if(webSiteMode==="cry"){
     formDataCrypt.append('method', numOfMethod);  
     formDataCrypt.append('textToEncrypt', textFeildToCrypt.value);
+    formDataCrypt.append('affine_a', affine_a.value);
+    formDataCrypt.append('affine_b', affine_b.value);
+    formDataCrypt.append('cesar_key', cesar_key.value);
+    }else{
+        formDataCrypt.append('methodStg', 1);  
+        formDataCrypt.append('textToStg', textFeildToCrypt.value);
+    }
 
     fetch(urlCrypt, {
         method: 'POST',
@@ -223,82 +318,96 @@ btnSumbitCryp.addEventListener('click', function(e) {
     })
     .then(response => response.json()) 
     .then(data => {
-       
         if (data.success) {
-            textFeildResult.textContent = data.CryptedText
+            if(webSiteMode=="cry"){
+            textFeildResultCrypt.textContent = data.CryptedText;
+            textFeildResultDecrypt.textContent = data.DecryptedText;
+            }else{
+                messageStg.textContent = data.messageStg;
+            }
+            textFeildResultCrypt.style.color = "";  // Reset any error styling
         } else if (data.errors) {
-            textFeildResult.textContent = "An error occurred. Please try again."
-        textFeildResult.style.color = "red"
-
+            // Error case: display specific error message from server
+            if(webSiteMode=="cry"){
+            textFeildResultCrypt.textContent = data.errors;
+            }else{
+            messageStg.textContent = data.errors;
+            }
+            textFeildResultCrypt.style.color = "red";
         }
     })
     .catch(error => {
-        textFeildResult.textContent = "An error occurred. Please try again." 
-        textFeildResult.style.color = "red"
+        if(webSiteMode=="cry"){
+        textFeildResultCrypt.textContent = "An error occurred. Please try again.";
+        }else{
+            messageStg.textContent ="An error occurred. Please try again.";
+        }
+        textFeildResultCrypt.style.color = "red";
     });
+    
 }
 
 
 })
 
-function miroir(theText) {
-    let theTextsting = new String(theText)
-    let words = []
-    words = theTextsting.split(" ")
-    let reverse = words.map(function(ele) {
-        let word = []
-        word = ele.split("")
-        let i = Math.floor(word.length / 2)
-        for (j = 0 ; j <= i ; j++ ) {
-            let a = word[j]
-            word[j] = word[ele.length - 1 - j]
-            word[ele.length - 1 - j] = a
-        }
-        ele = word.join("")
-        return ele
-    } )
-    console.log(reverse.join(" "))
-}
+// function miroir(theText) {
+//     let theTextsting = new String(theText)
+//     let words = []
+//     words = theTextsting.split(" ")
+//     let reverse = words.map(function(ele) {
+//         let word = []
+//         word = ele.split("")
+//         let i = Math.floor(word.length / 2)
+//         for (j = 0 ; j <= i ; j++ ) {
+//             let a = word[j]
+//             word[j] = word[ele.length - 1 - j]
+//             word[ele.length - 1 - j] = a
+//         }
+//         ele = word.join("")
+//         return ele
+//     } )
+//     console.log(reverse.join(" "))
+// }
 // miroir('mohamed zouaoui')
 
-function decalgeAdroite(theText) {
-    let theTextsting = new String(theText)
-    let words = [];
-    words = theTextsting.split(" ")
-    let reverseAdoite = words.map(function(ele) {
-        let word = []
-        word = ele.split("")
-        let i = word.length
-        let fin = word[i - 1]
-        for (j = i - 1 ;j >= 1; j--) {
-            let a  = word[j]
-            word[j] = word[j - 1]
-        }
-        word[0] = fin
-        return word.join("")
-    })
-    console.log(reverseAdoite.join(" "))
-}
+// function decalgeAdroite(theText) {
+//     let theTextsting = new String(theText)
+//     let words = [];
+//     words = theTextsting.split(" ")
+//     let reverseAdoite = words.map(function(ele) {
+//         let word = []
+//         word = ele.split("")
+//         let i = word.length
+//         let fin = word[i - 1]
+//         for (j = i - 1 ;j >= 1; j--) {
+//             let a  = word[j]
+//             word[j] = word[j - 1]
+//         }
+//         word[0] = fin
+//         return word.join("")
+//     })
+//     console.log(reverseAdoite.join(" "))
+// }
 // decalgeAdroite("abc bcfds mohamed")
 
-function decalgeAgauche(theText) {
-    let theTextsting = new String(theText)
-    let words = [];
-    words = theTextsting.split(" ")
-    let reverseAdoite = words.map(function(ele) {
-        let word = []
-        word = ele.split("")
-        let i = word.length
-        let start = word[0]
-        for (j = 0 ;j < i -1 ; j++) {
-            let a  = word[j]
-            word[j] = word[j + 1]
-        }
-        word[i -1 ] = start
-        return word.join("")
-    })
-    console.log(reverseAdoite.join(" "))
-}
+// function decalgeAgauche(theText) {
+//     let theTextsting = new String(theText)
+//     let words = [];
+//     words = theTextsting.split(" ")
+//     let reverseAdoite = words.map(function(ele) {
+//         let word = []
+//         word = ele.split("")
+//         let i = word.length
+//         let start = word[0]
+//         for (j = 0 ;j < i -1 ; j++) {
+//             let a  = word[j]
+//             word[j] = word[j + 1]
+//         }
+//         word[i -1 ] = start
+//         return word.join("")
+//     })
+//     console.log(reverseAdoite.join(" "))
+// }
 // decalgeAgauche('mohmaed zouaoui')
 // 
 
@@ -442,6 +551,21 @@ divIconSetting.addEventListener("click",function(e) {
         })
     }
 })
+//   meeeee
+settingSide.addEventListener('click',(e)=> {
+    e.stopPropagation()
+})
+window.addEventListener('click',function(e) {
+    if (e.target !== settingSide ) {
+        settingSide.classList.remove('active')
+        iconSetting.classList.remove('fa-spin')
+        gsap.to(settingSide,{
+            x:0,
+            duration:1,
+            ease:"power3.out",
+        })
+    }
+})
 listOfBtnSetting.forEach((ele)=> {
     ele.addEventListener("click",(e)=> {
         listOfBtnSetting.forEach((e) => {
@@ -463,3 +587,41 @@ listOfBtnSetting.forEach((ele)=> {
 
 
 // end maim Loader
+// the question marke ???
+
+ulLiChoise.forEach((ele) => {
+    ele.onclick = function() {
+        // Remove 'active' class from all list items
+        ulLiChoise.forEach((e) => {
+            e.classList.remove('active');
+        });
+
+        // Add 'active' class to the clicked item
+        this.classList.add('active');
+        numOfMethod = this.dataset.method;
+
+        // Hide both boxes (Affine and Cesar) by default when any new li is selected
+        questionIcon.classList.remove("active");
+        takeaffine.classList.remove('active');
+        takecesar.classList.remove('active');
+
+        // Show the relevant question icon and box based on the selected method
+        if (numOfMethod === "2") {
+            questionIcon.classList.add("active"); // Show the question icon for Affine
+            takeaffine.classList.add("active");   // Immediately show the Affine box
+        } else if (numOfMethod === "5" || numOfMethod === "6") {
+            questionIcon.classList.add("active"); // Show the question icon for Cesar
+            takecesar.classList.add("active");    // Immediately show the Cesar box
+        }
+    }
+});
+
+// Toggle box visibility on question icon click (optional, can be removed if auto-show is preferred)
+questionIcon.addEventListener('click', function() {
+    if (numOfMethod === "2") {
+        takeaffine.classList.toggle('active');  // Toggle Affine box
+    } else if (numOfMethod === "5" || numOfMethod === '6') {
+        takecesar.classList.toggle('active');  // Toggle Cesar box
+    }
+});
+

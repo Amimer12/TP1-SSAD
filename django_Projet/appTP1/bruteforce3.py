@@ -11,7 +11,7 @@ url = 'http://127.0.0.1:8000/'
 charset = string.printable.strip()  
 
 # Adresse username ou nom d'utilisateur que tu veux attaquer
-username = 'djahid'  
+username = 'username'  
 session = requests.Session()
 
 # Récupérer le CSRF token et le cookie

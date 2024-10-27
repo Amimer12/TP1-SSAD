@@ -18,38 +18,61 @@ numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 # Mot de passe de 3 charachtères de 0 à 2:
 
-def motDePasseThreeChar():
-    motDePasse = input("Entrer le mot de passe de 3 char de 0 à 2 :")
-    while len(motDePasse) != 3 or not all(char in ['0', '1', '2'] for char in motDePasse):
-        motDePasse = input("\033[91mEntrer un mot de passe de exactement 3 char de 0 à 2 !!\033[0m ")
+def motDePasseThreeChar(motDePasse):
     
-    print("\033[92mMot de passe valide\033[0m")
+    if len(motDePasse) != 3 or not all(char in ['0', '1', '2'] for char in motDePasse):
+        return False, "Password must have 3 characters that are 0, 1, or 2!"
+    return True, ""
     
-#motDePasseThreeChar()
-
-
 # Mot de passe de 6 charachtères de 0 à 9:
 
-def motDePasseSixChar():
-    motDePasse = input("Entrer le mot de passe de 6 char de 0 à 9 :")
-    while len(motDePasse) != 6 or not all(char in numbers for char in motDePasse) :
-        motDePasse = input("\033[91mEntrer un mot de passe de exactement 6 char de 0 à 9 !! \033[0m")
+def motDePasseSixChar(motDePasse):
     
-    print("\033[92mMot de passe valide\033[0m")
-    
-#motDePasseSixChar()
+    if len(motDePasse) != 6 or not all(char in numbers for char in motDePasse) :
+       return False, "Password must have 6 characters between 0 and 9!"
+    return True, ""
+
 
 # Mot de passe de 6 charchtères de tous les chars :
 
 def motDePasseMix(motDePasse):   
     if len(motDePasse) != 6 or not all(char in numbers + alphabetMaj + alphabetMin + specialCharacters for char in motDePasse):
-        return False
-    return True
+        return False, "Password must have 6 characters of letters, numbers, or special characters!"
+    return True, ""
 
-     
-#motDePasseMix()   
 
 ##################################################################################################################################
+def PW_verification(password):
+    digit = any(char.isdigit() for char in password)
+    lower = any(char.islower() for char in password)
+    upper = any(char.isupper() for char in password)
+    special = any(char in specialCharacters for char in password)
+    is_long_enough = len(password) >= 6
+
+    if not digit:
+        return False,"You should add a number to your password"
+    if not lower:
+        return False,"You should add a lowercase letter to your password"
+    if not upper:
+        return False,"You should add an uppercase letter to your password"
+    if not special:
+        return False,"You should add a special character to your password"
+    if not is_long_enough:
+        return False,"Your password should be at least 6 characters long"
+
+    # Check if the password is strong or weak
+    if digit and lower and upper and special and is_long_enough:
+        return True,"your password is very strong"
+    elif (digit and lower) or (upper and special) and is_long_enough:
+        return True,"your password is strong"
+    elif (digit and lower and not upper and not special) or (digit and upper and not lower and not special) \
+            or (lower and upper and not digit and not special) or (digit and special and not lower and not upper) \
+            or (lower and special and not digit and not upper) or (upper and special and not digit and not lower) \
+            and is_long_enough:
+         return False,"your password is weak"
+    else:
+        return False,"your password is very weak"
+    
 
 ## CREATE ACCOUNT FORM ##############################################
 
@@ -65,8 +88,10 @@ class CustomUserCreationForm(forms.ModelForm):
 
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
-        if not motDePasseMix(password1) :
-            raise forms.ValidationError("Password must have 6 charachters of letters or numbers or special charachters !!")
+
+        is_valid, error_message = PW_verification(password1)
+        if not is_valid:
+            raise forms.ValidationError(error_message)
         return password1
     
     def clean_password2(self):

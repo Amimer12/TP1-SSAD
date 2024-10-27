@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 # URL de ta page de connexion Django
 url = 'http://127.0.0.1:8000/'  
 
-username = 'djahid' 
-resultats = ['salem1111', 'sds*333/', 'dsds@4545', 'sd1*3dsd', "djahid", 'mahmoude-888']
+username = 'username' 
+resultats = ['salem1111', 'sds*333/', 'dsds@4545', 'sd1*3dsd', "djahid", 'mahmoude-888','azerty']
 
 # Créer une session
 session = requests.Session()

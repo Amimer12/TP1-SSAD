@@ -22,6 +22,13 @@
                 <button data-loader="n" class="">stop</button>
             </div>
         </div>
+        <div class="box-crypt">
+            <p>Choose website mode </p>
+            <div>
+                <button data-mode="cry" class="cry active">encryption</button>
+                <button data-mode="stg" class="stg">steganography</button>
+            </div>
+        </div>
     </div>
     <div class="theMianLoader">
         <div class="textContainer">
@@ -36,7 +43,7 @@
                 <p>Let's get started with creating your account</p>
     
                 <form action="" method="POST">
-                 {% csrf_token %}
+                {% csrf_token %}
                 
                 <!-- Username field -->
                 <input type="text" name="username" placeholder="Enter a User Name" required>
@@ -105,31 +112,79 @@
         <div class="container">
             <div class="loginPass">
                 <div class="left">
-                    <p>put your uncrypted message here </p>
                     <form action="">
-                        <textarea name=""  id="textCrypt" placeholder="" ></textarea>
-                    
+                    <div class="top">
+                        <p>Put your message here </p>
+                        <div class="question">
+                            <div class="icon">
+                                <i class="fa-solid fa-question"></i>
+                            </div>
+                            <div class="box takeaffine">
+                                <p>Please enter A and B for Affine algorithm to start</p>
+                                <div class="A">
+                                    <p>A :</p>
+                                    <input type="number" id="affine_a">
+                                </div>
+                                <div class="B">
+                                    <p>B :</p>
+                                    <input type="number" id="affine_b">
+                                </div>
+                            </div>
+                            <div class="box takecesar">
+                                <p>Please enter the key for Cesar algorithm to start</p>
+                                <div class="A">
+                                    <p>Key :</p>
+                                    <input type="number" id="cesar_key">
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                        <textarea name=""  id="textToCrypt" placeholder="" ></textarea>
                     <div class="bottom">
                         <div class="menu">
-                            <p>choose your methed <i class="fa-solid fa-chevron-up"></i></p>
-                            <ul> 
-                                <li data-method="1">method 1 - Miroir</li>
-                                <li data-method="2" >method 2 - Affine</li>
-                                <li data-method="3">method 3 - decalage a gauche</li>
-                                <li data-method="4">method 4 - decalage a droite</li>
-                                <li data-method="5">method 5 - cesar</li>
+                            <p>Choose your method <i class="fa-solid fa-chevron-up"></i></p>
+                            <ul class="crypt"> 
+                                <li data-method="1">1 - Mirror</li>
+                                <li data-method="2">2 - Affine</li>
+                                <li data-method="3">3 - Décalage à gauche</li>
+                                <li data-method="4">4 - Décalage à droite</li>
+                                <li data-method="5">5 - César à gauche</li>
+                                <li data-method="6">6 - César à droite</li>
+                            </ul>
+                            <ul class="stg"> 
+                                <li data-method="s1">1 - Invisible charahcters</li>
+                                <li data-method="s2"> method - 2 </li>
+                                <li data-method="s3"> method - 3</li>
                             </ul>
                         </div>
                         <button type="submit">execute</button>
                     </form>
+
                     </div>
                 </div>
+
                 <div class="right">
-                    <p>the crypted message</p>
-                    <form action="">
-                        <textarea name=""  id="textResult" readonly></textarea>
-                    </form> 
-                    <div class="bottom"></div>
+                    <div class="textleft areacry">
+                        <p>Crypted message </p>
+                        <form action="">
+                            <textarea name=""  id="textResultCrypt" readonly></textarea>
+                        </form>
+                        <div class="space"></div>
+                    </div>
+                    <div class="textright areacry">
+                        <p>Decrypted message</p>
+                        <form action="">
+                            <textarea name=""  id="textResultDecrypt" readonly></textarea>
+                        </form>
+                        <div class="space"></div>
+                    </div>
+                    <div class="areastg">
+                        <p>The Hidden Message</p>
+                        <form action="">
+                            <textarea name=""  id="textResultStg" readonly></textarea>
+                        </form>
+                        <div class="space"></div>
+                    </div>
                 </div>
             </div>
             <div class="login">
@@ -154,7 +209,7 @@
 
             
         </div>
-        <p>Copyright @TEAM_2 2024 | Privacy Policy </p>
+        <p class="copyright">Copyright @TEAM_2 2024 | Privacy Policy </p>
     </div>
     <script src="{% static 'more/gsapmin.js'%}"></script>
     <script src="{% static 'more/split.js'%}"></script>
