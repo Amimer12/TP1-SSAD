@@ -3,9 +3,10 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from .forms import CustomUserCreationForm, LoginForm
 from .models import UserAccount
-from .models import FailedLoginAttempt
 from django.views.decorators.csrf import csrf_exempt
 import math
+from .models import FailedLoginAttempt
+from django.utils.timezone import now
 
 
 ############################################ Affine Encrypt #######################################
@@ -14,41 +15,6 @@ def encrypt_message_affine(message, a, b):
     decimal_values_y = [a * value + b for value in decimal_values_x]  # Chiffrement
     encrypted_chars = [chr(value) for value in decimal_values_y]  # Conversion en caractères chiffrés
     encrypted_message = ''.join(encrypted_chars)  # Combinaison des caractères chiffrés
-from django.utils import timezone
-from datetime import timedelta
-from django.utils.timezone import now
-
-
-# ******************************* Fonction pour calculer l'inverse modulaire de a ######################################
-def mod_inverse(a, m):
-    for x in range(1, m):
-        if (a * x) % m == 1:
-            return x
-    raise ValueError(f"Pas d'inverse modulaire pour a={a} et m={m}")
-
-# ************************ Vérifier si a est coprime avec 128 (pour éviter des erreurs de déchiffrement)###########
-def is_coprime(a, m):
-    return math.gcd(a, m) == 1
-
-# *********************** Fonction pour chiffrer un message (Affine)
-def encrypt_message(message, a, b):
-    decimal_values_y = []
-    m = 128
-
-    if not is_coprime(a, m):
-        raise ValueError(f"Erreur : a doit être coprime avec {m} pour que le chiffrement fonctionne.")
-
-    # Liste des valeurs décimales avec les valeurs ASCII des caractères de message
-    decimal_values_x = [ord(char) for char in message]
-
-    # Chiffrer chaque caractère avec modulo 128
-    for value in decimal_values_x:
-        encrypted_value = (a * value + b) % m
-        decimal_values_y.append(encrypted_value)
-
-    # Convertir les valeurs décimales chiffrées en caractères
-    encrypted_message = ''.join([chr(value) for value in decimal_values_y])
-
     return encrypted_message
 
 
@@ -256,7 +222,27 @@ def decrypt_cesar_adroite(texte, n):
 
 ########################################################################################################################################
 
-#################################################################################################################################
+def check_text_length(text):
+    words = text.split()
+    return len(words) >= 30
+
+############################################### STGANOGRAPHY INIVSIBLE CHARACHTERS ##################################################################################
+def encode_message_with_invisible_characters(text, message):
+    binary_message = ''.join(f"{ord(char):08b}" for char in message)
+    encoded_text = []
+
+    bit_index = 0
+    for char in text:
+        encoded_text.append(char)
+        
+        if bit_index < len(binary_message):
+            if binary_message[bit_index] == '1':
+                encoded_text.append('\u200B') 
+            else:
+                encoded_text.append('\u200C')  
+            bit_index += 1
+    
+    return ''.join(encoded_text)
 
 def decode_message_from_invisible_characters(encoded_text):
     binary_message = ""
@@ -270,8 +256,98 @@ def decode_message_from_invisible_characters(encoded_text):
     decoded_chars = [chr(int(binary_message[i:i+8], 2)) for i in range(0, len(binary_message), 8)]
     return ''.join(decoded_chars)
 
+############################################### STGANOGRAPHY PAR PHRASE #########################################
+
+def steg_phrase(secret, text):
+    phrases = text.split('. ')
+
+    if len(phrases) < len(secret):
+       raise ValueError('Impossible de cacher le message dans le texte. Veuillez inserer un texte plus long.')
+
+    textSteg = []
+    for index, phrase in enumerate(phrases):
+        if index < len(secret):
+           phraseSteg = secret[index] + phrase[1:]
+        else:
+           phraseSteg = phrase 
+        textSteg.append(phraseSteg)
+
+    textSteg = '. '.join(textSteg)
+    return textSteg
 
 
+def extraire_message_phrase(texte_cache):
+    # Séparer le texte en phrases
+    phrases = texte_cache.split(". ")
+    # Prendre les premières lettres de chaque phrase
+    message_revele = ''.join(phrase[0] for phrase in phrases if phrase)
+    
+    return message_revele
+
+############################################### STGANOGRAPHY PAR COLONNE #########################################
+
+
+def steg_colonne(secret, text, nb_colonnes):
+
+    # Diviser le texte en mots
+    mots = text.split()
+
+    if len(mots) < len(secret):
+       raise ValueError('Impossible de cacher le message dans le texte. Veuillez inserer un texte plus long.')
+
+    # Calculer le nombre de lignes nécessaires
+    nb_lignes = math.ceil(len(mots) / nb_colonnes)
+
+    # Construire la matrice
+    tableau = text_to_tab(mots, nb_colonnes, nb_lignes)
+    
+    # Remplacer la première lettre de chaque case par les lettres du message en parcourant colonne par colonne
+    index_message = 0
+    for j in range(nb_colonnes):
+        for i in range(nb_lignes):
+           if index_message < len(secret) and tableau[i][j]:  # Vérifier si la cellule contient un mot
+              # Remplacer la première lettre du mot par la lettre du message
+              tableau[i][j] = secret[index_message] + tableau[i][j][1:]
+              index_message += 1
+
+    # Reconstruction du texte caché
+    texte_cache = " ".join(" ".join(ligne) for ligne in tableau)
+
+    return texte_cache.strip()
+
+
+
+def extraire_message_colonne(text_cache, nb_colonnes):
+    message_extrait = ""
+    mots = text_cache.split()
+    # Calculer le nombre de lignes nécessaires
+    nb_lignes = math.ceil(len(mots) / nb_colonnes)
+    # Reconstruire la matrice
+    tableau = text_to_tab(mots, nb_colonnes, nb_lignes)
+
+    for j in range(nb_colonnes):
+        for i in range(nb_lignes):
+            if tableau[i][j]:  # Vérifier si la cellule contient un mot
+                # Récupérer la première lettre de chaque mot de la colonne
+                message_extrait += tableau[i][j][0]
+    return message_extrait
+ # pour limiter la longueur à celle du message original
+ #  return message_extrait [:len(message)] 
+
+def text_to_tab(mots, nb_colonnes, nb_lignes):
+     # Construire la matrice
+    tableau = [["" for _ in range(nb_colonnes)] for _ in range(nb_lignes)]
+    index = 0
+    for i in range(nb_lignes):
+        for j in range(nb_colonnes):
+            if index < len(mots):
+                tableau[i][j] = mots[index]
+                index += 1
+    return tableau            
+
+
+#################################################################################################################
+@csrf_exempt
 def AuthPage(request):
     signup_form = CustomUserCreationForm()
     login_form = LoginForm()
@@ -311,13 +387,13 @@ def AuthPage(request):
             if user :  
             # verfier si utlisateure son compte n'est pas blocker 
                 failed_attempt,create= FailedLoginAttempt.objects.get_or_create(user=user)
-
+               
                 if failed_attempt.is_locked():
                     remaining_time = failed_attempt.locked_until - now()
                     minutes_remaining = remaining_time.total_seconds() 
                     print("account blocked")
                     return JsonResponse({'errors': {'__all__': [f"Your account is locked. Try again  in {int(minutes_remaining)} seconde."]}}, status=403)
- 
+                  
                 if  user.check_password(password):
                     failed_attempt.reset_attempts()
                     #user_found = True
@@ -327,7 +403,7 @@ def AuthPage(request):
                     print("Authentication failed.")
                     failed_attempt.attempts += 1
                     print(failed_attempt.attempts)
-                # Si 3 tentatives échouées, verrouiller pendant 30 minutes
+                    # Si 3 tentatives échouées, verrouiller pendant 30 minutes
                     if failed_attempt.attempts >= 3:
                         failed_attempt.lock_account()
                         return JsonResponse({'errors': {'__all__': ["Too many failed attempts. Account locked for 30 seconde"]}}, status=403)
@@ -337,7 +413,7 @@ def AuthPage(request):
                     return JsonResponse({'errors': {'__all__': ["invalide password"]}}, status=400)
            # if not user_found:
            
-#####################################################################################################
+################################################## CRYPTAGE ###################################################
         elif 'method' in request.POST and 'textToEncrypt' in request.POST:
             method = request.POST.get('method')
             textToEncrypt = request.POST.get('textToEncrypt')
@@ -397,25 +473,75 @@ def AuthPage(request):
                 if CryptedText and DecryptedText:
                     return JsonResponse({'success': True, 'CryptedText': CryptedText, 'DecryptedText': DecryptedText})
                 
-
             else:
                 error_msg = "Method and text to encrypt must be provided."
 
             # Return error if something goes wrong
             return JsonResponse({'errors': error_msg}, status=400)
     
+    #################################  STEGANOGRAPHY ########################################################""
+
         elif 'methodStg' in request.POST and 'textToStg' in request.POST: 
             methodStg = request.POST.get('methodStg')
             textToStg = request.POST.get('textToStg')
+            
             messageStg = ""
-            if methodStg and textToStg :
-                if methodStg == "1":
-                    messageStg = decode_message_from_invisible_characters(textToStg)
-                
+            error_msg = ""
+
+            # Check if both method and text are provided
+            if not methodStg or not textToStg:
+                error_msg = "Method and text must be provided."
+            elif not check_text_length(textToStg):  # Check if text length is sufficient
+                error_msg = "Your text must contain at least 30 words!"
             else:
-                error_msg = "Method and text to encrypt must be provided."
+                # Process the message extraction based on the chosen method
+                if methodStg == "s1":
+                    messageStg = decode_message_from_invisible_characters(textToStg)
+                elif methodStg == "s2":
+                    messageStg = extraire_message_phrase(textToStg)
+                elif methodStg == "s3":
+                    messageStg = extraire_message_colonne(textToStg, 4)
+            
+            # Return success or error messages in JSON response
             if messageStg:
-                    return JsonResponse({'success': True, 'messageStg': messageStg})
+                return JsonResponse({'success': True, 'messageStg': messageStg})
+            else:
+                return JsonResponse({'errors': error_msg}, status=400)
+
+            
+
+        elif 'methodStgHide' in request.POST and 'textToStgHide' in request.POST and 'MsgStgHide' in request.POST: 
+            methodStgHide = request.POST.get('methodStgHide')
+            textToStgHide = request.POST.get('textToStgHide')
+            MsgStgHide = request.POST.get('MsgStgHide')
+            nbr_columns = request.POST.get('nbr_column') if methodStgHide == "s3" else None
+
+            TextWithHiddenMessage = ""
+            error_msg = ""
+
+            # Check for missing required fields
+            if not methodStgHide or not textToStgHide or not MsgStgHide:
+                error_msg = "Method, text, and message are required."
+            elif not check_text_length(textToStgHide):  # Ensure text has at least 30 words
+                error_msg = "Your text must contain at least 30 words!"
+            else:
+                # Process the hiding message methods based on the chosen method
+                if methodStgHide == "s1":
+                    TextWithHiddenMessage = encode_message_with_invisible_characters(textToStgHide, MsgStgHide)
+                elif methodStgHide == "s2":
+                    TextWithHiddenMessage = steg_phrase(MsgStgHide, textToStgHide)
+                elif methodStgHide == "s3" and nbr_columns:
+                    TextWithHiddenMessage = steg_colonne(MsgStgHide, textToStgHide,int(nbr_columns))
+                else:
+                    error_msg = "Number of columns is required for this method."
+
+            # Return success or error messages in JSON
+            if TextWithHiddenMessage:
+                return JsonResponse({'success': True, 'TextWithHiddenMessage': TextWithHiddenMessage})
+            else:
+                return JsonResponse({'errors': error_msg}, status=400)
+
+            
 
     else:
         signup_form = CustomUserCreationForm()

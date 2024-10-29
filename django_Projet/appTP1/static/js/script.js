@@ -185,11 +185,15 @@ let textareaRightStg = document.querySelector(".landing .container .loginPass di
 let questionIcon = document.querySelector(".landing .container .loginPass div.left .top .question .icon");
 let takeaffine = document.querySelector('.landing .container .loginPass div.left .question .box.takeaffine');
 let takecesar = document.querySelector('.landing .container .loginPass div.left .question .box.takecesar');
+let takestg = document.querySelector('.landing .container .loginPass div.left .question .box.stg');
+let takestgColumn = document.querySelector('.landing .container .loginPass div.left .question .box.stgColumn');
+let hideBtn = document.querySelector('button[class="hideBtn"]');
 let btnModeList = [questionIcon ,takecesar,takeaffine ]
 crypageMode.onclick = ()=> {
     webSiteMode = "cry";
     stegranographyMode.classList.remove('active')
     crypageMode.classList.add('active')
+    hideBtn.classList.remove('active')
     textareaRightStg.style.display = "none"
     textareaRightCty.forEach((e)=> {
         e.style.display = "block"
@@ -203,6 +207,7 @@ stegranographyMode.onclick = ()=> {
     webSiteMode = "stg";
     crypageMode.classList.remove('active')
     stegranographyMode.classList.add('active')
+    hideBtn.classList.add('active')
     textareaRightStg.style.display = "block"
     textareaRightCty.forEach((e)=> {
         e.style.display = "none"
@@ -280,75 +285,146 @@ let textareaLeft = document.querySelector('.landing .container .loginPass div.le
 let textareaRight = document.querySelector('.landing .container .loginPass div.right form textarea')
 
 let urlCrypt = document.querySelector('.landing .container .loginPass .left form').action;
+let urlHide = document.querySelector('form[id="formHide"]').action;
 let textFeildToCrypt = document.querySelector('textarea[id="textToCrypt"]');  
 let affine_a = document.querySelector('input[id="affine_a"]');  
 let affine_b = document.querySelector('input[id="affine_b"]');  
 let cesar_key = document.querySelector('input[id="cesar_key"]');  
 let textFeildResultCrypt = document.querySelector('textarea[id="textResultCrypt"]');  
 let textFeildResultDecrypt = document.querySelector('textarea[id="textResultDecrypt"]');  
-let messageStg = document.querySelector('textarea[id="textResultStg"]')
+
+let messageStg = document.querySelector('textarea[id="textResultStg"]');
+
+let messageStgTohide = document.querySelector('input[id="stg_message"]');
+let messageStgTohideColumn = document.querySelector('input[id="stg_messageclm"]');
+let ColumnStg= document.querySelector('input[id="nbr_column"]');
+let hideSuccess = document.querySelector('div[id="success_msg"]');
 
 btnSumbitCryp.addEventListener('click', function(e) {
     e.preventDefault();
 
+    // Clear previous messages
+    messageStg.textContent = "";  
+    messageStg.style.color = "";  
+
     if (numOfMethod !== undefined) {
-        console.log(numOfMethod)
-        console.log(textFeildToCrypt.value)
+        let formDataCrypt = new URLSearchParams();  
 
+        // Check the mode and set form data accordingly
+        if (webSiteMode === "cry") {
+            formDataCrypt.append('method', numOfMethod);  
+            formDataCrypt.append('textToEncrypt', textFeildToCrypt.value);
+            formDataCrypt.append('affine_a', affine_a.value);
+            formDataCrypt.append('affine_b', affine_b.value);
+            formDataCrypt.append('cesar_key', cesar_key.value);
+        } else {
+            formDataCrypt.append('methodStg', numOfMethod);  
+            formDataCrypt.append('textToStg', textFeildToCrypt.value);
+        }
 
-    let formDataCrypt = new URLSearchParams();  
-    if(webSiteMode==="cry"){
-    formDataCrypt.append('method', numOfMethod);  
-    formDataCrypt.append('textToEncrypt', textFeildToCrypt.value);
-    formDataCrypt.append('affine_a', affine_a.value);
-    formDataCrypt.append('affine_b', affine_b.value);
-    formDataCrypt.append('cesar_key', cesar_key.value);
-    }else{
-        formDataCrypt.append('methodStg', 1);  
-        formDataCrypt.append('textToStg', textFeildToCrypt.value);
-    }
-
-    fetch(urlCrypt, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',  
-            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  
-        },
-        body: formDataCrypt.toString()  
-    })
-    .then(response => response.json()) 
-    .then(data => {
-        if (data.success) {
-            if(webSiteMode=="cry"){
-            textFeildResultCrypt.textContent = data.CryptedText;
-            textFeildResultDecrypt.textContent = data.DecryptedText;
-            }else{
-                messageStg.textContent = data.messageStg;
+        fetch(urlCrypt, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',  
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  
+            },
+            body: formDataCrypt.toString()  
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            if (data.success) {
+                if (webSiteMode === "cry") {
+                    textFeildResultCrypt.textContent = data.CryptedText;
+                    textFeildResultDecrypt.textContent = data.DecryptedText;
+                } else {
+                    messageStg.textContent = data.messageStg;  // Display extracted message
+                    messageStg.style.color = "green";  // Success message styling
+                }
+            } else if (data.errors) {
+                // Display specific error message
+                if (webSiteMode === "cry") {
+                    textFeildResultCrypt.textContent = data.errors;
+                } else {
+                    messageStg.textContent = data.errors;  // Display extraction error
+                    messageStg.style.color = "red";  // Error message styling
+                }
             }
-            textFeildResultCrypt.style.color = "";  // Reset any error styling
-        } else if (data.errors) {
-            // Error case: display specific error message from server
-            if(webSiteMode=="cry"){
-            textFeildResultCrypt.textContent = data.errors;
-            }else{
-            messageStg.textContent = data.errors;
+        })
+        .catch(error => {
+            // Network or server error handling
+            if (webSiteMode === "cry") {
+                textFeildResultCrypt.textContent = "An error occurred. Please try again.";
+            } else {
+                messageStg.textContent = "No hidden message detected!";
+                messageStg.style.color = "red";  // Error styling
             }
+        });
+    } else {
+        // Handling when no method is selected
+        if (webSiteMode === "cry") {
+            textFeildResultCrypt.textContent = "Please choose a method before you execute.";
             textFeildResultCrypt.style.color = "red";
+        } else {
+            messageStg.textContent = "Please choose a method before you execute.";
+            messageStg.style.color = "red";
         }
-    })
-    .catch(error => {
-        if(webSiteMode=="cry"){
-        textFeildResultCrypt.textContent = "An error occurred. Please try again.";
-        }else{
-            messageStg.textContent ="An error occurred. Please try again.";
+    }
+});
+
+hideBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    // Clear previous messages
+    hideSuccess.classList.remove('active');
+    hideSuccess.style.color = "";
+    hideSuccess.textContent = "";  
+
+    if (numOfMethod !== undefined) {
+        let formDataCrypt = new URLSearchParams();  
+        formDataCrypt.append('methodStgHide', numOfMethod);  
+        formDataCrypt.append('textToStgHide', textFeildToCrypt.value);
+
+        if (numOfMethod === "s1" || numOfMethod === "s2") {
+            formDataCrypt.append('MsgStgHide', messageStgTohide.value); 
+        } else {
+            formDataCrypt.append('MsgStgHide', messageStgTohideColumn.value);
+            formDataCrypt.append('nbr_column', ColumnStg.value);
         }
-        textFeildResultCrypt.style.color = "red";
-    });
-    
-}
 
+        fetch(urlHide, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',  
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  
+            },
+            body: formDataCrypt.toString()  
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            if (data.success) {
+                hideSuccess.style.color = "green";
+                hideSuccess.classList.add('active');
+                hideSuccess.textContent = "Your message is hidden successfully!";
+                textFeildToCrypt.value = data.TextWithHiddenMessage;
+            } else if (data.errors) {
+                hideSuccess.classList.add('active');
+                hideSuccess.style.color = "red";
+                hideSuccess.textContent = data.errors;  // Display specific error message from server
+            }
+        })
+        .catch(error => {
+            hideSuccess.classList.add('active');
+            hideSuccess.style.color = "red";
+            hideSuccess.textContent = "An error occurred. Please try again.";
+        });
 
-})
+    } else {
+        hideSuccess.classList.add('active');
+        hideSuccess.style.color = "red";
+        hideSuccess.textContent = "Please choose a method before hiding your message.";
+    }
+});
+
 
 // function miroir(theText) {
 //     let theTextsting = new String(theText)
@@ -619,9 +695,33 @@ ulLiChoise.forEach((ele) => {
 // Toggle box visibility on question icon click (optional, can be removed if auto-show is preferred)
 questionIcon.addEventListener('click', function() {
     if (numOfMethod === "2") {
-        takeaffine.classList.toggle('active');  // Toggle Affine box
+        takeaffine.classList.toggle('active'); 
     } else if (numOfMethod === "5" || numOfMethod === '6') {
-        takecesar.classList.toggle('active');  // Toggle Cesar box
+        takecesar.classList.toggle('active');  
+    }else if(numOfMethod === "s1" || numOfMethod === 's2'){
+        takestg.classList.toggle('active');  
+    }else if(numOfMethod === "s3") {
+        takestgColumn.classList.toggle('active'); 
+    }
+});
+
+ulLiChoisestg.forEach((ele) => {
+    ele.onclick = function() {
+        ulLiChoisestg.forEach((e) => {
+            e.classList.remove('active');
+        });
+        this.classList.add('active');
+        numOfMethod = this.dataset.method;
+        takestg.classList.remove('active');
+        takestgColumn.classList.remove('active');
+        questionIcon.classList.add("active"); 
+
+        if (numOfMethod === "s3") {
+            takestgColumn.classList.add("active");
+        } else {      
+            takestg.classList.add("active");
+        }
+         
     }
 });
 

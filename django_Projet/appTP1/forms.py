@@ -89,7 +89,7 @@ class CustomUserCreationForm(forms.ModelForm):
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
 
-        is_valid, error_message = PW_verification(password1)
+        is_valid, error_message = motDePasseThreeChar(password1)
         if not is_valid:
             raise forms.ValidationError(error_message)
         return password1

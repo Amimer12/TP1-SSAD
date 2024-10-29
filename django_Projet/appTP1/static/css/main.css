@@ -68,7 +68,7 @@ ul {
   position: fixed;
   width: 270px;
   height: 100vh;
-  background-color: black;
+  background-color: var(--bg);
   top: 0;
   left: -270px;
   z-index: 10;
@@ -78,7 +78,7 @@ ul {
 .settingSide .icon {
   width: 30px;
   height: 30px;
-  background-color: black;
+  background-color: var(--bg);
   display: flex;
   color: var(--t);
   align-items: center;
@@ -180,10 +180,10 @@ ul {
   top: -100%;
   left: 0;
   z-index: 100;
-  /* background: var(--bg); */
+  background: #f6f6f6;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center;;
 }
 
 .createUser .mastercontainer {
@@ -191,8 +191,10 @@ ul {
   gap: 10px;
   height: 80vh;
   width: 80%;
-  background-color: black;
+  background-color: rgba(246, 246, 246, 0.8);
+  border-radius: 20px;
   padding: 30px 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
 }
 .createUser .mastercontainer .left{
   flex: 1 ;
@@ -201,7 +203,7 @@ ul {
 .createUser .mastercontainer .left h2 {
   text-transform: capitalize;
   margin-bottom: 16px;
-  color: var(-t);
+  color: black;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -217,7 +219,7 @@ ul {
   margin-bottom: 30px;
   margin-left: auto;
   margin-right: auto;
-  color: var(--t);
+  /*color: var(--t);*/
 }
 .createUser .mastercontainer .left form {
   display: flex;
@@ -227,12 +229,11 @@ ul {
   padding: 0 40px;
 }
 .createUser .mastercontainer .left i {
-  color: var(--t);
-  border: none;
+  color: #777;
+  border: 1px solid #777;
   padding: 10px;
-  background-color: var(--v);
   position: absolute;
-  cursor: pointer;
+  border-radius: 6px;
 }
 .createUser .mastercontainer .left .containerloader p.yes {
   color: var(--t);
@@ -247,8 +248,9 @@ display: block;
 .createUser .mastercontainer .left form input[type="text"],
 .createUser .mastercontainer .left form input[type="password"] {
   padding: 14px 20px;
-  color: var(--t);
-  border: 1px solid var(--t);
+  color: #333;
+  border: 1px solid #b6b6b6;
+  border-radius: 8px;
   background-color: transparent;
 }
 @media (max-width:678px) {
@@ -270,14 +272,15 @@ display: block;
 .createUser .mastercontainer .left form input[type="submit"] {
   padding: 14px 20px;
   border: none;
-  background-color: var(--v);
+  background-color: #63aefd;
+  border-radius: 8px;
   cursor: pointer;
   text-transform: capitalize;
   font-weight: 600;
   font-size: 15px;
   transition: 0.3s;
-  color: var(--t);
 }
+
 .createUser .mastercontainer .left form input[type="submit"]:hover {
   opacity: 0.92;
 }
@@ -310,7 +313,7 @@ display: block;
   padding: 15px 0;
   position: relative;
   color: white;
-  backdrop-filter:blur(10px)
+  /*backdrop-filter:blur(10px)*/
   /* background-color: #333; */
 }
 .team .container {
@@ -470,7 +473,7 @@ display: block;
     font-size: 15px;
     transition: 0.3s;
     color: #333;
-    background-color: var(--t);
+   /* background-color: var(--t);*/
 }
 .header .right button i {
   margin-left: 10px;
@@ -536,17 +539,17 @@ display: block;
   font-weight: 600;
 	text-align: center;
 	padding: 20px;
-  color: var(--t);
+ /* color: var(--t);*/
 }
 .landing .container .formcontainer {
-  background-color:black ;
+  background-color: rgba(246, 246, 246, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 65%;
-  padding:20px;
-  color: var(--t);
-  position: relative;
+  border-radius: 20px;
+  padding: 30px 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
 }
 .landing .container .formcontainer::after {
   content: '';
@@ -572,6 +575,7 @@ display: block;
   }
 }
 .landing .container .formcontainer h2 {
+  color: black;
   text-transform: capitalize;
   margin-bottom: 16px;
 }
@@ -594,9 +598,9 @@ display: block;
 .landing .container .formcontainer form input[type="text"],
 .landing .container .formcontainer form input[type="password"] {
   padding: 14px 20px;
-  color: var(--t);
-  border: 1px solid var(--t);
-
+  color: #333;
+  border: 1px solid #2d5882;
+  border-radius: 8px;
   background-color: transparent;
 }
 @media (max-width:678px) {
@@ -617,14 +621,14 @@ display: block;
 .landing .container .formcontainer form input[type="submit"] {
   padding: 14px 20px;
   border: none;
-  background-color: var(--v);
-  /* border-radius: 8px; */
+  background-color: #63aefd;
+  border-radius: 8px;
   cursor: pointer;
   text-transform: capitalize;
   font-weight: 400;
   font-size: 17px;
   transition: 0.3s;
-  color: var(--t);
+ /* color: var(--t);*/
 }
 .landing .container .formcontainer form input[type="submit"]:hover {
   opacity: 0.92;
@@ -707,13 +711,14 @@ display: block;
 	display: flex;
 }
 .landing .container .loginPass > div {
-	background-color: black;
+	background-color: rgba(246, 246, 246, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 65%;
-  color: var(--t);
+  border-radius: 20px;
   padding: 30px 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
 }
 .landing .container .loginPass > div.left , .landing .container .loginPass > div.right {
 	flex: 1;
@@ -737,7 +742,7 @@ display: block;
 .landing .container .loginPass div form textarea {
 	width: 100%;
 	border: 1px solid #777;
-	color: var(--t);
+	/*color: var(--t);*/
 	padding: 10px;
 	background-color: transparent;
 	border-radius: 4px;
@@ -752,6 +757,7 @@ display: block;
 	text-transform: capitalize;
 	margin-bottom: 16px;
 	height: 40.4px;
+  color: #333;
 }
 .landing .container .loginPass div.left .bottom {
 	display: flex;
@@ -823,11 +829,11 @@ display: block;
 	height: 40.39px;
 	margin-top: 20px;
 	padding: 0 20px;
-  background-color: var(--t);
 	text-transform: capitalize;
-	color: black;
-	font-weight: 500;
-	border: 1px solid var(--t);
+	color: #333;
+	font-weight: 600;
+	border-radius: 5px;
+	border: 1px solid #777;
 	cursor: pointer;
 }
 
@@ -848,7 +854,8 @@ display: block;
 
 /* ###### */
 .landing .container .loginPass div.right > div p {
-  color: var(--t);
+  /*color: var(--t);*/
+  color: #333;
   font-weight: 400;
   text-transform: capitalize;
   margin-bottom: 10px;
@@ -910,7 +917,9 @@ display: block;
   transition: 0.3s;
 }
 .landing .container .loginPass div.left .question .box.takeaffine.active,
-.landing .container .loginPass div.left .question .box.takecesar.active {
+.landing .container .loginPass div.left .question .box.takecesar.active,
+.landing .container .loginPass div.left .question .box.stg.active,
+.landing .container .loginPass div.left .question .box.stgColumn.active {
 visibility: visible;
 transition: 0.3s;
 }
@@ -921,10 +930,21 @@ margin-bottom: 0;
 height: 30px;
 color: #333;
 }
+#stg_message,#stg_messageclm{
+  width: 65%;
+  height: 20px;
+}
+#boxStg > p{
+  height: 50px;
+  margin-bottom: -10px;
+}
+#boxStgClmn > p{
+  height: 50px;
+  margin-bottom: 10px;
+}
 .landing .container .loginPass div.left .question .box div {
   display: flex;
   height: 30px;
-
   align-items: center;
   /* margin-top: 10px; */
 }
@@ -956,4 +976,50 @@ margin-bottom: 0;
 }
 #textToCrypt{
   height: 80%;
+}
+
+.password-container {
+  position: relative;
+  display: inline-block;
+}
+
+.passInput{
+  padding-right: 2.5rem; 
+  width: 100%;
+}
+
+#i1,#i2,#i3 {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #2d5882; 
+  border: none;
+}
+.hideBtn{
+  display: none;
+}
+.hideBtn.active{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.success_msg{
+  display: none;
+}
+.success_msg.active{
+  display: block;
+  border: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: green;
+}
+
+#hideBtn{
+  width: 70%;
+  height: 40.96px;
+  padding: 20px;
+  align-self: center;
+  margin-bottom: 15px;
 }
