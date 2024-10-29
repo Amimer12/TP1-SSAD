@@ -68,7 +68,7 @@ ul {
   position: fixed;
   width: 270px;
   height: 100vh;
-  background-color: var(--bg);
+  background-color: black;
   top: 0;
   left: -270px;
   z-index: 10;
@@ -78,7 +78,7 @@ ul {
 .settingSide .icon {
   width: 30px;
   height: 30px;
-  background-color: var(--bg);
+  background-color: black;
   display: flex;
   color: var(--t);
   align-items: center;
@@ -180,7 +180,7 @@ ul {
   top: -100%;
   left: 0;
   z-index: 100;
-  background: var(--bg);
+  /* background: var(--bg); */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -617,8 +617,8 @@ display: block;
 .landing .container .formcontainer form input[type="submit"] {
   padding: 14px 20px;
   border: none;
-  background-color: #63aefd;
-  border-radius: 8px;
+  background-color: var(--v);
+  /* border-radius: 8px; */
   cursor: pointer;
   text-transform: capitalize;
   font-weight: 400;
