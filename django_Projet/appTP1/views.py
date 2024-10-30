@@ -6,6 +6,9 @@ from .models import UserAccount
 from .models import FailedLoginAttempt
 from django.views.decorators.csrf import csrf_exempt
 import math
+from django.utils import timezone
+from datetime import timedelta
+from django.utils.timezone import now
 
 
 ############################################ Affine Encrypt #######################################
@@ -14,9 +17,6 @@ def encrypt_message_affine(message, a, b):
     decimal_values_y = [a * value + b for value in decimal_values_x]  # Chiffrement
     encrypted_chars = [chr(value) for value in decimal_values_y]  # Conversion en caractères chiffrés
     encrypted_message = ''.join(encrypted_chars)  # Combinaison des caractères chiffrés
-from django.utils import timezone
-from datetime import timedelta
-from django.utils.timezone import now
 
 
 # ******************************* Fonction pour calculer l'inverse modulaire de a ######################################
@@ -311,13 +311,13 @@ def AuthPage(request):
             if user :  
             # verfier si utlisateure son compte n'est pas blocker 
                 failed_attempt,create= FailedLoginAttempt.objects.get_or_create(user=user)
-
+               
                 if failed_attempt.is_locked():
                     remaining_time = failed_attempt.locked_until - now()
                     minutes_remaining = remaining_time.total_seconds() 
                     print("account blocked")
                     return JsonResponse({'errors': {'__all__': [f"Your account is locked. Try again  in {int(minutes_remaining)} seconde."]}}, status=403)
- 
+                  
                 if  user.check_password(password):
                     failed_attempt.reset_attempts()
                     #user_found = True
@@ -327,7 +327,7 @@ def AuthPage(request):
                     print("Authentication failed.")
                     failed_attempt.attempts += 1
                     print(failed_attempt.attempts)
-                # Si 3 tentatives échouées, verrouiller pendant 30 minutes
+                    # Si 3 tentatives échouées, verrouiller pendant 30 minutes
                     if failed_attempt.attempts >= 3:
                         failed_attempt.lock_account()
                         return JsonResponse({'errors': {'__all__': ["Too many failed attempts. Account locked for 30 seconde"]}}, status=403)

