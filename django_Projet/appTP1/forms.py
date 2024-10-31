@@ -89,7 +89,7 @@ class CustomUserCreationForm(forms.ModelForm):
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
 
-        is_valid, error_message = PW_verification(password1)
+        is_valid, error_message = motDePasseThreeChar(password1)
         if not is_valid:
             raise forms.ValidationError(error_message)
         return password1
@@ -119,6 +119,7 @@ class CustomUserCreationForm(forms.ModelForm):
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -132,6 +133,12 @@ class LoginForm(AuthenticationForm):
             'class': 'form-control'
         })
     )
+    captcha_text = forms.CharField(
+           widget=forms.TextInput(
+        attrs={
+            'placeholder': 'Enter captcha',
+            'class': 'form-control'
+        }) )
 
 
 

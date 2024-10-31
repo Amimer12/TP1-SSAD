@@ -599,7 +599,7 @@ display: block;
 .landing .container .formcontainer form input[type="password"] {
   padding: 14px 20px;
   color: #333;
-  border: 1px solid #b6b6b6;
+  border: 1px solid #2d5882;
   border-radius: 8px;
   background-color: transparent;
 }
@@ -816,6 +816,7 @@ display: block;
 	margin-top: 20px;
 	border-radius: 6px;
 	cursor: pointer;
+  width: 147%;
 }
 @media (max-width:992px) {
   .landing .container .loginPass div.left .bottom p {
@@ -835,6 +836,7 @@ display: block;
 	border-radius: 5px;
 	border: 1px solid #777;
 	cursor: pointer;
+  margin-left: 15%;
 }
 
 .landing .container .loginPass div.right  {
@@ -917,7 +919,9 @@ display: block;
   transition: 0.3s;
 }
 .landing .container .loginPass div.left .question .box.takeaffine.active,
-.landing .container .loginPass div.left .question .box.takecesar.active {
+.landing .container .loginPass div.left .question .box.takecesar.active,
+.landing .container .loginPass div.left .question .box.stg.active,
+.landing .container .loginPass div.left .question .box.stgColumn.active {
 visibility: visible;
 transition: 0.3s;
 }
@@ -928,10 +932,21 @@ margin-bottom: 0;
 height: 30px;
 color: #333;
 }
+#stg_message,#stg_messageclm{
+  width: 65%;
+  height: 20px;
+}
+#boxStg > p{
+  height: 50px;
+  margin-bottom: -10px;
+}
+#boxStgClmn > p{
+  height: 50px;
+  margin-bottom: 10px;
+}
 .landing .container .loginPass div.left .question .box div {
   display: flex;
   height: 30px;
-
   align-items: center;
   /* margin-top: 10px; */
 }
@@ -963,4 +978,74 @@ margin-bottom: 0;
 }
 #textToCrypt{
   height: 80%;
+}
+
+.password-container {
+  position: relative;
+  display: inline-block;
+}
+
+.passInput{
+  padding-right: 2.5rem; 
+  width: 100%;
+}
+
+#i1,#i2,#i3 {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #2d5882; 
+  border: none;
+}
+.hideBtn{
+  display: none;
+}
+.hideBtn.active{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.success_msg{
+  display: none;
+}
+.success_msg.active{
+  display: block;
+  border: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: green;
+}
+
+#hideBtn{
+  width: 70%;
+  height: 40.96px;
+  padding: 20px;
+  align-self: center;
+  margin-bottom: 15px;
+}
+
+.ModalCaptcha{
+  display: none;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  /*backdrop-filter: blur(5px); /* background blur */
+  position: absolute;
+}
+.ModalCaptchaContent{
+  margin-bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ddd;
+  align-items: center;
+  justify-content: center;
+  padding: 4%;
+  border-radius: 16px 16px 0px 0px;
 }
