@@ -331,6 +331,7 @@ btnSumbitCryp.addEventListener('click', function(e) {
         } else {
             formDataCrypt.append('methodStg', numOfMethod);  
             formDataCrypt.append('textToStg', textFeildToCrypt.value);
+            formDataCrypt.append('nbr_column', ColumnStg.value);
         }
 
         fetch(urlCrypt, {

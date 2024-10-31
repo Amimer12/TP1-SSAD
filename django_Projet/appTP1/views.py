@@ -259,10 +259,10 @@ def decode_message_from_invisible_characters(encoded_text):
 ############################################### STGANOGRAPHY PAR PHRASE #########################################
 
 def steg_phrase(secret, text):
-    phrases = text.split('. ')
-
+    phrases = text.split('.')
+    error_message = ""
     if len(phrases) < len(secret):
-       raise ValueError('Impossible de cacher le message dans le texte. Veuillez inserer un texte plus long.')
+       error_message = (F"It's impossible to hide your message in this text cause it contains {len(phrases)} sentences, insert more sentences pr shorter message !")
 
     textSteg = []
     for index, phrase in enumerate(phrases):
@@ -272,13 +272,13 @@ def steg_phrase(secret, text):
            phraseSteg = phrase 
         textSteg.append(phraseSteg)
 
-    textSteg = '. '.join(textSteg)
-    return textSteg
+    textSteg = '.'.join(textSteg)
+    return textSteg ,error_message
 
 
 def extraire_message_phrase(texte_cache):
     # Séparer le texte en phrases
-    phrases = texte_cache.split(". ")
+    phrases = texte_cache.split(".")
     # Prendre les premières lettres de chaque phrase
     message_revele = ''.join(phrase[0] for phrase in phrases if phrase)
     
@@ -497,23 +497,27 @@ def AuthPage(request):
         elif 'methodStg' in request.POST and 'textToStg' in request.POST: 
             methodStg = request.POST.get('methodStg')
             textToStg = request.POST.get('textToStg')
-            
+            nbr_column = request.POST.get('nbr_column')
             messageStg = ""
             error_msg = ""
-
+            
             # Check if both method and text are provided
             if not methodStg or not textToStg:
                 error_msg = "Method and text must be provided."
+            elif methodStg =="s3" and not nbr_column:
+                error_msg = "You have to enter the number of columns for this method to work"
             elif not check_text_length(textToStg):  # Check if text length is sufficient
                 error_msg = "Your text must contain at least 30 words!"
             else:
                 # Process the message extraction based on the chosen method
                 if methodStg == "s1":
                     messageStg = decode_message_from_invisible_characters(textToStg)
+                    if not messageStg :
+                        error_msg = "No hidden message detected !"
                 elif methodStg == "s2":
                     messageStg = extraire_message_phrase(textToStg)
                 elif methodStg == "s3":
-                    messageStg = extraire_message_colonne(textToStg, 4)
+                    messageStg = extraire_message_colonne(textToStg, int(nbr_column))
             
             # Return success or error messages in JSON response
             if messageStg:
@@ -542,7 +546,9 @@ def AuthPage(request):
                 if methodStgHide == "s1":
                     TextWithHiddenMessage = encode_message_with_invisible_characters(textToStgHide, MsgStgHide)
                 elif methodStgHide == "s2":
-                    TextWithHiddenMessage = steg_phrase(MsgStgHide, textToStgHide)
+                    TextWithHiddenMessage,error_msg = steg_phrase(MsgStgHide, textToStgHide)
+                    if error_msg != "":
+                        TextWithHiddenMessage = ""
                 elif methodStgHide == "s3" and nbr_columns:
                     TextWithHiddenMessage = steg_colonne(MsgStgHide, textToStgHide,int(nbr_columns))
                 else:
@@ -574,6 +580,4 @@ def AuthPage(request):
         "login_form": login_form,
         'captcha_image': captcha_image_base64,
     })
-
-
 
