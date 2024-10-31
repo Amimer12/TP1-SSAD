@@ -34,9 +34,9 @@ ul {
 }
 :root {
   --padding-container: 15px;
-  --bg: #002711;
-  --v:#510047;
-  --t:#f1cbe6;
+  --bg: rgba(246, 246, 246, 0.8);
+  --v:#2d5882;
+  --t:#63aefd;
 
 }
 .container {
@@ -68,12 +68,12 @@ ul {
   position: fixed;
   width: 270px;
   height: 100vh;
-  background-color: var(--bg);
+  background-color: rgba(246, 246, 246);
   top: 0;
   left: -270px;
   z-index: 10;
   isolation: isolate;
-  border-right: 1px solid var(--t);
+  border-right: 1px solid #2d5882;
 }
 .settingSide .icon {
   width: 30px;
@@ -96,7 +96,7 @@ ul {
 .settingSide .box , .settingSide .box-crypt {
   padding: 20px 15px;
   height: 100px;
-  color: var(--t);
+  color: #2d5882;
 }
 .settingSide .box-crypt {
   display: none;
@@ -125,18 +125,18 @@ ul {
 .settingSide .box div button,.settingSide .box-crypt div button {
   flex: 1;
   padding: 8px;
-  border: 1px solid var(--t);
+  border: 1px solid #2d5882;
   background-color: transparent;
   cursor: pointer;
   text-transform: capitalize;
   font-weight: 400;
   font-size: 15px;
   transition: 0.3s;
-  color: var(--t);
+  color: #2d5882;
 }
 .settingSide .box div button.active ,.settingSide .box-crypt div button.active {
   border: none;
-  background-color:var(--v) ;
+  background-color:#63aefd ;
 }
 
 
@@ -1023,7 +1023,7 @@ margin-bottom: 0;
   height: 40.96px;
   padding: 20px;
   align-self: center;
-  margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .ModalCaptcha{
