@@ -95,7 +95,7 @@ def AuthPage(request):
             method = request.POST.get('method')
             textToEncrypt = request.POST.get('textToEncrypt')
             cesar_key = int(request.POST.get('cesar_key')) if request.POST.get('cesar_key') else None
-            affine_a = int(request.POST.get('affine_a')) if request.POST.get('affine_a') else None
+            #affine_a = int(request.POST.get('affine_a')) if request.POST.get('affine_a') else None
             affine_b = int(request.POST.get('affine_b')) if request.POST.get('affine_b') else None
             CryptedText = ""
             DecryptedText = ""
@@ -109,7 +109,16 @@ def AuthPage(request):
                         DecryptedText = mirroir_decryptage(CryptedText)
 
                 elif method == '2':  # Affine method
-                    if affine_a is not None and affine_b is not None:
+                    if  affine_b is not None:
+                            CryptedText,affine_a = encrypt_message_affine(textToEncrypt, affine_b)
+                            if CryptedText:
+                                DecryptedText = decrypt_message_affine(CryptedText,affine_a, affine_b)
+                       
+                    else:
+                        error_msg = "You must enter B so the method works!"
+
+                    
+                '''    if affine_a is not None and affine_b is not None:
                         if affine_a > 0:
                             CryptedText = encrypt_message_affine(textToEncrypt, affine_a, affine_b)
                             if CryptedText:
@@ -117,7 +126,7 @@ def AuthPage(request):
                         else:
                             error_msg = "A value must be superior than 0 !"
                     else:
-                        error_msg = "You must enter A and B so the method works!"
+                        error_msg = "You must enter A and B so the method works!"  '''
 
                 elif method == '3':  # Decalage gauche method
                     CryptedText = encrypt_decalage_gauche(textToEncrypt)
