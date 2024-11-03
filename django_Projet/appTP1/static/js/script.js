@@ -514,77 +514,148 @@ hideBtn.addEventListener('click', function(e) {
 // //  the responsive end
 // sign up
 // Handle the submission with visual effects and then form submission
+
+
 document.addEventListener('DOMContentLoaded', function () {
     let form = document.querySelector('.createUser .mastercontainer .left form');
     let div = document.querySelector('.createUser .mastercontainer .containerloader');
     let successMessageElement = div.querySelector('.yes');
+    let passwordStrength = "";
 
-    if (form) {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault(); // Prevent the default form submission (no page reload)
+    function checkPasswordStrength(password) {
+        const formError = form.querySelector('p[id="thisFormError"]');
+        if (password === "") {
+            formError.innerHTML = "";
+            return;
+        }
 
-            let formData = new FormData(form); // Create a FormData object to hold form data
-            let url = form.action; // Get the form action URL
+        // Criteria
+        const lowercase = /[a-z]/;
+        const uppercase = /[A-Z]/;
+        const digit = /[0-9]/;
+        const specialChar = /[—’!"#$%&`()*+,\-./:;<=>?@\[\\\]^_'{|}~]/;
 
-            // Clear previous errors by hiding all form-error elements
-            let errorElements = form.querySelectorAll('.form-error');
-            errorElements.forEach(function (errorElement) {
-                errorElement.style.display = 'none'; // Hide all error messages initially
-            });
+        let score = 0;
+        let missingCriteria = [];
 
-            // Send an AJAX POST request using the Fetch API
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest', // Header to indicate AJAX request
-                    'X-CSRFToken': form.querySelector('input[name="csrfmiddlewaretoken"]').value // CSRF token
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(data => { throw data });  // Throw error data
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Handle the response data (success)
-                if (data.success_message) {
-                    // Success: show the loader and animate the form away
-                    successMessageElement.textContent = data.success_message;
+        if (lowercase.test(password)) {
+            score++;
+        } else {
+            missingCriteria.push("lowercase letters");
+        }
 
-                    let divLoader = div.querySelector('span');
-                    let divP = div.querySelector('p');
+        if (uppercase.test(password)) {
+            score++;
+        } else {
+            missingCriteria.push("uppercase letters");
+        }
 
-                    div.classList.add('active');
-                    divLoader.style.display = 'block';
-                    divP.style.display = 'none';
+        if (digit.test(password)) {
+            score++;
+        } else {
+            missingCriteria.push("numbers");
+        }
 
-                    setTimeout(() => {
-                        divLoader.style.display = 'none';
-                        divP.style.display = 'block';
-
-                        let createUser = document.querySelector('.createUser');
-                        gsap.to(createUser, { y: "-100%", duration: 1.6, delay: 1, ease: "power3.in" });
-                    }, 1900);
-                }
-            })
-            .catch(data => {
-                // Errors: Display form errors dynamically
-                if (data.errors) {
-                    let errors = JSON.parse(data.errors); // Parse the JSON-formatted errors
-                    Object.keys(errors).forEach(function (fieldName) {
-                        let errorElement = form.querySelector(`[name="${fieldName}"]`).nextElementSibling;
-                        if (errorElement && errorElement.classList.contains('form-error')) {
-                            errorElement.textContent = errors[fieldName][0].message; // Show the first error for the field
-                            errorElement.style.display = 'block'; // Show the error message
-                           
-                        }
-                    });
-                }
-            });
-        });
+        if (specialChar.test(password)) {
+            score++;
+        } else {
+            missingCriteria.push("special characters");
+        }
+        if (score === 4) {
+            formError.innerHTML = "Your password is <b>Very Strong</b>";
+            formError.style.color = "green";
+        } else if (score === 3) {
+            formError.innerHTML = "Your password is <b>Strong</b> . Try adding: " + missingCriteria.join(", ");
+            formError.style.color = "green";
+        } else if (score === 2) {
+            formError.innerHTML = "Your password is <b>Weak</b> . Consider adding: " + missingCriteria.join(", ");
+            formError.style.color = "red";
+        } else {
+            formError.innerHTML = "Your password is <b>Very Weak</b> . Try including: " + missingCriteria.join(", ");
+            formError.style.color = "red";
+        }
     }
+   
+    const passwordField = form.querySelector('input[name="password1"]');
+    
+    passwordField.addEventListener('input', function() {
+        if (this.value.length > 6) {
+            this.value = this.value.slice(0, 6);
+        }
+        checkPasswordStrength(this.value);
+    });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent the default form submission (no page reload)
+
+        if (passwordStrength === "Weak" || passwordStrength === "Very Weak") {
+            form.querySelector('p[id="thisFormError"]').style.display = 'block';
+            return; 
+        }
+
+        let formData = new FormData(form); // Create a FormData object to hold form data
+        let url = form.action; // Get the form action URL
+
+        // Clear previous errors by hiding all form-error elements
+        let errorElements = form.querySelectorAll('.form-error');
+        errorElements.forEach(function (errorElement) {
+            errorElement.style.display = 'none'; // Hide all error messages initially
+        });
+
+        // Send an AJAX POST request using the Fetch API
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest', // Header to indicate AJAX request
+                'X-CSRFToken': form.querySelector('input[name="csrfmiddlewaretoken"]').value // CSRF token
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => { throw data });  // Throw error data
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle the response data (success)
+            if (data.success_message) {
+                // Success: show the loader and animate the form away
+                successMessageElement.textContent = data.success_message;
+
+                let divLoader = div.querySelector('span');
+                let divP = div.querySelector('p');
+
+                div.classList.add('active');
+                divLoader.style.display = 'block';
+                divP.style.display = 'none';
+
+                // Clear the form error message on successful request
+                form.querySelector('p[id="thisFormError"]').textContent = "";
+
+                setTimeout(() => {
+                    divLoader.style.display = 'none';
+                    divP.style.display = 'block';
+
+                    let createUser = document.querySelector('.createUser');
+                    gsap.to(createUser, { y: "-100%", duration: 1.6, delay: 1, ease: "power3.in" });
+                }, 1900);
+            }
+        })
+        .catch(data => {
+            // Errors: Display form errors dynamically
+            if (data.errors) {
+                let errors = JSON.parse(data.errors); // Parse the JSON-formatted errors
+                Object.keys(errors).forEach(function (fieldName) {
+                    let errorElement = form.querySelector(`[name="${fieldName}"]`).nextElementSibling;
+                    if (errorElement && errorElement.classList.contains('form-error')) {
+                        errorElement.textContent = errors[fieldName][0].message; // Show the first error for the field
+                        errorElement.style.display = 'block'; // Show the error message
+                    }
+                });
+            }
+        });
+    });
 });
 
 
