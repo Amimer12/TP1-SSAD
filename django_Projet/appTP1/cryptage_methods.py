@@ -1,19 +1,63 @@
 
 ############################################ Affine Encrypt #######################################
-def encrypt_message_affine(message, a, b):
-    decimal_values_x = [ord(char) for char in message]  # Conversion en valeurs ASCII
-    decimal_values_y = [a * value + b for value in decimal_values_x]  # Chiffrement
-    encrypted_chars = [chr(value) for value in decimal_values_y]  # Conversion en caractères chiffrés
-    encrypted_message = ''.join(encrypted_chars)  # Combinaison des caractères chiffrés
-    return encrypted_message
+import random
+
+def encrypt_message_affine(message, b):
+    a_values = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25]
+    a = random.choice(a_values)
+
+    def affine_encrypt_char(char):
+     if char == " ":
+        return '$'  # Replace spaces with $
+     if char.isalpha():
+        # Check for uppercase letters
+        if char.isupper(): 
+            return chr(((a * (ord(char) - ord('A')) + b) % 26) + ord('A'))
+        # Check for lowercase letters
+        else:
+            return chr(((a * (ord(char) - ord('a')) + b) % 26) + ord('a'))
+     else:
+        return char  # Leave other characters unchanged
+
+    
+    encrypted_chars = [affine_encrypt_char(char) for char in message]
+    encrypted_message = ''.join(encrypted_chars)
+    return encrypted_message, a
 
 
 ############################################ Affine Decrypt ############################################
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+ 
+def mod_inverse(a, m):
+    if gcd(a, m) != 1:
+        return None
+    for x in range(1, m):
+        if (a * x) % m == 1:
+            return x
+    return None
+
+
 def decrypt_message_affine(encrypted_message, a, b):
-    decimal_values_z = [ord(char) for char in encrypted_message]  # Conversion en valeurs ASCII chiffrées
-    decimal_values_decrypted = [(value - b) // a for value in decimal_values_z]  # Déchiffrement
-    decrypted_chars = [chr(value) for value in decimal_values_decrypted]  # Conversion en caractères déchiffrés
-    decrypted_message = ''.join(decrypted_chars)  # Combinaison des caractères déchiffrés
+    a_inv = mod_inverse(a, 26)
+    if a_inv is None:
+        raise ValueError("L'inverse de a n'existe pas. Assurez-vous que a et 26 sont premiers entre eux.")
+
+    def affine_decrypt_char(char):
+        if char == "$":
+            return " "
+        elif char.isalpha():
+            if char.isupper():
+                return chr(((a_inv * (ord(char) - ord('A') - b)) % 26 + 26) % 26 + ord('A'))
+            else:
+                return chr(((a_inv * (ord(char) - ord('a') - b)) % 26 + 26) % 26 + ord('a'))
+        else:
+            return char
+
+    decrypted_chars = [affine_decrypt_char(char) for char in encrypted_message]
+    decrypted_message = ''.join(decrypted_chars)
     return decrypted_message
 
 ############################################ Décalage ##############################################
