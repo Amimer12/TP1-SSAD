@@ -1,28 +1,22 @@
 
 ############################################ Affine Encrypt #######################################
-import random
-
-def encrypt_message_affine(message, b):
-    a_values = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25]
-    a = random.choice(a_values)
-
+def encrypt_message_affine(message, a, b):
     def affine_encrypt_char(char):
-     if char == " ":
-        return '$'  # Replace spaces with $
-     if char.isalpha():
-        # Check for uppercase letters
-        if char.isupper(): 
-            return chr(((a * (ord(char) - ord('A')) + b) % 26) + ord('A'))
-        # Check for lowercase letters
-        else:
-            return chr(((a * (ord(char) - ord('a')) + b) % 26) + ord('a'))
-     else:
-        return char  # Leave other characters unchanged
-
+         if char == " ":
+           return '$'  # Replace spaces with $
+         if char.isalpha():
+             
+            # Pour les lettres majuscules
+            if char.isupper():
+                return chr(((a * (ord(char) - ord('A')) + b) % 26) + ord('A'))
+            else:
+                return chr(((a * (ord(char) - ord('a')) + b) % 26) + ord('a'))
+         else:
+            return char  # Les autres caractères ne sont pas modifiés
     
-    encrypted_chars = [affine_encrypt_char(char) for char in message]
-    encrypted_message = ''.join(encrypted_chars)
-    return encrypted_message, a
+    encrypted_chars = [affine_encrypt_char(char) for char in message]  # Chiffrement
+    encrypted_message = ''.join(encrypted_chars)  # Combinaison des caractères chiffrés
+    return encrypted_message
 
 
 ############################################ Affine Decrypt ############################################
@@ -46,7 +40,7 @@ def decrypt_message_affine(encrypted_message, a, b):
         raise ValueError("L'inverse de a n'existe pas. Assurez-vous que a et 26 sont premiers entre eux.")
 
     def affine_decrypt_char(char):
-        if char == "$":
+        if char == '$':
             return " "
         elif char.isalpha():
             if char.isupper():
