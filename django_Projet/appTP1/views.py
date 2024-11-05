@@ -110,12 +110,12 @@ def AuthPage(request):
 
                 elif method == '2':  # Affine method    
                    if affine_a is not None and affine_b is not None:
-                        if affine_a > 0:
+                        if affine_a > 0 and affine_b>0:
                             CryptedText = encrypt_message_affine(textToEncrypt, affine_a, affine_b)
                             if CryptedText:
                                 DecryptedText = decrypt_message_affine(CryptedText, affine_a, affine_b)
                         else:
-                            error_msg = "A value must be superior than 0 !"
+                            error_msg = "A and B value must be superior than 0 !"
                     else:
                         error_msg = "You must enter A and B so the method works!"  
 
