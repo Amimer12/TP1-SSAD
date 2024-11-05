@@ -2,20 +2,20 @@
 ############################################ Affine Encrypt #######################################
 def encrypt_message_affine(message, a, b):
     def affine_encrypt_char(char):
-         if char == " ":
-           return '$'  # Replace spaces with $
-         if char.isalpha():
-             
-            # Pour les lettres majuscules
+        if char == " ":
+            return '$'   
+        if char.isalpha():
             if char.isupper():
-                return chr(((a * (ord(char) - ord('A')) + b) % 26) + ord('A'))
+                # Chiffrement pour les majuscules avec alphabet commençant à 1
+                return chr(((a * ((ord(char) - ord('A') + 1)) + b - 1) % 26) + ord('A'))
             else:
-                return chr(((a * (ord(char) - ord('a')) + b) % 26) + ord('a'))
-         else:
+                # Chiffrement pour les minuscules avec alphabet commençant à 1
+                return chr(((a * ((ord(char) - ord('a') + 1)) + b - 1) % 26) + ord('a'))
+        else:
             return char  # Les autres caractères ne sont pas modifiés
-    
-    encrypted_chars = [affine_encrypt_char(char) for char in message]  # Chiffrement
-    encrypted_message = ''.join(encrypted_chars)  # Combinaison des caractères chiffrés
+
+    encrypted_chars = [affine_encrypt_char(char) for char in message]   
+    encrypted_message = ''.join(encrypted_chars)   
     return encrypted_message
 
 
@@ -24,7 +24,7 @@ def gcd(a, b):
     while b != 0:
         a, b = b, a % b
     return a
- 
+
 def mod_inverse(a, m):
     if gcd(a, m) != 1:
         return None
@@ -33,20 +33,23 @@ def mod_inverse(a, m):
             return x
     return None
 
-
 def decrypt_message_affine(encrypted_message, a, b):
     a_inv = mod_inverse(a, 26)
     if a_inv is None:
-        raise ValueError("L'inverse de a n'existe pas. Assurez-vous que a et 26 sont premiers entre eux.")
+        raise ValueError("L'inverse de 'a' n'existe pas. Assurez-vous que 'a' et 26 sont premiers entre eux.")
 
     def affine_decrypt_char(char):
         if char == '$':
             return " "
         elif char.isalpha():
             if char.isupper():
-                return chr(((a_inv * (ord(char) - ord('A') - b)) % 26 + 26) % 26 + ord('A'))
+                
+                decrypted_value = a_inv * ((ord(char) - ord('A') + 1 - b)) % 26
+                return chr(decrypted_value - 1 + ord('A')) if decrypted_value != 0 else 'Z'
             else:
-                return chr(((a_inv * (ord(char) - ord('a') - b)) % 26 + 26) % 26 + ord('a'))
+                 
+                decrypted_value = a_inv * ((ord(char) - ord('a') + 1 - b)) % 26
+                return chr(decrypted_value - 1 + ord('a')) if decrypted_value != 0 else 'z'
         else:
             return char
 
