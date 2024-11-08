@@ -150,12 +150,14 @@ submit.addEventListener('click', function(e) {
           //  pno.textContent = data.errors.__all__ ? data.errors.__all__[0] : "Invalid email or password";
             pno.textContent = data.errors.__all__[0] ;
             pno.classList.add('active');
+            captcha.value="";
         }
     })
     .catch(error => {
         loader.classList.remove('active');
         pno.textContent = "An error occurred. Please try again.";
         pno.classList.add('active');
+        captcha.value="";
     });
 });
 

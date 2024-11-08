@@ -354,7 +354,7 @@ def generate_captcha_text(length=6):
     letters = string.ascii_uppercase + string.digits
     return ''.join(random.choice(letters) for _ in range(length))
 #################################################################################################################
-@csrf_exempt
+
 def AuthPage(request):
     signup_form = CustomUserCreationForm()
     login_form = LoginForm()
@@ -394,9 +394,7 @@ def AuthPage(request):
                 user = UserAccount.objects.get(username=username)
             except UserAccount.DoesNotExist:
                 return JsonResponse({'errors': {'__all__': ["Invalid username."]}}, status=400)
-            #users = UserAccount.objects.all()
-            #user_found = False
-            #for user in users: user.username == username and
+
             if user :  
             # verfier si utlisateure son compte n'est pas blocker 
                 failed_attempt,create= FailedLoginAttempt.objects.get_or_create(user=user)
