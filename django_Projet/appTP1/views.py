@@ -47,10 +47,13 @@ def AuthPage(request):
             username = login_form.data.get('username')
             password = login_form.data.get('password')
             captcha = login_form.data.get('captcha_text')
+            captha_verfication = login_form.data.get('captha_verfication')
+            print(captha_verfication)
 
-            print(f"{captcha} and {request.session.get('captcha_text')}")
-            if request.session.get('captcha_text') != captcha : 
-                return JsonResponse({'errors': {'__all__': ["Invalid captcha"]}}, status=400)
+            if captha_verfication == "true":
+                print(f"{captcha} and {request.session.get('captcha_text')}")
+                if request.session.get('captcha_text') != captcha : 
+                    return JsonResponse({'errors': {'__all__': ["Invalid captcha"]}}, status=400)
 
             print(f"Attempting to authenticate user: {username}")
             

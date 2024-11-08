@@ -93,7 +93,7 @@ ul {
   border-color: var(--t) var(--t) var(--t) transparent;
   border-width: 1px ;
 }
-.settingSide .box , .settingSide .box-crypt,.settingSide .box-passwordF {
+.settingSide .box , .settingSide .box-crypt,.settingSide .box-passwordF,.settingSide .box-crypt,.settingSide .box-captcha {
   padding: 20px 15px;
   height: 100px;
   color: #2d5882;
@@ -109,7 +109,7 @@ ul {
     margin-bottom: 25px;
     position: relative;
 }
-.settingSide .box p::after ,.settingSide .box-crypt p::after,.settingSide .box-passwordF p::after {
+.settingSide .box p::after ,.settingSide .box-crypt p::after,.settingSide .box-passwordF p::after,.settingSide  .box-captcha  p::after{
   content: "";
   position: absolute;
   width: 70%;
@@ -118,12 +118,12 @@ ul {
   bottom: -10px;
   left: 0;
 }
-.settingSide .box div ,.settingSide .box-crypt div, .settingSide .box-passwordF div {
+.settingSide .box div ,.settingSide .box-crypt div, .settingSide .box-passwordF div,.settingSide .box-captcha div {
     display: flex;
     gap: 12px;
 }
 
-.settingSide .box div button,.settingSide .box-crypt div button,.settingSide .box-passwordF div button {
+.settingSide .box div button,.settingSide .box-crypt div button,.settingSide .box-passwordF div button,.settingSide .box-captcha div button{
   flex: 1;
   padding: 8px;
   border: 1px solid #2d5882;
@@ -135,7 +135,7 @@ ul {
   transition: 0.3s;
   color: #2d5882;
 }
-.settingSide .box div button.active ,.settingSide .box-crypt div button.active,.settingSide .box-passwordF div button.active {
+.settingSide .box div button.active ,.settingSide .box-crypt div button.active,.settingSide .box-passwordF div button.active,.settingSide .box-captcha div button.active {
   border: none;
   background-color:#63aefd ;
 }

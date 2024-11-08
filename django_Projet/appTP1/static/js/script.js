@@ -66,9 +66,12 @@ teambtn.onclick = function() {
 // the background change
 // end
 // 
+
 let emailfild = document.querySelector('input[name="usernameL"]');  // Update the selector to match the rendered ID
 let passwordfild = document.querySelector('input[name="passwordL"]');  // Update the selector to match the rendered ID
 let captcha = document.querySelector('input[name="CAPTCHA"]');
+let captcha_activation = document.getElementsByClassName('runpasswordF')[1];
+let captcha_verfication = false ; 
 let containerloader = document.querySelector('.landing .container .formcontainer .containerloader');
 let loginfrom = document.querySelector('.landing .container .login');
 let loginPass = document.querySelector('.landing .container .loginPass');
@@ -76,18 +79,35 @@ let urlLogin = document.querySelector('.landing .container .login .formcontainer
 let theModeBox = document.querySelector(".settingSide .box-crypt")
 let model = document.querySelector('.landing .container .formcontainer form .ModalCaptcha ');
 let afficher =document.querySelector('.landing .container .formcontainer form input[type="submit"]');
-afficher.addEventListener('click', function() {
+
+afficher.addEventListener('click', function(e) {
 //ModalCaptcha
-console.log("le message ",emailfild.value)
-if( emailfild.value !=""  && passwordfild.value !="" ) {
-model.style.display = 'flex';
+if(captcha_activation.classList.contains('active')){
+    captcha_verfication = true;
+    console.log("le message ",emailfild.value)
+
+    if( emailfild.value !=""  && passwordfild.value !="" ) {
+    model.style.display = 'flex';
+    console.log( model.style.display)
+    
+    }
+}else{
+    document.querySelector('.landing .container .formcontainer form .ModalCaptcha input[type="submit"]').style.display='none';
+     handleSubmit(e);
 }
+
+console.log(captcha_verfication);
+
+
 });
 
-let submit = document.querySelector('.landing .container .formcontainer form .ModalCaptcha input[type="submit"]');
-submit.addEventListener('click', function(e) {
-    e.preventDefault();
 
+let submit = document.querySelector('.landing .container .formcontainer form .ModalCaptcha input[type="submit"]')
+   
+submit.addEventListener('click', function(e) {
+  
+  e.preventDefault();
+    console.log('ddddd')
     model.style.display = 'none'
     containerloader.classList.add('active');
     let loader = document.querySelector('.login .formcontainer span.loader');
@@ -103,7 +123,7 @@ submit.addEventListener('click', function(e) {
     formData.append('username', emailfild.value);  // Appending username
     formData.append('password', passwordfild.value);  // Appending password
     formData.append('captcha_text',captcha.value); //Apending captcha 
-    
+    formData.append('captha_verfication',captcha_verfication)
 
     fetch(urlLogin, {
         method: 'POST',
@@ -160,6 +180,83 @@ submit.addEventListener('click', function(e) {
         captcha.value=""
     });
 });
+
+async function handleSubmit(e) {
+    e.preventDefault();
+    console.log('ddddd')
+    model.style.display = 'none'
+    containerloader.classList.add('active');
+    let loader = document.querySelector('.login .formcontainer span.loader');
+    let pyes = document.querySelector('.landing .container .formcontainer .containerloader p.yes');
+    let pno = document.querySelector('.landing .container .formcontainer .containerloader p.no');
+    
+    pno.classList.remove('active');
+    pyes.classList.remove('active');
+    loader.classList.add('active');
+
+    // Collect form data
+    let formData = new URLSearchParams();  // Using URLSearchParams
+    formData.append('username', emailfild.value);  // Appending username
+    formData.append('password', passwordfild.value);  // Appending password
+    formData.append('captcha_text',captcha.value); //Apending captcha 
+    formData.append('captha_verfication',captcha_verfication)
+
+    fetch(urlLogin, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',  // URL-encoded form data
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  // CSRF token
+        },
+        body: formData.toString()  // Convert formData to string for sending
+    })
+    .then(response => response.json()) // Parse JSON response
+    .then(data => {
+        loader.classList.remove('active');
+
+        if (data.success_message) {
+            pyes.textContent = data.success_message;
+            pyes.classList.add('active');
+            theModeBox.style.display = "block"
+            setTimeout(() => {
+                loginfrom.classList.add('gone');
+                setTimeout(() => {
+                    loginfrom.remove();
+                    loginPass.classList.add('active');
+                    
+                    let divtextareaLeft = document.querySelector('.landing .container .loginPass div.left');
+                    let divtextareaRight = document.querySelector('.landing .container .loginPass div.right');
+                    
+                    gsap.from(divtextareaLeft, {
+                        x: -200,
+                        duration: 1,
+                        opacity: 0,
+                        ease: "power3.out"
+                    });
+                    gsap.from(divtextareaRight, {
+                        x: +400,
+                        opacity: 0,
+                        duration: 1,
+                        ease: "power3.out"
+                    });
+                }, 1000);
+            }, 2000);
+        } else if (data.errors) {
+            console.log(data.errors)
+          //  pno.textContent = data.errors.__all__ ? data.errors.__all__[0] : "Invalid email or password";
+            pno.textContent = data.errors.__all__[0] ;
+            captcha.value=""
+            pno.classList.add('active');
+            captcha.value="";
+        }
+    })
+    .catch(error => {
+        loader.classList.remove('active');
+        pno.textContent = "An error occurred. Please try again.";
+        pno.classList.add('active');
+        captcha.value=""
+    });
+
+}
 
 
 
@@ -534,7 +631,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Select the toggle buttons
     const runButton = document.querySelector('.runpasswordF');
     const stopButton = document.querySelector('.nonrunpasswordF.active'); // Default active
-
+    const runButton2 = document.querySelector('.box-captcha .runpasswordF');
+    const stopButton2 = document.querySelector('.box-captcha .nonrunpasswordF.active'); //
     // Toggle function to switch the active button and update flag
     function togglePasswordTest(clickedButton) {
         if (clickedButton === runButton) {
@@ -547,10 +645,20 @@ document.addEventListener('DOMContentLoaded', function () {
             runButton.classList.remove('active');
         }
     }
-
+    function togglePasswordTest2(clickedButton) {
+        if (clickedButton === runButton2) {
+            runButton2.classList.add('active');
+            stopButton2.classList.remove('active');
+        } else {
+            stopButton2.classList.add('active');
+            runButton2.classList.remove('active');
+        }
+    }
     // Attach event listeners to toggle buttons
     runButton.addEventListener('click', () => togglePasswordTest(runButton));
     stopButton.addEventListener('click', () => togglePasswordTest(stopButton));
+    runButton2.addEventListener('click', () => togglePasswordTest2(runButton2));
+    stopButton2.addEventListener('click', () => togglePasswordTest2(stopButton2));
 
     function checkPasswordStrength(password) {
         if (password === "") {
