@@ -11,7 +11,7 @@
     <script>
         function togglePassword(icon) {
             const input = icon.previousElementSibling; // Find the input field before the icon
-    
+
             // Toggle password visibility
             if (input.type === "password") {
                 input.type = "text";
@@ -37,8 +37,22 @@
         <div class="box">
             <p>stop the animation loader  </p>
             <div>
-                <button data-loader="y" class="active">run</button>
+                <button data-loader="y" class="active">activate</button>
                 <button data-loader="n" class="">stop</button>
+            </div>
+        </div>
+        <div class="box-passwordF">
+            <p>The testing password force function </p>
+            <div>
+                <button data-loader="y" class="runpasswordF">activate</button>
+                <button data-loader="n" class="nonrunpasswordF active">stop</button>
+            </div>
+        </div>
+        <div class="box captcha">
+            <p>Captcha</p>
+            <div>
+                <button data-loader="y" class="runpasswordF">activate</button>
+                <button data-loader="n" class="nonrunpasswordF active">stop</button>
             </div>
         </div>
         <div class="box-crypt">
@@ -62,33 +76,37 @@
                 <p>Let's get started with creating your account</p>
     
                 <form action="" method="POST">
-                {% csrf_token %}
-                
-                <!-- Username field -->
-                <input type="text" name="username" placeholder="Enter a User Name" required>
-                
-                <!-- Email field -->
-                <input type="text" name="email" placeholder="Enter Email" required>
-                <p class="form-error"></p>
+                    {% csrf_token %}
+                    
+                    <!-- Username field -->
+                    <input type="text" name="username" placeholder="Enter a User Name" required>
+                    
+                    <!-- Email field -->
+                    <input type="text" name="email" placeholder="Enter Email" required>
+                    <p class="form-error"></p>
+    
+                    <!-- Password fields -->
+                     
+                    <div class="password-container">
+                    <input type="password" name="password1" placeholder="Create A Password" class="passInput" required>
+                    <i id="i1" class="fa-solid fa-eye" onclick="togglePassword(this)"></i>
+                    </div>
+                    <p class="form-error" id="thisFormError"></p>
 
-                <!-- Password fields -->
-                <div class="password-container">
-                <input type="password" name="password1" placeholder="Create A Password" class="passInput" required>
-                <i id="i1" class="fa-solid fa-eye" onclick="togglePassword(this)"></i>
-                <p class="form-error"></p>
-                </div>
-                <div class="password-container">
-                <input type="password" name="password2" placeholder="Confirm Your Password" class="passInput" required>
-                <i id="i2" class="fa-solid fa-eye" onclick="togglePassword(this)"></i>
-                <p class="form-error"></p>
-                </div>
-                <input type="submit" value="Sign Up">
+                    <div class="password-container">
+                    <input type="password" name="password2" placeholder="Confirm Your Password" class="passInput" required>
+                    <i id="i2" class="fa-solid fa-eye" onclick="togglePassword(this)"></i>
+                    <p class="form-error"></p>
+                    </div>
+    
+                    <input type="submit" value="Sign Up">
+                    
+                    <div class="containerloader">
+                        <p class="yes"></p>
+                        <span class="loader"></span>
+                    </div>
+                    </form>
                 
-                <div class="containerloader">
-                    <p class="yes"></p>
-                    <span class="loader"></span>
-                </div>
-                </form>
             </div>
             <div class="right">
                 <img src="https://cdni.iconscout.com/illustration/premium/thumb/sign-up-illustration-download-in-svg-png-gif-file-formats--login-enter-log-cyber-protection-nallow-pack-people-illustrations-6983270.png?f=webp" alt="Signup Image">
@@ -137,7 +155,7 @@
                 <div class="left">
                     <form action="">
                     <div class="top">
-                        <p>Put your message here </p>
+                        <p>Message entered by A</p>
                         <div class="question">
                             <div class="icon">
                                 <i class="fa-solid fa-question"></i>
@@ -218,7 +236,7 @@
                         <div class="space"></div>
                     </div>
                     <div class="textright areacry">
-                        <p>Decrypted message</p>
+                        <p>Message for B</p>
                         <form action="">
                             <textarea name=""  id="textResultDecrypt" readonly></textarea>
                         </form>
@@ -243,7 +261,7 @@
                         <input type="text" name="usernameL" placeholder="Enter Username" required>
                         <div class="password-container">
                         <input type="password" name="passwordL" placeholder="Enter Password" class="passInput" required>
-                        <i id="i3" class="fa-solid fa-eye" onclick="togglePassword(this)"></i>
+                        <i id="i3" class="fa-solid fa-eye" onclick="togglePassword(this,3)"></i>
                         </div>
                         <input type="submit" value="Sign In">
                         <div class="containerloader">

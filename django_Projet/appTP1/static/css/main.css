@@ -34,9 +34,9 @@ ul {
 }
 :root {
   --padding-container: 15px;
-  --bg: #002711;
-  --v:#510047;
-  --t:#f1cbe6;
+  --bg: rgba(246, 246, 246, 0.8);
+  --v:#2d5882;
+  --t:#63aefd;
 
 }
 .container {
@@ -68,12 +68,12 @@ ul {
   position: fixed;
   width: 270px;
   height: 100vh;
-  background-color: var(--bg);
+  background-color: rgba(246, 246, 246);
   top: 0;
   left: -270px;
   z-index: 10;
   isolation: isolate;
-  border-right: 1px solid var(--t);
+  border-right: 1px solid #2d5882;
 }
 .settingSide .icon {
   width: 30px;
@@ -93,10 +93,11 @@ ul {
   border-color: var(--t) var(--t) var(--t) transparent;
   border-width: 1px ;
 }
-.settingSide .box , .settingSide .box-crypt {
+.settingSide .box , .settingSide .box-crypt,.settingSide .box-passwordF {
   padding: 20px 15px;
   height: 100px;
-  color: var(--t);
+  color: #2d5882;
+  margin-bottom: 7px;
 }
 .settingSide .box-crypt {
   display: none;
@@ -108,7 +109,7 @@ ul {
     margin-bottom: 25px;
     position: relative;
 }
-.settingSide .box p::after ,.settingSide .box-crypt p::after {
+.settingSide .box p::after ,.settingSide .box-crypt p::after,.settingSide .box-passwordF p::after {
   content: "";
   position: absolute;
   width: 70%;
@@ -117,26 +118,26 @@ ul {
   bottom: -10px;
   left: 0;
 }
-.settingSide .box div ,.settingSide .box-crypt div {
+.settingSide .box div ,.settingSide .box-crypt div, .settingSide .box-passwordF div {
     display: flex;
     gap: 12px;
 }
 
-.settingSide .box div button,.settingSide .box-crypt div button {
+.settingSide .box div button,.settingSide .box-crypt div button,.settingSide .box-passwordF div button {
   flex: 1;
   padding: 8px;
-  border: 1px solid var(--t);
+  border: 1px solid #2d5882;
   background-color: transparent;
   cursor: pointer;
   text-transform: capitalize;
   font-weight: 400;
   font-size: 15px;
   transition: 0.3s;
-  color: var(--t);
+  color: #2d5882;
 }
-.settingSide .box div button.active ,.settingSide .box-crypt div button.active {
+.settingSide .box div button.active ,.settingSide .box-crypt div button.active,.settingSide .box-passwordF div button.active {
   border: none;
-  background-color:var(--v) ;
+  background-color:#63aefd ;
 }
 
 
@@ -990,7 +991,7 @@ margin-bottom: 0;
   width: 100%;
 }
 
-#i1,#i2,#i3 {
+#i3 {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -999,6 +1000,20 @@ margin-bottom: 0;
   color: #2d5882; 
   border: none;
 }
+#i2,#i1,#i3{
+  position: absolute;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #2d5882; 
+  border: none;
+  right: 10px;
+  top: 50%;
+}
+#thisFormError{
+  margin-top: 10px;
+}
+
+
 .hideBtn{
   display: none;
 }
@@ -1023,7 +1038,7 @@ margin-bottom: 0;
   height: 40.96px;
   padding: 20px;
   align-self: center;
-  margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .ModalCaptcha{
