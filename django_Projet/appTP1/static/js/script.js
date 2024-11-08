@@ -63,7 +63,6 @@ teambtn.onclick = function() {
 }
 
 //////////////////////////////////////////////////////////////////////
-
 // the background change
 // end
 // 
@@ -149,6 +148,7 @@ submit.addEventListener('click', function(e) {
             console.log(data.errors)
           //  pno.textContent = data.errors.__all__ ? data.errors.__all__[0] : "Invalid email or password";
             pno.textContent = data.errors.__all__[0] ;
+            captcha.value=""
             pno.classList.add('active');
         }
     })
@@ -156,6 +156,7 @@ submit.addEventListener('click', function(e) {
         loader.classList.remove('active');
         pno.textContent = "An error occurred. Please try again.";
         pno.classList.add('active');
+        captcha.value=""
     });
 });
 
@@ -522,14 +523,45 @@ document.addEventListener('DOMContentLoaded', function () {
     let successMessageElement = div.querySelector('.yes');
     let passwordStrength = "";
 
+    // Reference to the form error element
+    const formError = form.querySelector('p[id="thisFormError"]');
+    formError.style.display = "none"; // Hide initially
+
+    // Flag to control whether to enforce password testing
+    let enforcePasswordTest = false;
+
+    // Select the toggle buttons
+    const runButton = document.querySelector('.runpasswordF');
+    const stopButton = document.querySelector('.nonrunpasswordF.active'); // Default active
+
+    // Toggle function to switch the active button and update flag
+    function togglePasswordTest(clickedButton) {
+        if (clickedButton === runButton) {
+            enforcePasswordTest = true;
+            runButton.classList.add('active');
+            stopButton.classList.remove('active');
+        } else {
+            enforcePasswordTest = false;
+            stopButton.classList.add('active');
+            runButton.classList.remove('active');
+        }
+    }
+
+    // Attach event listeners to toggle buttons
+    runButton.addEventListener('click', () => togglePasswordTest(runButton));
+    stopButton.addEventListener('click', () => togglePasswordTest(stopButton));
+
     function checkPasswordStrength(password) {
-        const formError = form.querySelector('p[id="thisFormError"]');
         if (password === "") {
             formError.innerHTML = "";
+            formError.style.display = "none";
+           
             return;
         }
 
-        // Criteria
+        formError.style.display = "block";
+        document.getElementById("i1").style.top = "25%";
+
         const lowercase = /[a-z]/;
         const uppercase = /[A-Z]/;
         const digit = /[0-9]/;
@@ -538,91 +570,92 @@ document.addEventListener('DOMContentLoaded', function () {
         let score = 0;
         let missingCriteria = [];
 
-        if (lowercase.test(password)) {
-            score++;
-        } else {
-            missingCriteria.push("lowercase letters");
-        }
+        if (lowercase.test(password)) score++;
+        else missingCriteria.push("lowercase letters");
 
-        if (uppercase.test(password)) {
-            score++;
-        } else {
-            missingCriteria.push("uppercase letters");
-        }
+        if (uppercase.test(password)) score++;
+        else missingCriteria.push("uppercase letters");
 
-        if (digit.test(password)) {
-            score++;
-        } else {
-            missingCriteria.push("numbers");
-        }
+        if (digit.test(password)) score++;
+        else missingCriteria.push("numbers");
 
-        if (specialChar.test(password)) {
-            score++;
-        } else {
-            missingCriteria.push("special characters");
-        }
+        if (specialChar.test(password)) score++;
+        else missingCriteria.push("special characters");
+
+        if(password.length < 6) missingCriteria.push("<br>( Password must contain 6 charachters )")
+
         if (score === 4) {
-            formError.innerHTML = "Your password is <b>Very Strong</b>";
+            passwordStrength = "Very Strong";
+            formError.innerHTML = "Your password is <b>Very Strong</b>"+ missingCriteria.join(", ");
             formError.style.color = "green";
         } else if (score === 3) {
-            formError.innerHTML = "Your password is <b>Strong</b> . Try adding: " + missingCriteria.join(", ");
+            passwordStrength = "Strong";
+            formError.innerHTML = "Your password is <b>Strong</b>. Try adding: " + missingCriteria.join(", ");
             formError.style.color = "green";
         } else if (score === 2) {
-            formError.innerHTML = "Your password is <b>Weak</b> . Consider adding: " + missingCriteria.join(", ");
+            passwordStrength = "Weak";
+            formError.innerHTML = "Your password is <b>Weak</b>. Consider adding: " + missingCriteria.join(", ");
             formError.style.color = "red";
         } else {
-            formError.innerHTML = "Your password is <b>Very Weak</b> . Try including: " + missingCriteria.join(", ");
+            passwordStrength = "Very Weak";
+            formError.innerHTML = "Your password is <b>Very Weak</b>. Try including: " + missingCriteria.join(", ");
             formError.style.color = "red";
         }
     }
-   
+
     const passwordField = form.querySelector('input[name="password1"]');
-    
-    passwordField.addEventListener('input', function() {
-        if (this.value.length > 6) {
-            this.value = this.value.slice(0, 6);
+    passwordField.addEventListener('input', function () {
+        
+        if (enforcePasswordTest) {
+            if (this.value.length > 6) {
+                this.value = this.value.slice(0, 6);
+            }
+            checkPasswordStrength(this.value);
+        } else {
+            // If not enforcing password test, clear formError on input change
+            formError.innerHTML = "";
+            formError.style.display = "none";
+            
         }
-        checkPasswordStrength(this.value);
     });
 
     form.addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent the default form submission (no page reload)
+        e.preventDefault();
 
-        if (passwordStrength === "Weak" || passwordStrength === "Very Weak") {
-            form.querySelector('p[id="thisFormError"]').style.display = 'block';
-            return; 
+        // If enforcing password test, run the strength check
+        if (enforcePasswordTest) {
+            if (passwordStrength === "Weak" || passwordStrength === "Very Weak" || passwordField.value.length < 6) {
+                formError.style.display = 'block';
+                return; // Stop form submission if password strength is insufficient
+            }
         }
 
-        let formData = new FormData(form); // Create a FormData object to hold form data
-        let url = form.action; // Get the form action URL
+        let formData = new FormData(form);
+        let url = form.action;
 
-        // Clear previous errors by hiding all form-error elements
+        // Hide any existing error messages
         let errorElements = form.querySelectorAll('.form-error');
         errorElements.forEach(function (errorElement) {
-            errorElement.style.display = 'none'; // Hide all error messages initially
+            errorElement.style.display = 'none';
         });
 
-        // Send an AJAX POST request using the Fetch API
         fetch(url, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest', // Header to indicate AJAX request
-                'X-CSRFToken': form.querySelector('input[name="csrfmiddlewaretoken"]').value // CSRF token
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': form.querySelector('input[name="csrfmiddlewaretoken"]').value
             }
         })
         .then(response => {
             if (!response.ok) {
-                return response.json().then(data => { throw data });  // Throw error data
+                return response.json().then(data => { throw data });
             }
             return response.json();
         })
         .then(data => {
-            // Handle the response data (success)
             if (data.success_message) {
-                // Success: show the loader and animate the form away
                 successMessageElement.textContent = data.success_message;
-
                 let divLoader = div.querySelector('span');
                 let divP = div.querySelector('p');
 
@@ -630,33 +663,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 divLoader.style.display = 'block';
                 divP.style.display = 'none';
 
-                // Clear the form error message on successful request
-                form.querySelector('p[id="thisFormError"]').textContent = "";
+                formError.textContent = "";
+                formError.style.display = "none";
 
                 setTimeout(() => {
                     divLoader.style.display = 'none';
                     divP.style.display = 'block';
-
                     let createUser = document.querySelector('.createUser');
                     gsap.to(createUser, { y: "-100%", duration: 1.6, delay: 1, ease: "power3.in" });
                 }, 1900);
             }
         })
         .catch(data => {
-            // Errors: Display form errors dynamically
             if (data.errors) {
-                let errors = JSON.parse(data.errors); // Parse the JSON-formatted errors
-                Object.keys(errors).forEach(function (fieldName) {
-                    let errorElement = form.querySelector(`[name="${fieldName}"]`).nextElementSibling;
-                    if (errorElement && errorElement.classList.contains('form-error')) {
-                        errorElement.textContent = errors[fieldName][0].message; // Show the first error for the field
-                        errorElement.style.display = 'block'; // Show the error message
-                    }
-                });
+                let errors = JSON.parse(data.errors);
+        
+                // Collect all error messages into a single string
+                let errorMessages = Object.keys(errors).map(fieldName => errors[fieldName][0].message).join('<br>');
+        
+                // Display the combined error message in formError
+                formError.innerHTML = errorMessages;
+                formError.style.display = "block";
+            } else {
+                formError.innerHTML = "An unexpected error occurred.";
+                formError.style.display = "block";
             }
         });
     });
 });
+
+
+
 
 
 

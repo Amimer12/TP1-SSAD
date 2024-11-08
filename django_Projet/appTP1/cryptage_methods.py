@@ -2,20 +2,20 @@
 ############################################ Affine Encrypt #######################################
 def encrypt_message_affine(message, a, b):
     def affine_encrypt_char(char):
-        if char == " ":
-            return '$'   
-        if char.isalpha():
+         if char == " ":
+           return '$'  # Replace spaces with $
+         if char.isalpha():
+             
+            # Pour les lettres majuscules
             if char.isupper():
-                # Chiffrement pour les majuscules avec alphabet commençant à 1
-                return chr(((a * ((ord(char) - ord('A') + 1)) + b - 1) % 26) + ord('A'))
+                return chr(((a * (ord(char) - ord('A')) + b) % 26) + ord('A'))
             else:
-                # Chiffrement pour les minuscules avec alphabet commençant à 1
-                return chr(((a * ((ord(char) - ord('a') + 1)) + b - 1) % 26) + ord('a'))
-        else:
+                return chr(((a * (ord(char) - ord('a')) + b) % 26) + ord('a'))
+         else:
             return char  # Les autres caractères ne sont pas modifiés
-
-    encrypted_chars = [affine_encrypt_char(char) for char in message]   
-    encrypted_message = ''.join(encrypted_chars)   
+    
+    encrypted_chars = [affine_encrypt_char(char) for char in message]  # Chiffrement
+    encrypted_message = ''.join(encrypted_chars)  # Combinaison des caractères chiffrés
     return encrypted_message
 
 
@@ -24,7 +24,7 @@ def gcd(a, b):
     while b != 0:
         a, b = b, a % b
     return a
-
+ 
 def mod_inverse(a, m):
     if gcd(a, m) != 1:
         return None
@@ -33,23 +33,17 @@ def mod_inverse(a, m):
             return x
     return None
 
+
 def decrypt_message_affine(encrypted_message, a, b):
     a_inv = mod_inverse(a, 26)
-    if a_inv is None:
-        raise ValueError("L'inverse de 'a' n'existe pas. Assurez-vous que 'a' et 26 sont premiers entre eux.")
-
     def affine_decrypt_char(char):
         if char == '$':
             return " "
         elif char.isalpha():
             if char.isupper():
-                
-                decrypted_value = a_inv * ((ord(char) - ord('A') + 1 - b)) % 26
-                return chr(decrypted_value - 1 + ord('A')) if decrypted_value != 0 else 'Z'
+                return chr(((a_inv * (ord(char) - ord('A') - b)) % 26 + 26) % 26 + ord('A'))
             else:
-                 
-                decrypted_value = a_inv * ((ord(char) - ord('a') + 1 - b)) % 26
-                return chr(decrypted_value - 1 + ord('a')) if decrypted_value != 0 else 'z'
+                return chr(((a_inv * (ord(char) - ord('a') - b)) % 26 + 26) % 26 + ord('a'))
         else:
             return char
 
@@ -174,17 +168,30 @@ def encrypt_cesar_agauche(texte, n):
     for caractere in texte:
         # crypter les chiffres
         if caractere.isdigit():
-            texte_crypte += chr((ord(caractere) - n - 48) % 10 + 48)
+            if n % 10 == 0 :
+                texte_crypte += chr((ord(caractere) - 1 - 48) % 10 + 48)
+            else:
+                texte_crypte += chr((ord(caractere) - n - 48) % 10 + 48)
+           
         # crypter les lettres majuscules
         elif caractere.isupper():
-            texte_crypte += chr((ord(caractere) - n - 65) % 26 + 65)
+            if n % 26 == 0 :
+                texte_crypte += chr((ord(caractere) - 1 - 65) % 26 + 65)
+            else:
+                texte_crypte += chr((ord(caractere) - n - 65) % 26 + 65)
         # crypter les lettres minuscules
         elif caractere.islower():
-            texte_crypte += chr((ord(caractere) - n - 97) % 26 + 97)
+            if n % 26 == 0  :
+                texte_crypte += chr((ord(caractere) - 1 - 97) % 26 + 97)
+            else:
+                texte_crypte += chr((ord(caractere) - n - 97) % 26 + 97)
         # crypter les caractères spéciaux
         else:
             index = caracteres_speciaux.index(caractere)
-            texte_crypte += caracteres_speciaux[(index - n) % 33]
+            if n % 35 == 0 :
+                texte_crypte += caracteres_speciaux[(index - 1) % 35]
+            else:
+                texte_crypte += caracteres_speciaux[(index - n) % 35]
     return texte_crypte
 
 
@@ -195,17 +202,29 @@ def encrypt_cesar_adroite(texte, n):
     for caractere in texte:
         # crypter les chiffres
         if caractere.isdigit():
-            texte_crypte += chr((ord(caractere) + n - 48) % 10 + 48)
+            if n % 10 == 0 :
+                texte_crypte += chr((ord(caractere) + 1 - 48) % 10 + 48)
+            else:
+                texte_crypte += chr((ord(caractere) + n - 48) % 10 + 48)
         # crypter les lettres majuscules
         elif caractere.isupper():
-            texte_crypte += chr((ord(caractere) + n - 65) % 26 + 65)
+            if n % 26 == 0:
+                texte_crypte += chr((ord(caractere) + 1 - 65) % 26 + 65)
+            else:
+                texte_crypte += chr((ord(caractere) + n - 65) % 26 + 65)
         # crypter les lettres minuscules
         elif caractere.islower():
-            texte_crypte += chr((ord(caractere) + n - 97) % 26 + 97)
+            if n % 26 == 0:
+                texte_crypte += chr((ord(caractere) + 1 - 97) % 26 + 97)
+            else:
+                texte_crypte += chr((ord(caractere) + n - 97) % 26 + 97)
         # crypter les caractères spéciaux
         else:
             index = caracteres_speciaux.index(caractere)
-            texte_crypte += caracteres_speciaux[(index + n) % 33]
+            if n % 35 == 0:
+                texte_crypte += caracteres_speciaux[(index + 1) % 35]
+            else:
+                texte_crypte += caracteres_speciaux[(index + n) % 35]
     return texte_crypte
 
 
@@ -216,17 +235,29 @@ def decrypt_cesar_agauche(texte, n):
     for caractere in texte:
         # décrypter les chiffres
         if caractere.isdigit():
-            texte_decrypte += chr((ord(caractere) + n - 48) % 10 + 48)
+            if n % 10 == 0 :
+                texte_decrypte += chr((ord(caractere) + 1 - 48) % 10 + 48)
+            else:
+                texte_decrypte += chr((ord(caractere) + n - 48) % 10 + 48)
         # décrypter les lettres majuscules
         elif caractere.isupper():
-            texte_decrypte += chr((ord(caractere) + n - 65) % 26 + 65)
+            if n % 26 == 0 :
+                texte_decrypte += chr((ord(caractere) + 1 - 65) % 26 + 65)
+            else:
+                texte_decrypte += chr((ord(caractere) + n - 65) % 26 + 65)
         # décrypter les lettres minuscules
         elif caractere.islower():
-            texte_decrypte += chr((ord(caractere) + n - 97) % 26 + 97)
+            if n % 26 == 0 :
+                texte_decrypte += chr((ord(caractere) + 1 - 97) % 26 + 97)
+            else:
+                texte_decrypte += chr((ord(caractere) + n - 97) % 26 + 97)
         # décrypter les caractères spéciaux
         else:
             index = caracteres_speciaux.index(caractere)
-            texte_decrypte += caracteres_speciaux[(index + n) % 33]
+            if n % 35 == 0 :
+                texte_decrypte += caracteres_speciaux[(index + 1) % 35]
+            else:
+                texte_decrypte += caracteres_speciaux[(index + n) % 35]
     return texte_decrypte
 
 
@@ -237,15 +268,27 @@ def decrypt_cesar_adroite(texte, n):
     for caractere in texte:
         # décrypter les chiffres
         if caractere.isdigit():
-            texte_decrypte += chr((ord(caractere) - n - 48) % 10 + 48)
+            if n % 10 == 0 :
+                texte_decrypte += chr((ord(caractere) - 1 - 48) % 10 + 48)
+            else:
+                texte_decrypte += chr((ord(caractere) - n - 48) % 10 + 48)
         # décrypter les lettres majuscules
         elif caractere.isupper():
-            texte_decrypte += chr((ord(caractere) - n - 65) % 26 + 65)
+            if n % 26 == 0 :
+                texte_decrypte += chr((ord(caractere) - 1 - 65) % 26 + 65)
+            else:
+                texte_decrypte += chr((ord(caractere) - n - 65) % 26 + 65)
         # décrypter les lettres minuscules
         elif caractere.islower():
-            texte_decrypte += chr((ord(caractere) - n - 97) % 26 + 97)
+            if n % 26 == 0 :
+                texte_decrypte += chr((ord(caractere) - 1 - 97) % 26 + 97)
+            else:
+                texte_decrypte += chr((ord(caractere) - n - 97) % 26 + 97)
         # décrypter les caractères spéciaux
         else:
             index = caracteres_speciaux.index(caractere)
-            texte_decrypte += caracteres_speciaux[(index - n) % 33]
+            if n % 35 == 0 :
+                texte_decrypte += caracteres_speciaux[(index - 1) % 35]
+            else:
+                texte_decrypte += caracteres_speciaux[(index - n) % 35]
     return texte_decrypte

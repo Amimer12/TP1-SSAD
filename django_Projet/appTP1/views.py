@@ -6,7 +6,7 @@ from .models import UserAccount
 from django.views.decorators.csrf import csrf_exempt
 from .models import FailedLoginAttempt
 from django.utils.timezone import now
-from .cryptage_methods import encrypt_cesar_adroite,encrypt_cesar_agauche,encrypt_decalage_droite,encrypt_decalage_gauche,encrypt_message_affine,decrypt_cesar_adroite,decrypt_cesar_agauche,decrypt_decalage_droite,decrypt_decalage_gauche,decrypt_message_affine,mirroir_decryptage,mirroir_cryptage
+from .cryptage_methods import *
 from .steganography_methods import *
 from captcha.image import ImageCaptcha
 import random
@@ -109,13 +109,14 @@ def AuthPage(request):
                         DecryptedText = mirroir_decryptage(CryptedText)
 
                 elif method == '2':  # Affine method    
-                   if affine_a is not None and affine_b is not None:
-                        if affine_a > 0 and affine_b>0:
+                    if affine_a is not None and affine_b is not None:
+                        if mod_inverse(affine_a, 26):
+
                             CryptedText = encrypt_message_affine(textToEncrypt, affine_a, affine_b)
                             if CryptedText:
                                 DecryptedText = decrypt_message_affine(CryptedText, affine_a, affine_b)
                         else:
-                            error_msg = "A and B value must be superior than 0 !"
+                            error_msg = "L'inverse de A n'existe pas. Assurez-vous que A et 26 sont premiers entre eux."    
                     else:
                         error_msg = "You must enter A and B so the method works!"  
 
@@ -130,10 +131,11 @@ def AuthPage(request):
                         DecryptedText = decrypt_decalage_droite(CryptedText)
 
                 elif method == '5':  # Cesar à gauche method
-                    if cesar_key is not None:
+                    if cesar_key is not None: 
                         CryptedText = encrypt_cesar_agauche(textToEncrypt, cesar_key)
                         if CryptedText:
                             DecryptedText = decrypt_cesar_agauche(CryptedText, cesar_key)
+                        
                     else:
                         error_msg = "You have to enter the Cesar key so the method works!"
 

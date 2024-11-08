@@ -10,9 +10,9 @@ def encode_message_with_invisible_characters(text, message):
     encoded_text = []
 
     bit_index = 0
-    mots = text.split()
     error_message =""
-    if len(mots) < len(binary_message):
+    if len(text) < len(binary_message):
+        print(len(text),len(binary_message))
         error_message = (F"it's impossible to hide your message in this text cause it contains less words than the length of your message, insert more words or shorter message !")
     
     for char in text:
